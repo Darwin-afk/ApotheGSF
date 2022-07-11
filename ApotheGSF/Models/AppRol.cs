@@ -2,7 +2,7 @@
 
 namespace ApotheGSF.Models
 {
-    public class AppRole : IdentityRole<int>
+    public class AppRol : IdentityRole<int>
     {
     }
 }

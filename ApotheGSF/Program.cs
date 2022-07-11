@@ -6,7 +6,7 @@ using ApotheGSF.Clases;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddIdentity<AppUsuario, AppRole>(options =>
+builder.Services.AddIdentity<AppUsuario, AppRol>(options =>
 {
     //Definir las caracteristicas de la contraseña
     options.Password.RequireDigit = false;

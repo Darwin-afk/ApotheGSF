@@ -5,6 +5,6 @@ namespace ApotheGSF.Models
     public class AppUserRole : IdentityUserRole<int>
     {
         public AppUsuario User { get; set; }
-        public AppRole Rol { get; set; }
+        public AppRol Rol { get; set; }
     }
 }

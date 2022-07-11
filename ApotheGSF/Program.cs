@@ -6,6 +6,34 @@ using ApotheGSF.Clases;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    //Definir las caracteristicas de la contraseña
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 4;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+}).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // Determina si se necesita el consentimiento del usuario para cookies no esenciales para una solicitud determinada.
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+
+//Donde redirecciona cuando no estan autorizados a ver paginas
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Home/Login";  //Cuando alguien no tenga permiso a una pagina, lo enviara aqui.
+    options.AccessDeniedPath = "/Home/AccesoDenegado";
+    options.Cookie.Name = ".applicationname";
+    options.Cookie.HttpOnly = true; // Ser true para prevenir XSS
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
+
 ConfigurationManager configuration = builder.Configuration;
 
 string connStr = configuration.GetConnectionString("prodConn");
@@ -13,6 +41,8 @@ if (configuration.GetSection("AppSettings")["EnProduccion"].Equals("NO"))
     connStr = configuration.GetConnectionString("devConn");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connStr), ServiceLifetime.Scoped);
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

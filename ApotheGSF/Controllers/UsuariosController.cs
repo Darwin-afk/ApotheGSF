@@ -21,20 +21,20 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-              return _context.AppUser != null ? 
-                          View(await _context.AppUser.ToListAsync()) :
+              return _context.AppUsuarios != null ? 
+                          View(await _context.AppUsuarios.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.AppUser'  is null.");
         }
 
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.AppUser == null)
+            if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
             }
 
-            var appUser = await _context.AppUser
+            var appUser = await _context.AppUsuarios
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appUser == null)
             {
@@ -69,12 +69,12 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.AppUser == null)
+            if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
             }
 
-            var appUser = await _context.AppUser.FindAsync(id);
+            var appUser = await _context.AppUsuarios.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -120,12 +120,12 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.AppUser == null)
+            if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
             }
 
-            var appUser = await _context.AppUser
+            var appUser = await _context.AppUsuarios
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appUser == null)
             {
@@ -140,14 +140,14 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.AppUser == null)
+            if (_context.AppUsuarios == null)
             {
                 return Problem("Entity set 'AppDbContext.AppUser'  is null.");
             }
-            var appUser = await _context.AppUser.FindAsync(id);
+            var appUser = await _context.AppUsuarios.FindAsync(id);
             if (appUser != null)
             {
-                _context.AppUser.Remove(appUser);
+                _context.AppUsuarios.Remove(appUser);
             }
             
             await _context.SaveChangesAsync();
@@ -156,7 +156,7 @@ namespace ApotheGSF.Controllers
 
         private bool AppUserExists(int id)
         {
-          return (_context.AppUser?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.AppUsuarios?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApotheGSF.Models
 {
-    public class AppUser : IdentityUser<int>
+    public class AppUsuario : IdentityUser<int>
     {
         public ICollection<AppUserRole> UserRoles { get; set; }
     }

@@ -1,7 +1,11 @@
-﻿namespace ApotheGSF.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ApotheGSF.Models
 {
     public class Proveedor
     {
-        //Erick was Here 
+        [Key]
+        public int Codigo { get; set; }
     }
 }

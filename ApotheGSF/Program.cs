@@ -1,4 +1,18 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using ApotheGSF.Models;
+using ApotheGSF.Clases;
+
 var builder = WebApplication.CreateBuilder(args);
+
+ConfigurationManager configuration = builder.Configuration;
+
+string connStr = configuration.GetConnectionString("prodConn");
+if (configuration.GetSection("AppSettings")["EnProduccion"].Equals("NO"))
+    connStr = configuration.GetConnectionString("devConn");
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connStr), ServiceLifetime.Scoped);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -18,7 +32,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseCookiePolicy();
 
 app.MapControllerRoute(
     name: "default",

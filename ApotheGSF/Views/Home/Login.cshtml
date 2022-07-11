@@ -1,0 +1,55 @@
+﻿@*@model WebPruebaEF22022.ViewModels.LoginViewModel
+@inject IOptions<AppSettings> appSettings
+
+@{
+	ViewData["Title"] = "Conectarse al Sistema";
+    Layout = "_LayoutHome";
+}
+
+
+<div class="container">
+	<div class="card card-container">
+        <center>
+            <h4><strong>@appSettings.Value.Nombre.ToUpper()</strong></h4>
+            <p>
+                Ingrese sus credenciales
+            </p>
+        </center>
+	
+		<p id="profile-name" class="profile-name-card"></p>
+        <form asp-action="login" asp-controller="home" class="form-signin" method="post" asp-route-returnurl="@Model.ReturnUrl">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span id="reauth-email" class="reauth-email"></span>
+
+            <div class="form-group input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input asp-for="Usuario" class="form-control" placeholder="Usuario" autofocus required>
+                <span asp-validation-for="Usuario" class="text-danger"></span>
+            </div>
+
+            <div class="form-group input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input asp-for="Password" class="form-control" placeholder="Contraseña" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            @*	<div id="remember" class="checkbox">
+            <label>
+                <input type="checkbox" asp-for="RememberMe"> Recordarme
+            </label>
+        </div>
+            *@ ------ @*
+            <input type="submit" class="btn btn-lg btn-primary btn-block btn-signin" value="Entrar" />
+        <br />
+            <p style="font-size:12px;text-align:center;">
+                Para soporte técnico, nos puede contactar en el 8X9.XXX.XXXX
+            </p>
+        </form><!-- /form -->
+
+	@*
+		<a href="#" class="forgot-password">
+			¿Olvidó su contraseña?
+		</a>
+		*@ ------ @*
+	</div><!-- /card-container -->
+</div><!-- /container -->
+*@

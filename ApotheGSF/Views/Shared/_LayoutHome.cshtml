@@ -1,11 +1,11 @@
 ﻿@using Microsoft.Extensions.Options;
-<!--"@inject IOptions<AppSettings> appSettings"-->
+@*@inject IOptions<AppSettings> appSettings;*@
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - title<!--@appSettings.Value.Nombre--></title>
+	<title>@ViewData["Title"] - title@*@appSettings.Value.Nombre*@</title>
 
 	<environment include="Development">
 		<link rel="stylesheet" href="/lib/twitter-bootstrap/css/bootstrap.css" />

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace ApotheGSF.Models
 {
     public class AppDbContext : IdentityDbContext<AppUsuario, AppRol, int,
-        IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>,
+        IdentityUserClaim<int>, AppUsuarioRol, IdentityUserLogin<int>,
         IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -112,7 +112,7 @@ namespace ApotheGSF.Models
 
         public DbSet<AppUsuario> AppUser { get; set; }
         public DbSet<AppRol> AppRole { get; set; }
-        public DbSet<AppUserRole> AppUserRole { get; set; }
+        public DbSet<AppUsuarioRol> AppUserRole { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<Factura> Facturas { get; set; }
         public DbSet<Medicamento> Medicamentos { get; set; }

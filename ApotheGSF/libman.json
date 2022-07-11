@@ -21,6 +21,15 @@
     {
       "library": "twitter-bootstrap@5.1.3",
       "destination": "wwwroot/lib/twitter-bootstrap"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2",
+      "files": [
+        "js/select2.min.js",
+        "css/select2.min.css",
+        "js/select2.full.min.js"
+      ]
     }
   ]
 }

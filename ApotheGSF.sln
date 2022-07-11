@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApotheGSF", "ApotheGSF\ApotheGSF.csproj", "{B45E6A76-D6CB-4679-A016-F2A93EC60BDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B45E6A76-D6CB-4679-A016-F2A93EC60BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B45E6A76-D6CB-4679-A016-F2A93EC60BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B45E6A76-D6CB-4679-A016-F2A93EC60BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B45E6A76-D6CB-4679-A016-F2A93EC60BDE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CF489C1-7F3D-4DA3-B1B7-6F32295C6623}
+	EndGlobalSection
+EndGlobal

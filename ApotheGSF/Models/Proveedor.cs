@@ -7,5 +7,7 @@ namespace ApotheGSF.Models
     {
         [Key]
         public int Codigo { get; set; }
+        public string Nombre { get; set; }
+        public ICollection<ProveedorMedicamento> ProveedoresMedicamentos { get; set; }
     }
 }

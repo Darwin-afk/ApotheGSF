@@ -113,5 +113,8 @@ namespace ApotheGSF.Models
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppRole> AppRole { get; set; }
         public DbSet<AppUserRole> AppUserRole { get; set; }
+        public DbSet<Proveedor> Proveedores { get; set; }
+        public DbSet<Factura> Facturas { get; set; }
+        public DbSet<Medicamento> Medicamentos { get; set; }
     }
 }

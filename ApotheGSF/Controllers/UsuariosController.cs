@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
+using ApotheGSF.ViewModels;
 
 namespace ApotheGSF.Controllers
 {
@@ -50,14 +51,35 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var appUser = await _context.AppUsuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (appUser == null)
+            var usuario = await (from u in _context.AppUsuarios
+                            .AsNoTracking()
+                            .AsQueryable()
+                                 join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
+                                 join r in _context.Roles on ur.RoleId equals r.Id
+                                 join creado in _context.AppUsuarios on u.CreadoPorId equals creado.Id into lj2
+                                 from y in lj2.DefaultIfEmpty()
+                                 join modificado in _context.AppUsuarios on u.ModificadoPorId equals modificado.Id into lj
+                                 from x in lj.DefaultIfEmpty()
+                                 select new UsuarioViewModel
+                                 {
+                                     Id = u.Id,
+                                     Nombre = u.Nombre,
+                                     Usuario = u.UserName,
+                                     Email = u.Email,
+                                     Telefono = u.PhoneNumber,
+                                     Rol = r.Name,
+                                     Creado = u.Creado,
+                                     Modificado = u.Modificado,
+                                     ModificadoPor = x == null ? string.Empty : x.Nombre,
+                                     CreadPor = x == null ? string.Empty : y.Nombre,
+                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            return View(appUser);
+            return View(usuario);
         }
 
         // GET: Usuarios/Create

@@ -33,7 +33,7 @@ namespace ApotheGSF.ViewModels
 
 		[Display(Name = "Rol")]
 		[Required(ErrorMessage = "Debe elegir un rol.")]
-		public string NombreRol { get; set; }
+		public string Rol { get; set; }
 
 		[Display(Name = "Fecha de nacimiento")]
 		public DateTime FechaNacimiento { get; set; }

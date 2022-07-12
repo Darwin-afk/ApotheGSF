@@ -90,5 +90,12 @@ namespace ApotheGSF.Controllers
             ModelState.AddModelError("", "Usuario/Contraseña Inválidos");
             return View(model);
         }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Home");
+        }
     }
 }

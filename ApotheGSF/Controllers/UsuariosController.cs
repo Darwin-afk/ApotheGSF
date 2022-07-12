@@ -146,28 +146,84 @@ namespace ApotheGSF.Controllers
             return View(viewModel);
         }
 
+        // GET: Usuarios/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.AppUsuarios == null)
+            {
+                return NotFound();
+            }
+            var usuario = await (from u in _context.AppUsuarios
+                             .AsNoTracking()
+                             .AsQueryable()
+                                 join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
+                                 join r in _context.Roles on ur.RoleId equals r.Id
+                                 select new UsuarioViewModel
+                                 {
+                                     Id = u.Id,
+                                     Nombre = u.Nombre,
+                                     Usuario = u.UserName,
+                                     Email = u.Email,
+                                     Telefono = u.PhoneNumber,
+                                     Rol = r.Name
+                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return View(usuario);
+        }
+
         // POST: Usuarios/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] AppUsuario appUser)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Nombre, Apellido, Usuario, FechaNacimiento, Cedula, Email, Direccion, Telefono, Rol")] UsuarioViewModel viewModel)
         {
-            if (id != appUser.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
+
+            ModelState.Remove("Password");
+            ModelState.Remove("ConfirmarPassword");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(appUser);
-                    await _context.SaveChangesAsync();
+                    var antiguoUsuario = await _context.AppUsuarios.FirstOrDefaultAsync(x => x.Id == id);
+                    antiguoUsuario.Nombre = viewModel.Nombre;
+                    antiguoUsuario.UserName = viewModel.Usuario;
+                    antiguoUsuario.Email = viewModel.Email;
+                    antiguoUsuario.PhoneNumber = viewModel.Telefono;
+                    antiguoUsuario.Modificado = DateTime.Now;
+                    antiguoUsuario.ModificadoPorId = _user.GetUserID().ToInt();
+
+                    //Se debe validar que el email y el telefono no se repitan.
+                    // Verificar si _userManager tiene una opcion, se pueden hacer indeces unique y se puede hacer un query antes de.
+                    _context.Update(antiguoUsuario);
+                    antiguoUsuario.Modificado = DateTime.Now;
+                    antiguoUsuario.ModificadoPorId = _user.GetUserID().ToInt();
+                    _context.Entry(antiguoUsuario).Property(c => c.Creado).IsModified = false;
+                    _context.Entry(antiguoUsuario).Property(c => c.CreadoPorId).IsModified = false;
+                    _context.Entry(antiguoUsuario).Property(c => c.Inactivo).IsModified = false;
+                    var result = await _context.SaveChangesAsync();
+
+                    // verificar si se grabó bien, para luego asignar el rol
+                    if (result > 0)
+                    {
+                        var rolesViejos = await _context.AppUsuariosRoles.Where(x => x.UserId == viewModel.Id).ToListAsync();
+                        _context.RemoveRange(rolesViejos);
+                        await _context.SaveChangesAsync();
+                        await _userManager.AddToRoleAsync(antiguoUsuario, viewModel.Rol);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AppUserExists(appUser.Id))
+                    if (!AppUserExists(ViewBag.Id))
                     {
                         return NotFound();
                     }
@@ -178,7 +234,7 @@ namespace ApotheGSF.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(appUser);
+            return View(viewModel);
         }
 
         // GET: Usuarios/Delete/5

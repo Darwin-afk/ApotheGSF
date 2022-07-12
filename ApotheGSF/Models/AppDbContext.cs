@@ -105,7 +105,7 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable("tblProveedores");
             });
-            modelBuilder.Entity<ProveedorMedicamento>(entity =>
+            modelBuilder.Entity<ProveedorMedicamentos>(entity =>
             {
                 entity.ToTable("tblProveedoresMedicamentos");
             });

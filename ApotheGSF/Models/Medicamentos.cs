@@ -27,8 +27,16 @@ namespace ApotheGSF.Models
         public string Indicaciones { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Dosis { get; set; }
-        public ICollection<ProveedorMedicamento> ProveedoresMedicamentos { get; set; }
-        public ICollection<FacturaMedicamentos> FacturasMedicamentos { get; set; }
+        
+        public Medicamentos()
+        {
+            ProveedoresMedicamentos = new HashSet<ProveedorMedicamentos>();
+            MedicamentosCajas = new HashSet<MedicamentosCajas>();
+        }
+        
+        public ICollection<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
+        
+        public ICollection<MedicamentosCajas> MedicamentosCajas { get; set; }
 
         [Column("Creado", TypeName = "datetime")]
         public DateTime? Creado { get; set; }

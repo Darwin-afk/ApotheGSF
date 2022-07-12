@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApotheGSF.Models
 {
@@ -6,7 +7,13 @@ namespace ApotheGSF.Models
     {
         [Key]
         public int FacturaMedicamentoId { get; set; }
-        public int FacturaId { get; set; }
-        public int MedicamentoId { get; set; }
+        [ForeignKey("Facturas")]
+        public virtual Facturas? FacturaId { get; set; }
+        [ForeignKey("Medicamentos")]
+        public virtual Medicamentos? CajaId { get; set; }
+        public int CantidadUnidad { get; set; }
+        public float Precio { get; set; }
+
+        
     }
 }

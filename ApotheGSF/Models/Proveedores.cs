@@ -49,7 +49,14 @@ namespace ApotheGSF.Models
 
         [NotMapped]
         public bool IsUpdate { get; set; }
-
-        public ICollection<ProveedorMedicamento> ProveedoresMedicamentos { get; set; }
+        
+        public Proveedores()
+        {
+            ProveedoresMedicamentos = new HashSet<ProveedorMedicamentos>();
+        }
+        
+       public ICollection<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
+        
+    
     }
 }

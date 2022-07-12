@@ -15,8 +15,9 @@ namespace ApotheGSF.Models
         [Column("Foto", TypeName = "varchar(50)")]
         public string? Foto { get; set; }
         public DateTime FechaNacimiento { get; set; }
-        public string Cedula { get; set; }
-        public string Direccion { get; set; }
+
+        public string? Cedula { get; set; }
+        public string? Direccion { get; set; }
         [NotMapped]
         [Display(Name = "Rol")]
         public string? Rol { get; set; }

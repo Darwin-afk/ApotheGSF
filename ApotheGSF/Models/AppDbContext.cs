@@ -174,9 +174,5 @@ namespace ApotheGSF.Models
         public DbSet<Proveedores> Proveedores { get; set; }
         public DbSet<Facturas> Facturas { get; set; }
         public DbSet<Medicamentos> Medicamentos { get; set; }
-        public DbSet<FacturaMedicamentos> FacturasMedicamentos { get; set; }
-        public DbSet<MedicamentosCajas> MedicamentosCajas { get; set; }
-        public DbSet<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
-
     }
 }

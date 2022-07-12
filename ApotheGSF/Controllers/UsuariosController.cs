@@ -262,14 +262,19 @@ namespace ApotheGSF.Controllers
         {
             if (_context.AppUsuarios == null)
             {
-                return Problem("Entity set 'AppDbContext.AppUser'  is null.");
+                return Problem("Entity set 'AppDbContext.AppUsuario'  is null.");
             }
-            var appUser = await _context.AppUsuarios.FindAsync(id);
-            if (appUser != null)
+            var appUsuario = await _context.AppUsuarios.FindAsync(id);
+            if (appUsuario != null)
             {
-                _context.AppUsuarios.Remove(appUser);
+                _context.AppUsuarios.Update(appUsuario);
+                appUsuario.Modificado = DateTime.Now;
+                appUsuario.ModificadoPorId = _user.GetUserID().ToInt();
+                appUsuario.Inactivo = true;
+                _context.Entry(appUsuario).Property(c => c.Creado).IsModified = false;
+                _context.Entry(appUsuario).Property(c => c.CreadoPorId).IsModified = false;
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

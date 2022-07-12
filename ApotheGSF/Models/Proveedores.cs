@@ -8,6 +8,9 @@ namespace ApotheGSF.Models
         [Key]
         public int Codigo { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "RNC")]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{1})$", ErrorMessage = "Teléfono inválido")]
         public string RNC { get; set; }

@@ -21,9 +21,25 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-              return _context.AppUsuarios != null ? 
-                          View(await _context.AppUsuarios.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.AppUser'  is null.");
+            var lista = await (from u in _context.AppUsuarios
+                            .AsNoTracking()
+                            .AsQueryable()
+                               join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
+                               join r in _context.Roles on ur.RoleId equals r.Id
+                               select new AppUsuario
+                               {
+                                   Id = u.Id,
+                                   Nombre = u.Nombre,
+                                   UserName = u.UserName,
+                                   Email = u.Email,
+                                   PhoneNumber = u.PhoneNumber,
+                                   Inactivo = u.Inactivo,
+                                   Rol = r.Name
+                               }).Where(x => x.Inactivo == false).ToListAsync();
+
+            return lista != null ?
+                    View(lista) :
+                    Problem("Entity set 'AppDbContext.AppUsuario'  is null.");
         }
 
         // GET: Usuarios/Details/5

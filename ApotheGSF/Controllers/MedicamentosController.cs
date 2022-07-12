@@ -55,7 +55,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo")] Medicamento medicamento)
+        public async Task<IActionResult> Create([Bind("Codigo")] Medicamentos medicamento)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo")] Medicamento medicamento)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo")] Medicamentos medicamento)
         {
             if (id != medicamento.Codigo)
             {

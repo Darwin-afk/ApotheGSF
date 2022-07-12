@@ -2,7 +2,7 @@
 
 namespace ApotheGSF.Models
 {
-    public class FacturaMedicamento
+    public class FacturaMedicamentos
     {
         [Key]
         public int FacturaMedicamentoId { get; set; }

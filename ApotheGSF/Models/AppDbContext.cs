@@ -101,7 +101,7 @@ namespace ApotheGSF.Models
                 entity.Property(p => p.Value).HasColumnName("Valor");
                 //-
             });
-            modelBuilder.Entity<Proveedor>(entity =>
+            modelBuilder.Entity<Proveedores>(entity =>
             {
                 entity.ToTable("tblProveedores");
             });
@@ -109,15 +109,15 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable("tblProveedoresMedicamentos");
             });
-            modelBuilder.Entity<Medicamento>(entity =>
+            modelBuilder.Entity<Medicamentos>(entity =>
             {
                 entity.ToTable("tblMedicamentos");
             });
-            modelBuilder.Entity<FacturaMedicamento>(entity =>
+            modelBuilder.Entity<FacturaMedicamentos>(entity =>
             {
                 entity.ToTable("tblFacturasMedicamentos");
             });
-            modelBuilder.Entity<Factura>(entity =>
+            modelBuilder.Entity<Facturas>(entity =>
             {
                 entity.ToTable("tblFacturas");
             });
@@ -171,8 +171,8 @@ namespace ApotheGSF.Models
         public DbSet<AppUsuario> AppUsuarios { get; set; }
         public DbSet<AppRol> AppRoles { get; set; }
         public DbSet<AppUsuarioRol> AppUsuariosRoles { get; set; }
-        public DbSet<Proveedor> Proveedores { get; set; }
-        public DbSet<Factura> Facturas { get; set; }
-        public DbSet<Medicamento> Medicamentos { get; set; }
+        public DbSet<Proveedores> Proveedores { get; set; }
+        public DbSet<Facturas> Facturas { get; set; }
+        public DbSet<Medicamentos> Medicamentos { get; set; }
     }
 }

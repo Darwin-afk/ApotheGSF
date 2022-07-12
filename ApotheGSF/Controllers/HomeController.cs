@@ -69,6 +69,7 @@ namespace ApotheGSF.Controllers
                 bool usuarioInactivo;
                 try
                 {
+                    //Busca si el usuario que intenta logearse esta activo o inactivo
                     usuarioInactivo = _userManager.FindByNameAsync(model.Usuario).Result.Inactivo;
                 }
                 catch
@@ -83,6 +84,7 @@ namespace ApotheGSF.Controllers
                     return View(model);
                 }
 
+                //logea al usuario
                 var result = await _signInManager.PasswordSignInAsync(model.Usuario,
                    model.Password, false, false);
 
@@ -90,6 +92,7 @@ namespace ApotheGSF.Controllers
                 {
                     var usuario = await _userManager.FindByNameAsync(model.Usuario); //consigue los datos del usurio conectado
 
+                    //Si intento acceder a una pagina y termino en el login lo regresa a esa pagina, sino va al inicio
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -140,20 +143,24 @@ namespace ApotheGSF.Controllers
         {
 
             var user = await _userManager.FindByIdAsync(_user.GetUserID());
+            //verifica si el campo contraseña actual es correcto
             var checkPassResult = await _userManager.CheckPasswordAsync(user, modelo.PasswordActual);
             if (!checkPassResult)
             {
                 ModelState.AddModelError("", "Contraseña actual incorrecta.");
             }
 
+            //verifica si el campo confirmar contraseña es igual a la nueva contraseña
             if (!modelo.Password.Equals(modelo.ConfirmarPassword))
             {
                 ModelState.AddModelError("", "Las contraseñas con coinciden.");
             }
 
-            ModelState.Remove("Nombre");
+            ModelState.Remove("Nombre");//no se toma en cuenta el nombre al validar
+
             if (ModelState.IsValid)
             {
+                //Reinicia la contraseña del usuario
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, modelo.Password);
                 if (result.Succeeded)
@@ -182,8 +189,8 @@ namespace ApotheGSF.Controllers
             {
                 Response.StatusCode = 404;
                 return View("NotFound");
-                //return NotFound();
             }
+            //si encuentra al usuario lo manda a su vista con sus campos
             PerfilUsuarioViewModel perfil = new PerfilUsuarioViewModel()
             {
                 Nombre = modelo.Nombre,

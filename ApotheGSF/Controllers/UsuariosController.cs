@@ -7,16 +7,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using ApotheGSF.ViewModels;
+using System.Security.Claims;
+using ApotheGSF.Clases;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApotheGSF.Controllers
 {
     public class UsuariosController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<AppUsuario> _userManager;
+        private readonly RoleManager<AppRol> _roleManager;
+        private readonly ClaimsPrincipal _user;
 
-        public UsuariosController(AppDbContext context)
+        public UsuariosController(AppDbContext context,
+                                  UserManager<AppUsuario> userManager,
+                                  RoleManager<AppRol> roleManager,
+                                  IHttpContextAccessor accessor)
         {
             _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
+            _user = accessor.HttpContext.User;
         }
 
         // GET: Usuarios
@@ -93,31 +105,45 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] AppUsuario appUser)
+        public async Task<IActionResult> Create([Bind("Nombre, Apellido, Usuario, FechaNacimiento, Cedula, Email, Direccion, Telefono, Password, ConfirmarPassword, Rol")] UsuarioViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(appUser);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(appUser);
-        }
+                AppUsuario nuevoUsuario = new()
+                {
+                    Nombre = viewModel.Nombre,
+                    Apellido = viewModel.Apellido,
+                    UserName = viewModel.Usuario,
+                    FechaNacimiento = viewModel.FechaNacimiento,
+                    Cedula = viewModel.Cedula,
+                    Email = viewModel.Email,
+                    Direccion = viewModel.Direccion,
+                    PhoneNumber = viewModel.Telefono,
+                    Creado = DateTime.Now,
+                    CreadoPorId = _user.GetUserID().ToInt(),
+                    Modificado = DateTime.Now,
+                    ModificadoPorId = _user.GetUserID().ToInt(),
+                    Inactivo = false
+                };
 
-        // GET: Usuarios/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.AppUsuarios == null)
-            {
-                return NotFound();
+                //Crea el usuario y lo asigna al rol elegido.
+                //Se debe validar que el email y el telefono no se repitan.
+                // Verificar si _userManager tiene una opcion, se pueden hacer indeces unique y se puede hacer un query antes de.
+                var result = await _userManager.CreateAsync(nuevoUsuario, viewModel.Password);
+                if (result.Succeeded)
+                {
+                    var rr = await _userManager.AddToRoleAsync(nuevoUsuario, viewModel.Rol);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    foreach (IdentityError error in result.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                }
             }
-
-            var appUser = await _context.AppUsuarios.FindAsync(id);
-            if (appUser == null)
-            {
-                return NotFound();
-            }
-            return View(appUser);
+            return View(viewModel);
         }
 
         // POST: Usuarios/Edit/5

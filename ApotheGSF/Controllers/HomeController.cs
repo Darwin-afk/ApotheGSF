@@ -97,5 +97,10 @@ namespace ApotheGSF.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Home");
         }
+
+        public IActionResult AccesoDenegado()
+        {
+            return View();
+        }
     }
 }

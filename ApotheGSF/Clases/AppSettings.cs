@@ -4,6 +4,7 @@
     {
         public string? Version { get; set; }
         public string? Nombre { get; set; }
+        public string EnProduccion { get; set; }
         public string? RNC { get; set; }
         public string? NombreAbreviado { get; set; }
         public string? UrlFotosUsuario { get; set; }

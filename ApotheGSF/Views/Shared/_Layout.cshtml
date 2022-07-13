@@ -10,8 +10,9 @@
 	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/ApotheGSF.styles.css" asp-append-version="true" />
+
 </head>
-<body class="bg-dark hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed" >
+<body class="bg-dark hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
 			<div class="container-fluid">
@@ -29,7 +30,7 @@
 							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" style="color: white;"asp-controller="Facturas" asp-action="Index">
+							<a class="nav-link" style="color: white;" asp-controller="Facturas" asp-action="Index">
 								Facturar
 							</a>
 						</li>
@@ -62,7 +63,7 @@
 								<li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Details">Proveedores</a></li>
 							</ul>
 						</li>
-						
+
 					</ul>
 					<ul class="navbar-nav ml-auto dropstart">
 						<li class="nav-item dropdown">
@@ -94,6 +95,9 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/lib/admin-lte/js/adminlte.min.js"></script>
+	<script src="~/lib/admin-lte/js/demo.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

@@ -108,6 +108,7 @@ namespace ApotheGSF.Controllers
             var factura = await (from f in _context.Facturas
                                  .AsNoTracking()
                                  .AsQueryable()
+                                 .Include(fmc => fmc.FacturasMedicamentosCajas)
                                  join fm in _context.FacturasMedicamentosCajas on f.Codigo equals fm.FacturaId
                                  select new FacturaViewModel
                                  {
@@ -116,15 +117,15 @@ namespace ApotheGSF.Controllers
                                      SubTotal = f.SubTotal,
                                      Total = f.Total,
                                      Estado = f.Estado,
-                                     Medicamentos = new List<FacturaViewModel.DetalleMedicamentos>
-                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+                                     Medicamentos = (List<FacturaMedicamentosCajas>)f.FacturasMedicamentosCajas
+                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
 
-            //if (factura == null)
-            //{
-            //    return NotFound();
-            //}
-            return View();
-            //return View(factura);
+            if (factura == null)
+            {
+                return NotFound();
+            }
+
+            return View(factura);
         }
 
         // POST: Facturas/Edit/5

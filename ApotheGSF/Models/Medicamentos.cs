@@ -32,11 +32,9 @@ namespace ApotheGSF.Models
         {
             ProveedoresMedicamentos = new HashSet<ProveedorMedicamentos>();
             MedicamentosCajas = new HashSet<MedicamentosCajas>();
-            Facturas = new HashSet<Facturas>();
         }
         
         public ICollection<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
-        public ICollection<Facturas> Facturas { get; set; }
         public ICollection<MedicamentosCajas> MedicamentosCajas { get; set; }
 
         [Column("Creado", TypeName = "datetime")]

@@ -6,16 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
+using ApotheGSF.ViewModels;
+using System.Security.Claims;
+using ApotheGSF.Clases;
 
 namespace ApotheGSF.Controllers
 {
     public class FacturasController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ClaimsPrincipal _user;
 
-        public FacturasController(AppDbContext context)
+        public FacturasController(AppDbContext context,
+                                  ClaimsPrincipal user)
         {
             _context = context;
+            _user = user;
         }
 
         // GET: Facturas
@@ -55,15 +61,29 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo")] Facturas factura)
+        public async Task<IActionResult> Create([Bind("Codigo,FechaCreacion,SubTotal,Total,Estado,Medicamentos")] FacturaViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(factura);
+                Facturas nuevaFactura = new()
+                {
+                    FechaCreacion = viewModel.FechaCreacion,
+                    SubTotal = viewModel.SubTotal,
+                    Total = viewModel.Total,
+                    Estado = viewModel.Estado,
+                    FacturasMedicamentos = viewModel.Medicamentos,
+                    Creado = DateTime.Now,
+                    CreadoId = _user.GetUserID().ToInt(),
+                    Modificado = DateTime.Now,
+                    ModificadoId = _user.GetUserID().ToInt(),
+                    Inactivo = false
+                };
+
+                _context.Add(nuevaFactura);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(factura);
+            return View(viewModel);
         }
 
         // GET: Facturas/Edit/5

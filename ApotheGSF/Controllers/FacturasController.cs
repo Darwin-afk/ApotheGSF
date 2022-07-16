@@ -18,10 +18,10 @@ namespace ApotheGSF.Controllers
         private readonly ClaimsPrincipal _user;
 
         public FacturasController(AppDbContext context,
-                                  ClaimsPrincipal user)
+                                  IHttpContextAccessor accessor)
         {
             _context = context;
-            _user = user;
+            _user = accessor.HttpContext.User;
         }
 
         // GET: Facturas
@@ -65,13 +65,24 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
+                List<FacturaMedicamentosCajas> facturaMedicamentos = new();
+                foreach (var i in viewModel.Medicamentos)
+                {
+                    facturaMedicamentos.Add(new FacturaMedicamentosCajas
+                    {
+                        CajaId = i.CajaId,
+                        CantidadUnidad = i.CantidadUnidad,
+                        Precio = i.Precio
+                    });
+                }
+
                 Facturas nuevaFactura = new()
                 {
                     FechaCreacion = viewModel.FechaCreacion,
                     SubTotal = viewModel.SubTotal,
                     Total = viewModel.Total,
                     Estado = viewModel.Estado,
-                    FacturasMedicamentos = viewModel.Medicamentos,
+                    FacturasMedicamentosCajas = facturaMedicamentos,
                     Creado = DateTime.Now,
                     CreadoId = _user.GetUserID().ToInt(),
                     Modificado = DateTime.Now,
@@ -94,12 +105,26 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var factura = await _context.Facturas.FindAsync(id);
-            if (factura == null)
-            {
-                return NotFound();
-            }
-            return View(factura);
+            var factura = await (from f in _context.Facturas
+                                 .AsNoTracking()
+                                 .AsQueryable()
+                                 join fm in _context.FacturasMedicamentosCajas on f.Codigo equals fm.FacturaId
+                                 select new FacturaViewModel
+                                 {
+                                     Codigo = f.Codigo,
+                                     FechaCreacion = f.FechaCreacion,
+                                     SubTotal = f.SubTotal,
+                                     Total = f.Total,
+                                     Estado = f.Estado,
+                                     Medicamentos = new List<FacturaViewModel.DetalleMedicamentos>
+                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            //if (factura == null)
+            //{
+            //    return NotFound();
+            //}
+            return View();
+            //return View(factura);
         }
 
         // POST: Facturas/Edit/5

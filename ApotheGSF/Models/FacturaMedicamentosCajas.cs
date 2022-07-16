@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApotheGSF.Models
 {
-    public class FacturaMedicamentos
+    public class FacturaMedicamentosCajas
     {
         [Key]
         public int FacturaMedicamentoId { get; set; }
@@ -16,6 +16,7 @@ namespace ApotheGSF.Models
         public int CantidadUnidad { get; set; }
         public float Precio { get; set; }
 
-        
+
     }
 }
+

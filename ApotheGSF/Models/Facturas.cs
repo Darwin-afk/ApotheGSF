@@ -25,9 +25,9 @@ namespace ApotheGSF.Models
 
         public Facturas()
         {
-            FacturasMedicamentos = new HashSet<FacturaMedicamentos>();
+            FacturasMedicamentosCajas = new HashSet<FacturaMedicamentosCajas>();
         }
         
-        public ICollection<FacturaMedicamentos> FacturasMedicamentos { get; set; }
+        public ICollection<FacturaMedicamentosCajas> FacturasMedicamentosCajas { get; set; }
     }
 }

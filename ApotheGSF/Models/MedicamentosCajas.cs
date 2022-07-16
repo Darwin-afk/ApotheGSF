@@ -8,8 +8,7 @@ namespace ApotheGSF.Models
         [Key]
         public int CajaId { get; set; }
         [ForeignKey("Medicamentos")]
-        public int MedicamentosId { get; set; }
-        public virtual Medicamentos? Medicamentos { get; set; }
+        public virtual Medicamentos? MedicamentosId { get; set; }
         [NotMapped]
         public string? NombreMedicamentos { get; set; }
         public DateTime FechaAdquirido { get; set; }
@@ -18,9 +17,9 @@ namespace ApotheGSF.Models
 
         public MedicamentosCajas()
         {
-            FacturaMedicamentos = new HashSet<FacturaMedicamentos>();
+            FacturaMedicamentos = new HashSet<FacturaMedicamentosCajas>();
         }
 
-        public ICollection<FacturaMedicamentos> FacturaMedicamentos { get; set; } 
+        public ICollection<FacturaMedicamentosCajas> FacturaMedicamentos { get; set; } 
     }
 }

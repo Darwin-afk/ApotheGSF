@@ -113,7 +113,7 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable("tblMedicamentos");
             });
-            modelBuilder.Entity<FacturaMedicamentos>(entity =>
+            modelBuilder.Entity<FacturaMedicamentosCajas>(entity =>
             {
                 entity.ToTable("tblFacturasMedicamentos");
             });
@@ -181,7 +181,7 @@ namespace ApotheGSF.Models
         public DbSet<Medicamentos> Medicamentos { get; set; }
         public DbSet<Facturas> Facturas { get; set; }
         public DbSet<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
-        public DbSet<FacturaMedicamentos> FacturasMedicamentos { get; set; }
+        public DbSet<FacturaMedicamentosCajas> FacturasMedicamentosCajas { get; set; }
         public DbSet<MedicamentosCajas> MedicamentosCajas { get; set; }
     }
 }

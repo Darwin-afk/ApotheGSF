@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    
     public class ProveedoresController : Controller
     {
+
         private readonly AppDbContext _context;
 
         public ProveedoresController(AppDbContext context)
@@ -55,7 +58,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre")] Proveedores proveedor)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago,Creado,CreadoId,Modificado,ModificadoId,Inactivo")] Proveedores proveedor)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +90,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre")] Proveedores proveedor)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago,Creado,CreadoId,Modificado,ModificadoId,Inactivo")] Proveedores proveedor)
         {
             if (id != proveedor.Codigo)
             {

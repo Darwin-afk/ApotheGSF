@@ -8,7 +8,8 @@ namespace ApotheGSF.Models
         [Key]
         public int CajaId { get; set; }
         [ForeignKey("Medicamentos")]
-        public virtual Medicamentos? MedicamentosId { get; set; }
+        public int MedicamentosId { get; set; }
+        public virtual Medicamentos? Medicamentos { get; set; }
         [NotMapped]
         public string? NombreMedicamentos { get; set; }
         public DateTime FechaAdquirido { get; set; }

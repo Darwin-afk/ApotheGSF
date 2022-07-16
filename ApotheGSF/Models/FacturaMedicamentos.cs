@@ -10,9 +10,9 @@ namespace ApotheGSF.Models
         [ForeignKey("Facturas")]
         public int FacturaId { get; set; }
         public virtual Facturas? Facturas { get; set; }
-        [ForeignKey("Medicamentos")]
+        [ForeignKey("MedicamentosCajas")]
         public int CajaId { get; set; }
-        public virtual Medicamentos? Medicamentos { get; set; }
+        public virtual MedicamentosCajas? MedicamentosCajas { get; set; }
         public int CantidadUnidad { get; set; }
         public float Precio { get; set; }
 

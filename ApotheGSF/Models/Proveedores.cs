@@ -7,7 +7,9 @@ namespace ApotheGSF.Models
     {
         [Key]
         public int Codigo { get; set; }
+
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [Display(Name = "Nombre")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]

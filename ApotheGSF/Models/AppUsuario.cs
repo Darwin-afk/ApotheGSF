@@ -22,10 +22,11 @@ namespace ApotheGSF.Models
         [Display(Name = "Rol")]
         public string? Rol { get; set; }
         public ICollection<AppUsuarioRol> UsuariosRoles { get; set; }
-        public DateTime Creado { get; set; }
-        public int CreadoPorId { get; set; }
+        public DateTime? Creado { get; set; }
+        public string? CreadoNombreUsuario { get; set; }
         public DateTime? Modificado { get; set; }
-        public int? ModificadoPorId { get; set; }
-        public bool Inactivo { get; set; }
+        public string? ModificadoNombreUsuario { get; set; }
+        public bool? Inactivo { get; set; }
+    
     }
 }

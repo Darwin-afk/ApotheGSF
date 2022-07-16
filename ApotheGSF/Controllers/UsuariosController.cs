@@ -120,9 +120,9 @@ namespace ApotheGSF.Controllers
                     Direccion = viewModel.Direccion,
                     PhoneNumber = viewModel.Telefono,
                     Creado = DateTime.Now,
-                    CreadoPorId = _user.GetUserID().ToInt(),
+                    CreadoNombreUsuario = _user.GetUserName(),
                     Modificado = DateTime.Now,
-                    ModificadoPorId = _user.GetUserID().ToInt(),
+                    ModificadoNombreUsuario = _user.GetUserName(),
                     Inactivo = false
                 };
 

@@ -6,12 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
+using System.Security.Claims;
+using ApotheGSF.Clases;
+using ApotheGSF.ViewModels;
 
 namespace ApotheGSF.Controllers
 {
     public class MedicamentosController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ClaimsPrincipal _user;
 
         public MedicamentosController(AppDbContext context)
         {
@@ -53,12 +57,22 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var medicamento = await _context.Medicamentos
-                .FirstOrDefaultAsync(m => m.Codigo == id);
-            if (medicamento == null)
-            {
-                return NotFound();
-            }
+            var medicamento = await (from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                               join m in _context.ProveedoresMedicamentos on meds.Codigo equals m.MedicamentosId
+                               join p in _context.Proveedores on m.ProveedoresId equals p.Codigo
+                               select new Medicamentos
+                               {
+                                   Codigo = meds.Codigo,
+                                   Nombre = meds.Nombre,
+                                   NombreProveedor = p.Nombre,
+                                   Marca = meds.Marca,
+                                   Categoria = meds.Categoria,
+                                   PrecioUnidad = meds.PrecioUnidad,
+                                   CreadoNombreUsuario = meds.CreadoNombreUsuario,
+                                   ModificadoNombreUsuario = meds.ModificadoNombreUsuario
+                               }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
 
             return View(medicamento);
         }
@@ -74,10 +88,14 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo")] Medicamentos medicamento)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Marca,Categoria,Sustancia,UnidadesPorCaja,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis")] Medicamentos medicamento)
         {
             if (ModelState.IsValid)
             {
+                medicamento.Creado = DateTime.Now;
+                medicamento.CreadoNombreUsuario = _user.GetUserName();
+                medicamento.Modificado = DateTime.Now;
+                medicamento.ModificadoNombreUsuario = _user.GetUserName();
                 _context.Add(medicamento);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

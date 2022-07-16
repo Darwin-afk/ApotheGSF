@@ -7,14 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using ApotheGSF.Clases;
 
 namespace ApotheGSF.Controllers
 {
     
     public class ProveedoresController : Controller
     {
-
+       
         private readonly AppDbContext _context;
+        private readonly ClaimsPrincipal _user;
+
 
         public ProveedoresController(AppDbContext context)
         {
@@ -62,6 +67,10 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
+                proveedor.Creado = DateTime.Now;
+                proveedor.CreadoId = _user.GetUserID().ToInt() ;
+                proveedor.Modificado = DateTime.Now;
+                proveedor.ModificadoId = _user.GetUserID().ToInt(); 
                 _context.Add(proveedor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Create));

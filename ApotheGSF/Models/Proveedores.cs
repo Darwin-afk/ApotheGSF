@@ -14,7 +14,7 @@ namespace ApotheGSF.Models
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "RNC")]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{1})$", ErrorMessage = "Teléfono inválido")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{1})$", ErrorMessage = "RNC inválido")]
         public string RNC { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
@@ -28,7 +28,7 @@ namespace ApotheGSF.Models
         public string Telefono2 { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Fax inválido")]
         [Display(Name = "Fax")]
         public string Fax { get; set; }
 
@@ -52,8 +52,6 @@ namespace ApotheGSF.Models
         public int? ModificadoId { get; set; }
         public bool? Inactivo { get; set; }
 
-        [NotMapped]
-        public bool IsUpdate { get; set; }
         
         public Proveedores()
         {

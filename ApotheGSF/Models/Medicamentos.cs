@@ -45,6 +45,6 @@ namespace ApotheGSF.Models
         public bool? Inactivo { get; set; }
 
         [NotMapped]
-        public bool IsUpdate { get; set; }
+        public string NombreProveedor { get; set; }
     }
 }

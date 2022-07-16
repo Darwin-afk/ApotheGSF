@@ -9,11 +9,13 @@ namespace ApotheGSF.Models
         public int ProveedorMedicamentoId { get; set; }
 
         [ForeignKey("Proveedores")]
-        public virtual Proveedores? ProveedoresId { get; set; }
+        public int ProveedoresId { get; set; }
+        public virtual Proveedores? Proveedores { get; set; }
         [NotMapped]
         public string? NombreProveedores { get; set; }
         [ForeignKey("Medicamentos")]
-        public virtual Medicamentos? MedicamentosId { get; set; }
+        public int MedicamentosId { get; set; }
+        public virtual Medicamentos? Medicamentos { get; set; }
         [NotMapped]
         public string? NombreMedicamentos { get; set; }
         

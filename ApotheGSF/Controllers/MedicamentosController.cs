@@ -21,9 +21,28 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos
         public async Task<IActionResult> Index()
         {
-              return _context.Medicamentos != null ? 
-                          View(await _context.Medicamentos.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Medicamentos'  is null.");
+        
+
+            var lista = await (from meds in _context.Medicamentos
+                              .AsNoTracking()
+                              .AsQueryable()
+                               join m in _context.ProveedoresMedicamentos on meds.Codigo equals m.MedicamentosId
+                               join p in _context.Proveedores  on m.ProveedoresId equals p.Codigo
+                               select new Medicamentos
+                               {
+                                   Codigo = meds.Codigo,
+                                   Nombre = meds.Nombre,
+                                   NombreProveedor = p.Nombre,
+                                   Marca = meds.Marca,
+                                   Categoria = meds.Categoria,
+                                   PrecioUnidad = meds.PrecioUnidad
+                                   
+                               }).ToListAsync();
+
+            return lista != null ?
+                View(lista) :
+                Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");
+                ;
         }
 
         // GET: Medicamentos/Details/5

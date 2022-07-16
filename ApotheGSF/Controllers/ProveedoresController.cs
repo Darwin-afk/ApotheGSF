@@ -110,6 +110,8 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
+                    proveedor.Modificado = DateTime.Now;
+                    proveedor.ModificadoId = _user.GetUserID().ToInt();
                     _context.Update(proveedor);
                     await _context.SaveChangesAsync();
                 }

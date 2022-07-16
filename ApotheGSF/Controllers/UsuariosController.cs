@@ -68,9 +68,9 @@ namespace ApotheGSF.Controllers
                             .AsQueryable()
                                  join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
                                  join r in _context.Roles on ur.RoleId equals r.Id
-                                 join creado in _context.AppUsuarios on u.CreadoPorId equals creado.Id into lj2
+                                 join creado in _context.AppUsuarios on u.CreadoNombreUsuario equals creado.CreadoNombreUsuario into lj2
                                  from y in lj2.DefaultIfEmpty()
-                                 join modificado in _context.AppUsuarios on u.ModificadoPorId equals modificado.Id into lj
+                                 join modificado in _context.AppUsuarios on u.ModificadoNombreUsuario equals modificado.ModificadoNombreUsuario into lj
                                  from x in lj.DefaultIfEmpty()
                                  select new UsuarioViewModel
                                  {
@@ -200,15 +200,15 @@ namespace ApotheGSF.Controllers
                     antiguoUsuario.Email = viewModel.Email;
                     antiguoUsuario.PhoneNumber = viewModel.Telefono;
                     antiguoUsuario.Modificado = DateTime.Now;
-                    antiguoUsuario.ModificadoPorId = _user.GetUserID().ToInt();
+                    antiguoUsuario.ModificadoNombreUsuario = _user.GetUserName();
 
                     //Se debe validar que el email y el telefono no se repitan.
                     // Verificar si _userManager tiene una opcion, se pueden hacer indeces unique y se puede hacer un query antes de.
                     _context.Update(antiguoUsuario);
                     antiguoUsuario.Modificado = DateTime.Now;
-                    antiguoUsuario.ModificadoPorId = _user.GetUserID().ToInt();
+                    antiguoUsuario.ModificadoNombreUsuario = _user.GetUserName();
                     _context.Entry(antiguoUsuario).Property(c => c.Creado).IsModified = false;
-                    _context.Entry(antiguoUsuario).Property(c => c.CreadoPorId).IsModified = false;
+                    _context.Entry(antiguoUsuario).Property(c => c.CreadoNombreUsuario).IsModified = false;
                     _context.Entry(antiguoUsuario).Property(c => c.Inactivo).IsModified = false;
                     var result = await _context.SaveChangesAsync();
 
@@ -269,10 +269,10 @@ namespace ApotheGSF.Controllers
             {
                 _context.AppUsuarios.Update(appUsuario);
                 appUsuario.Modificado = DateTime.Now;
-                appUsuario.ModificadoPorId = _user.GetUserID().ToInt();
+                appUsuario.ModificadoNombreUsuario = _user.GetUserName();
                 appUsuario.Inactivo = true;
                 _context.Entry(appUsuario).Property(c => c.Creado).IsModified = false;
-                _context.Entry(appUsuario).Property(c => c.CreadoPorId).IsModified = false;
+                _context.Entry(appUsuario).Property(c => c.CreadoNombreUsuario).IsModified = false;
             }
 
             await _context.SaveChangesAsync();

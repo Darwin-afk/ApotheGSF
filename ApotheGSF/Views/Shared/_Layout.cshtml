@@ -30,7 +30,7 @@
 							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" style="color: white;" asp-controller="Facturas" asp-action="Index">
+							<a class="nav-link" style="color: white;" asp-controller="Facturas" asp-action="Create">
 								Facturar
 							</a>
 						</li>
@@ -52,17 +52,20 @@
 								<li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Details">Usuario</a></li>
 								<li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Details">Medicamento</a></li>
 								<li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Details">Proveedores</a></li>
+								<li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Details">Facturas</a></li>
 							</ul>
 						</li>
+						@*
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Reportes
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item text-dark" asp-controller="Faturas" asp-action="Details">Factura</a></li>
+								<li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Details">Factura</a></li>
 								<li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Details">Proveedores</a></li>
 							</ul>
 						</li>
+						*@
 
 					</ul>
 					<ul class="navbar-nav ml-auto dropstart">

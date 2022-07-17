@@ -3,16 +3,63 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-11">
+                <div class="card">
+                    <div class="card-header text-center" style="background-color:#009900;">
+                        <h3 class="display-8" style="color:white;">Consulta de Medicamentos</h3>
+                    </div>
+                    <!--datos-->
+                    <div class="card-body">
+                        <div class="form-group row">
 
-<h1>Details</h1>
+                            <div class="col-sm-7 row">
+                                <div class="col-sm-2">
+                                    <label class="col-form-label">Desde</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="date"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="col-form-label">Hasta</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="date">
+                                </div>
+                            </div>
 
-<div>
-    <h4>Medicamento</h4>
-    <hr />
-    <dl class="row">
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Codigo">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+                            <div class="col-sm-4 row">
+                                <div class="col-sm-2">
+                                    <Label class="col-form-label">Filtro</Label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="EstadoCivil" id="EstadoCivil">
+                                        <option selected disabled></option>
+                                        <option value="Casado">Id</option>
+                                        <option value="Soltero">Marca</option>
+                                        <option value="Soltero">Proveedor</option>
+                                        <option value="Soltero">FechaCreacion</option>
+                                        <option value="Soltero">FechaAdquisicion</option>
+                                        <option value="Soltero">FechaVencimiento</option>
+                                        <option value="Soltero">Categoria</option>
+                                        <option value="Soltero">Consentracion</option>
+                                        <option value="Soltero">Costo</option>
+                                        <option value="Soltero">Precio</option>
+                                        <option value="Soltero">Dosis</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <button class="btn btn-primary" type="button">Buscar </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Botones-->
+                    <div class="card-footer text-center" style="background-color:#009900 ;">
+                        
+                        <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
+                        
+                    </div>
+                    <!--Fin Botones-->
+                </div>
+            </div>

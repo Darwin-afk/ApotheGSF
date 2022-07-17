@@ -37,6 +37,7 @@ namespace ApotheGSF.Controllers
         // GET: Proveedores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            /*
             if (id == null || _context.Proveedores == null)
             {
                 return NotFound();
@@ -48,8 +49,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-
-            return View(proveedor);
+            */
+            return View();
         }
 
         // GET: Proveedores/Create
@@ -81,6 +82,7 @@ namespace ApotheGSF.Controllers
         // GET: Proveedores/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            /*
             if (id == null || _context.Proveedores == null)
             {
                 return NotFound();
@@ -91,7 +93,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-            return View(proveedor);
+            */
+            return View();
         }
 
         // POST: Proveedores/Edit/5
@@ -134,6 +137,7 @@ namespace ApotheGSF.Controllers
         // GET: Proveedores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            /*
             if (id == null || _context.Proveedores == null)
             {
                 return NotFound();
@@ -145,8 +149,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-
-            return View(proveedor);
+            */
+            return View();
         }
 
         // POST: Proveedores/Delete/5

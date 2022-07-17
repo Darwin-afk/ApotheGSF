@@ -10,8 +10,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
              <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
                 <div class="card">
-                    <div class="card-header text-center" style="background-color: lightgreen;">
-                        <h3 class="display-8">Create Proveedor</h3>
+                    <div class="card-header text-center" style="background-color: #7F0099;">
+                        <h3 class="display-8" style="color:white;">Create Proveedor</h3>
                     </div>
                     <!--datos-->
                     <div class="card-body">
@@ -111,11 +111,11 @@
    
                         <!--Fin datos-->
                     </div>
-                    <div class="card-footer text-center" style="background-color: lightgreen ;">
+                    <div class="card-footer text-center" style="background-color: #7F0099 ;">
                         <!--Botones-->
                         <button class="btn btn-secondary" type="reset">Nuevo</button>
                         <button class="btn btn-primary" type="submit">Guardar</button>
-                        <a class="btn btn-danger" href="FrontEnd.html" type="button">Cerrar</a>
+                        <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
                         <!--Fin Botones-->
                     </div>
                 </div>

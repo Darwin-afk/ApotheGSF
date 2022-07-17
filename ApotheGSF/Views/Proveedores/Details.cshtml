@@ -3,22 +3,56 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-11">
+    <div class="card">
+        <div class="card-header text-center" style="background-color:#7F0099;">
+            <h3 class="display-8" style="color:white;">Consulta de Proveedores</h3>
+        </div>
+        <!--datos-->
+        <div class="card-body">
+            <div class="form-group row">
 
-<h1>Details</h1>
+                <div class="col-sm-7 row">
+                    <div class="col-sm-2">
+                        <label class="col-form-label">Desde</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="date" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="col-form-label">Hasta</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="date">
+                    </div>
+                </div>
 
-<div>
-    <h4>Proveedor</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Codigo">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <div class="col-sm-4 row">
+                    <div class="col-sm-2">
+                        <Label class="col-form-label">Filtro</Label>
+                    </div>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="EstadoCivil" id="EstadoCivil">
+                            <option selected disabled></option>
+                            <option value="Casado">Id</option>
+                            <option value="Soltero">Nombre</option>
+                            <option value="Soltero">RNC</option>
+                            <option value="Soltero">Terminos de Pago</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-1">
+                    <button class="btn btn-primary" type="button">Buscar </button>
+                </div>
+            </div>
+        </div>
+        <!--Botones-->
+        <div class="card-footer text-center" style="background-color:#7F0099 ;">
+
+            <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
+
+        </div>
+        <!--Fin Botones-->
+    </div>
 </div>

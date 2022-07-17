@@ -32,7 +32,7 @@ namespace ApotheGSF.Controllers
                               .AsQueryable()
                                join m in _context.ProveedoresMedicamentos on meds.Codigo equals m.MedicamentosId
                                join p in _context.Proveedores  on m.ProveedoresId equals p.Codigo
-                               select new Medicamentos
+                               select new MedicamentosViewModel
                                {
                                    Codigo = meds.Codigo,
                                    Nombre = meds.Nombre,
@@ -62,7 +62,7 @@ namespace ApotheGSF.Controllers
                                .AsQueryable()
                                join m in _context.ProveedoresMedicamentos on meds.Codigo equals m.MedicamentosId
                                join p in _context.Proveedores on m.ProveedoresId equals p.Codigo
-                               select new Medicamentos
+                               select new MedicamentosViewModel
                                {
                                    Codigo = meds.Codigo,
                                    Nombre = meds.Nombre,
@@ -88,19 +88,27 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Marca,Categoria,Sustancia,UnidadesPorCaja,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis")] Medicamentos medicamento)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Marca,Categoria,Sustancia,UnidadesPorCaja,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis")] MedicamentosViewModel viewModel)
         {
+
             if (ModelState.IsValid)
             {
-                medicamento.Creado = DateTime.Now;
-                medicamento.CreadoNombreUsuario = _user.GetUserName();
-                medicamento.Modificado = DateTime.Now;
-                medicamento.ModificadoNombreUsuario = _user.GetUserName();
-                _context.Add(medicamento);
+                var Meds = await(from m in _context.Medicamentos
+                                 .AsNoTracking()
+                                 .AsQueryable()
+                                 join 
+                                 )
+                viewModel.Creado = DateTime.Now;
+                viewModel.CreadoNombreUsuario = _user.GetUserName();
+                viewModel.Modificado = DateTime.Now;
+                viewModel.ModificadoNombreUsuario = _user.GetUserName();
+                viewModel.Inactivo = false;
+                _context.Add(viewModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(medicamento);
+            ViewData["ProveedoresId"] = new SelectList(_context.Proveedores, "Codigo", "Nombre", viewModel.ProveedorId );
+            return View(viewModel);
         }
 
         // GET: Medicamentos/Edit/5
@@ -124,7 +132,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo")] Medicamentos medicamento)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Marca,Categoria,Sustancia,UnidadesPorCaja,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis")] Medicamentos medicamento)
         {
             if (id != medicamento.Codigo)
             {
@@ -135,6 +143,9 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
+
+                    medicamento.Modificado = DateTime.Now;
+                    medicamento.ModificadoNombreUsuario = _user.GetUserName();
                     _context.Update(medicamento);
                     await _context.SaveChangesAsync();
                 }

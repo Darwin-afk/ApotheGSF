@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ApotheGSF.Models
+namespace ApotheGSF.ViewModels
 {
-    public class Medicamentos
+    public class MedicamentosViewModel
     {
-        [Key]
         public int Codigo { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Nombre { get; set; }
@@ -27,24 +25,14 @@ namespace ApotheGSF.Models
         public string Indicaciones { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Dosis { get; set; }
-        
-        public Medicamentos()
-        {
-            ProveedoresMedicamentos = new HashSet<ProveedorMedicamentos>();
-            MedicamentosCajas = new HashSet<MedicamentosCajas>();
-        }
-        
-        public ICollection<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
-        public ICollection<MedicamentosCajas> MedicamentosCajas { get; set; }
 
-        [Column("Creado", TypeName = "datetime")]
         public DateTime? Creado { get; set; }
         public string? CreadoNombreUsuario { get; set; }
         public DateTime? Modificado { get; set; }
         public string? ModificadoNombreUsuario { get; set; }
+
+        public int ProveedorId { get; set; }
+        public string NombreProveedor { get; set; }
         public bool? Inactivo { get; set; }
-
-      
-
     }
 }

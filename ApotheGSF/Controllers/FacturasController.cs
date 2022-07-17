@@ -84,9 +84,7 @@ namespace ApotheGSF.Controllers
                     Estado = viewModel.Estado,
                     FacturasMedicamentosCajas = facturaMedicamentos,
                     Creado = DateTime.Now,
-                    CreadoId = _user.GetUserID().ToInt(),
                     Modificado = DateTime.Now,
-                    ModificadoId = _user.GetUserID().ToInt(),
                     Inactivo = false
                 };
 

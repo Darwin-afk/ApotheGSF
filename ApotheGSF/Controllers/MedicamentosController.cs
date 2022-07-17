@@ -93,11 +93,12 @@ namespace ApotheGSF.Controllers
 
             if (ModelState.IsValid)
             {
-                var Meds = await(from m in _context.Medicamentos
+                /*
+                var Meds = await (from m in _context.Medicamentos
                                  .AsNoTracking()
                                  .AsQueryable()
-                                 join 
-                                 )
+                                  join() );
+                */
                 viewModel.Creado = DateTime.Now;
                 viewModel.CreadoNombreUsuario = _user.GetUserName();
                 viewModel.Modificado = DateTime.Now;

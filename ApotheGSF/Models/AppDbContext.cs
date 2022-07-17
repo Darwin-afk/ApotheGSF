@@ -160,9 +160,7 @@ namespace ApotheGSF.Models
                 NormalizedEmail = "admin@gmail.com".ToUpper(),
                 PasswordHash = hasher.HashPassword(null, "1234"),
                 Creado = DateTime.Now,
-                CreadoPorId = 0,
                 Modificado = DateTime.Now,
-                ModificadoPorId = 0,
                 SecurityStamp = string.Empty,
                 LockoutEnabled = true
             });

@@ -3,95 +3,198 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<div class="form-group row">
+	<div class="form-group col-sm-10">
+		<form asp-action="Edit">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
+				<div class="card">
+					<div class="card-header text-center" style="background-color:#006699 ;">
+						<h3 class="display-8" style="color:white;">Edit Usuario</h3>
+					</div>
+					<!--datos-->
+					<div class="card-body">
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Matricula" class="col-form-label">Código</label>
+							</div>
+							<div class="col-sm-8 row">
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="Matricula" id="Matricula"
+										   placeholder="0">
+								</div>
+								<div class="col-sm-1">
+									<button class="btn btn-primary" type="button">Buscar</button>
+								</div>
+							</div>
+						</div>
 
-<h1>Edit</h1>
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Cedula" class="col-form-label">Nombre</label>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="Cedula" id="Cedula"
+									   placeholder="Nombre">
+							</div>
+						</div>
 
-<h4>AppUser</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NormalizedUserName" class="control-label"></label>
-                <input asp-for="NormalizedUserName" class="form-control" />
-                <span asp-validation-for="NormalizedUserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NormalizedEmail" class="control-label"></label>
-                <input asp-for="NormalizedEmail" class="form-control" />
-                <span asp-validation-for="NormalizedEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="EmailConfirmed" /> @Html.DisplayNameFor(model => model.EmailConfirmed)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="PasswordHash" class="control-label"></label>
-                <input asp-for="PasswordHash" class="form-control" />
-                <span asp-validation-for="PasswordHash" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SecurityStamp" class="control-label"></label>
-                <input asp-for="SecurityStamp" class="form-control" />
-                <span asp-validation-for="SecurityStamp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConcurrencyStamp" class="control-label"></label>
-                <input asp-for="ConcurrencyStamp" class="form-control" />
-                <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="PhoneNumberConfirmed" /> @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="TwoFactorEnabled" /> @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="LockoutEnd" class="control-label"></label>
-                <input asp-for="LockoutEnd" class="form-control" />
-                <span asp-validation-for="LockoutEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="LockoutEnabled" /> @Html.DisplayNameFor(model => model.LockoutEnabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="AccessFailedCount" class="control-label"></label>
-                <input asp-for="AccessFailedCount" class="form-control" />
-                <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Apellido" class="col-form-label">Appellido</label>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="FechaNacimiento" id="FechaNacimiento"
+									   placeholder="Apellido" required>
+							</div>
+						</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="FechaIngreso" class="col-form-label">Teléfono</label>
+							</div>
+							<div class="col-sm-8">
+								<input type="tel" class="form-control" name="FechaIngreso" id="FechaIngreso"
+									   placeholder="___-____-____">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Nombre" class="col-form-label">Cédula</label>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="Nombre" id="Nombre"
+									   placeholder="___-_______-_" maxlength="40" required>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Apellido" class="col-form-label">Fecha de Nacimiento</label>
+							</div>
+							<div class="col-sm-8">
+								<input type="Date" class="form-control" name="Apellido" id="Apellido"
+									   placeholder="" maxlength="40">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Nacionalidad" class="col-form-label">Dirección</label>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="Nacionalidad" id="Nacionalidad"
+									   placeholder="Dirección">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Telefono" class="col-form-label">Email</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="email" class="form-control" name="Telefono"
+									   placeholder="Example@Something.com" id="Telefono">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Email" class="col-form-label">Nombre de Usuario</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="Email"
+									   placeholder="Nombre Usuario" id="Email">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="NombrePadre" class="col-form-label">Contraseña</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="NombrePadre"
+									   id="NombrePadre" placeholder="Contraseña" maxlength="60">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="NombreMadre" class="col-form-label">Creado</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="NombreMadre"
+									   id="NombreMadre" placeholder="Creado" maxlength="60">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label for="Direccion" class="col-form-label">CreadoId</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="NombreMadre"
+									   id="NombreMadre" placeholder="0" maxlength="60">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label class="col-form-label" for="Carrera">Modificado</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="Direccion"
+									   id="Direccion" placeholder="Modificado" maxlength="100">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label class="col-form-label" for="Carrera">ModificadoId</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="Direccion"
+									   id="Direccion" placeholder="0" maxlength="100">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label class="col-form-label" for="Carrera">Inactivo</label>
+							</div>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" class="form-control" name="Direccion"
+									   id="Direccion" placeholder="" maxlength="100">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label class="col-form-label" for="EstadoCivil">Roles</label>
+							</div>
+							<div class="col-sm-8">
+								<select class="form-control" name="EstadoCivil" id="EstadoCivil">
+									<option selected disabled>Seleccione Los roles del Usuario</option>
+									<option value="Casado">a</option>
+									<option value="Soltero">e</option>
+								</select>
+							</div>
+						</div>
+						<!--Fin datos-->
+					</div>
+					<div class="card-footer text-center" style="background-color:#006699 ;">
+						<!--Botones-->
+						<button class="btn btn-primary" type="submit">Modificar</button>
+						<a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
+						<!--Fin Botones-->
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-sm-2">
+	</div>
 </div>
 
 @section Scripts {

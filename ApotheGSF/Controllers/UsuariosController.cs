@@ -58,6 +58,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            /*
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -89,9 +90,9 @@ namespace ApotheGSF.Controllers
             if (usuario == null)
             {
                 return NotFound();
-            }
+            }*/
 
-            return View(usuario);
+            return View();
         }
 
         // GET: Usuarios/Create
@@ -149,6 +150,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            /*
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -172,7 +174,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-            return View(usuario);
+            */
+            return View();
         }
 
         // POST: Usuarios/Edit/5
@@ -240,6 +243,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            /*
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -251,8 +255,9 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
+            */
 
-            return View(appUser);
+            return View();
         }
 
         // POST: Usuarios/Delete/5

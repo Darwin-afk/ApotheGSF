@@ -21,8 +21,7 @@
                             </div>                            
                             <div class="col-sm-8 row">
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="Matricula" id="Matricula"
-                                    placeholder="0">
+                                    <input type="text" class="form-control" placeholder="0">
                                 </div>
                                 <div class="col-sm-2">
                                     <button class="btn btn-primary" type="button">Buscar</button>
@@ -35,8 +34,7 @@
                                 <label for="Cedula" class="col-form-label">Nombre</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="Cedula" id="Cedula"
-                                placeholder="Nombre">
+                                <input type="text" class="form-control" placeholder="Nombre">
                             </div>
                         </div>
                         
@@ -45,8 +43,7 @@
                                 <label for="Apellido" class="col-form-label">Marca</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="FechaNacimiento" id="FechaNacimiento"
-                                placeholder="Marca" required>
+                                <input type="text" class="form-control" placeholder="Marca" required>
                             </div>
                         </div>
 
@@ -54,13 +51,7 @@
                             <div class="col-sm-4">
                                 <label for="FechaIngreso" class="col-form-label">Proveedores</label>
                             </div>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="EstadoCivil" id="EstadoCivil">
-                                    <option selected disabled>Seleccione El Proveedor</option>
-                                    <option value="Casado">a</option>
-                                    <option value="Soltero">e</option>
-                                </select>
-                            </div>
+                            <div asp-nombres="@ViewBag.NombresProveedores" asp-valores="@ViewBag.CodigosProveedores" asp-valores-seleccionados=null asp-id=ProveedoresId></div>
                         </div>
 
                         <div class="form-group row">
@@ -68,8 +59,7 @@
                                 <label for="Nombre" class="col-form-label">Fecha de Creación</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" name="Nombre" id="Nombre"
-                                placeholder="" maxlength="40" required>
+                                <input type="date" class="form-control">
                             </div>
                         </div>
 
@@ -78,8 +68,7 @@
                                 <label for="Apellido" class="col-form-label">Fecha de Adquisición</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="Date" class="form-control" name="Apellido" id="Apellido"
-                                placeholder="" maxlength="40">
+                                <input type="Date" class="form-control">
                             </div> 
                         </div> 
                         
@@ -88,8 +77,7 @@
                                 <label for="Apellido" class="col-form-label">Fecha de Vencimiento</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="Date" class="form-control" name="Apellido" id="Apellido"
-                                placeholder="" maxlength="40">
+                                <input type="Date" class="form-control">
                             </div> 
                         </div>
 
@@ -98,8 +86,7 @@
                                 <label for="Nacionalidad" class="col-form-label">Categoria</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="Nacionalidad" id="Nacionalidad"
-                                    placeholder="Categoria">
+                                <input type="text" class="form-control" placeholder="Categoria">
                             </div>
                         </div>                        
 
@@ -108,8 +95,7 @@
                                 <label for="Telefono" class="col-form-label">Sustancia</label>
                             </div>
                             <div class="col-sm-8">
-                                <input class="form-control" type="email" class="form-control" name="Telefono"
-                                    placeholder="Sustancia" id="Telefono">
+                                <input class="form-control" type="email" placeholder="Sustancia">
                             </div>
                         </div>
 
@@ -118,8 +104,7 @@
                                 <label for="Telefono" class="col-form-label">Cantidad</label>
                             </div>
                             <div class="col-sm-8">
-                                <input class="form-control" type="email" class="form-control" name="Telefono"
-                                    placeholder="0" id="Telefono">
+                                <input class="form-control" type="email" placeholder="0">
                             </div>
                         </div>
 

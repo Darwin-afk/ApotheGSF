@@ -53,13 +53,7 @@
                             <div class="col-sm-4">
                                 <label for="FechaIngreso" class="col-form-label">Proveedores</label>
                             </div>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="EstadoCivil" id="EstadoCivil">
-                                    <option selected disabled>Seleccione El Proveedor</option>
-                                    <option value="Casado">a</option>
-                                    <option value="Soltero">e</option>
-                                </select>
-                            </div>
+                            <div asp-nombres="@ViewBag.NombresProveedores" asp-valores="@ViewBag.CodigosProveedores" asp-valores-seleccionados=@ViewBag.ValoresSeleccionados asp-id=ProveedoresId></div>
                         </div>
 
                         <div class="form-group row">

@@ -108,6 +108,7 @@ namespace ApotheGSF.Models
             modelBuilder.Entity<ProveedorMedicamentos>(entity =>
             {
                 entity.ToTable("tblProveedoresMedicamentos");
+                entity.HasKey(pm => new { pm.MedicamentosId, pm.ProveedoresId });
             });
             modelBuilder.Entity<Medicamentos>(entity =>
             {
@@ -115,7 +116,8 @@ namespace ApotheGSF.Models
             });
             modelBuilder.Entity<FacturaMedicamentosCajas>(entity =>
             {
-                entity.ToTable("tblFacturasMedicamentos");
+                entity.ToTable("tblFacturasMedicamentosCajas");
+                entity.HasKey(fm => new { fm.FacturaId, fm.CajaId });
             });
             modelBuilder.Entity<Facturas>(entity =>
             {

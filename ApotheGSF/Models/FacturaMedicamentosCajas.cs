@@ -5,8 +5,6 @@ namespace ApotheGSF.Models
 {
     public class FacturaMedicamentosCajas
     {
-        [Key]
-        public int FacturaMedicamentoId { get; set; }
         [ForeignKey("Facturas")]
         public int FacturaId { get; set; }
         public virtual Facturas? Facturas { get; set; }

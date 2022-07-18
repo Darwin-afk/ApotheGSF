@@ -11,6 +11,7 @@ namespace ApotheGSF.Models
         public virtual Medicamentos? MedicamentosId { get; set; }
         [NotMapped]
         public string? NombreMedicamentos { get; set; }
+        public int CantidadUnidad { get; set; }
         public DateTime FechaAdquirido { get; set; }
         public DateTime FechaVencimiento { get; set; }
         public bool Detallada { get; set; }

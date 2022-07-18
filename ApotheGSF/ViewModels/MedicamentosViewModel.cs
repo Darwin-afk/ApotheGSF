@@ -14,8 +14,6 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Sustancia { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        public int UnidadesPorCaja { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Concentracion { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public int Costo { get; set; }
@@ -26,13 +24,8 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Dosis { get; set; }
 
-        public DateTime? Creado { get; set; }
-        public string? CreadoNombreUsuario { get; set; }
-        public DateTime? Modificado { get; set; }
-        public string? ModificadoNombreUsuario { get; set; }
-
-        public int ProveedorId { get; set; }
-        public string NombreProveedor { get; set; }
-        public bool? Inactivo { get; set; }
+        public List<int>? ProveedoresId { get; set; }
+        public string? NombreProveedor { get; set; }
+       
     }
 }

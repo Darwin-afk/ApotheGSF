@@ -25,23 +25,43 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos
         public async Task<IActionResult> Index()
         {
-        
 
             var lista = await (from meds in _context.Medicamentos
-                              .AsNoTracking()
-                              .AsQueryable()
-                               join m in _context.ProveedoresMedicamentos on meds.Codigo equals m.MedicamentosId
-                               join p in _context.Proveedores  on m.ProveedoresId equals p.Codigo
-                               select new MedicamentosViewModel
-                               {
-                                   Codigo = meds.Codigo,
-                                   Nombre = meds.Nombre,
-                                   NombreProveedor = p.Nombre,
-                                   Marca = meds.Marca,
-                                   Categoria = meds.Categoria,
-                                   PrecioUnidad = meds.PrecioUnidad
-                                   
-                               }).ToListAsync();
+                               .AsNoTracking()
+                               .AsQueryable()
+                                     select new MedicamentosViewModel
+                                     {
+
+                                         Codigo = meds.Codigo,
+                                         Nombre = meds.Nombre,
+                                         Categoria = meds.Categoria,
+                                         Sustancia = meds.Sustancia,
+                                         Concentracion = meds.Concentracion,
+                                         Costo = meds.Costo,
+                                         PrecioUnidad = meds.PrecioUnidad,
+                                         Indicaciones = meds.Indicaciones,
+                                         Dosis = meds.Dosis,
+
+                                         NombreProveedor = string.Join(", ",
+                                         (from p in _context.Proveedores
+                                          .AsNoTracking()
+                                          join provMed in _context.ProveedoresMedicamentos
+                                          on new
+                                          {
+                                              ProveedoresId = p.Codigo,
+                                              MedicamentosId = meds.Codigo
+                                          } equals new
+                                          {
+                                              ProveedoresId = provMed.ProveedoresId,
+                                              MedicamentosId = provMed.MedicamentosId
+                                          }
+                                          select new Proveedores
+                                          {
+                                              Nombre = p.Nombre
+                                          }
+                                          ).Select(x => x.Nombre).ToList())
+
+                                     }).ToListAsync();
 
             return lista != null ?
                 View(lista) :
@@ -52,7 +72,7 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            /*
+            
             if (id == null || _context.Medicamentos == null)
             {
                 return NotFound();
@@ -61,26 +81,52 @@ namespace ApotheGSF.Controllers
             var medicamento = await (from meds in _context.Medicamentos
                                .AsNoTracking()
                                .AsQueryable()
-                               join m in _context.ProveedoresMedicamentos on meds.Codigo equals m.MedicamentosId
-                               join p in _context.Proveedores on m.ProveedoresId equals p.Codigo
-                               select new MedicamentosViewModel
-                               {
-                                   Codigo = meds.Codigo,
-                                   Nombre = meds.Nombre,
-                                   NombreProveedor = p.Nombre,
-                                   Marca = meds.Marca,
-                                   Categoria = meds.Categoria,
-                                   PrecioUnidad = meds.PrecioUnidad,
-                                   CreadoNombreUsuario = meds.CreadoNombreUsuario,
-                                   ModificadoNombreUsuario = meds.ModificadoNombreUsuario
-                               }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
-            */
-            return View();
+                                     select new MedicamentosViewModel
+                                     {
+
+                                         Codigo = meds.Codigo,
+                                         Nombre = meds.Nombre,
+                                         Categoria = meds.Categoria,
+                                         Sustancia = meds.Sustancia,
+                                         Concentracion = meds.Concentracion,
+                                         Costo = meds.Costo,
+                                         PrecioUnidad = meds.PrecioUnidad,
+                                         Indicaciones = meds.Indicaciones, 
+                                         Dosis = meds.Dosis,
+
+                                         NombreProveedor = string.Join(", ",
+                                         (from p in _context.Proveedores
+                                          .AsNoTracking()
+                                          join provMed in _context.ProveedoresMedicamentos
+                                          on new
+                                          {
+                                              ProveedoresId = p.Codigo,
+                                              MedicamentosId = meds.Codigo
+                                          } equals new
+                                          {
+                                              ProveedoresId = provMed.ProveedoresId, MedicamentosId = provMed.MedicamentosId
+                                          }
+                                          select new Proveedores
+                                          {
+                                              Nombre = p.Nombre
+                                          }
+                                          ).Select(x => x.Nombre).ToList())
+
+                                     }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+            
+            if(medicamento == null)
+            {
+                return NotFound();
+            }
+
+            return View(medicamento);
         }
 
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
+            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             return View();
         }
 
@@ -89,46 +135,92 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Marca,Categoria,Sustancia,UnidadesPorCaja,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
         {
+            ModelState.Remove("NombreProveedor");
 
             if (ModelState.IsValid)
             {
-                /*
-                var Meds = await (from m in _context.Medicamentos
-                                 .AsNoTracking()
-                                 .AsQueryable()
-                                  join() );
-                */
-                viewModel.Creado = DateTime.Now;
-                viewModel.CreadoNombreUsuario = _user.GetUserName();
-                viewModel.Modificado = DateTime.Now;
-                viewModel.ModificadoNombreUsuario = _user.GetUserName();
-                viewModel.Inactivo = false;
-                _context.Add(viewModel);
+                Medicamentos newMedicamentos = new()
+                {
+                    Nombre = viewModel.Nombre,
+                    Categoria = viewModel.Categoria,
+                    Sustancia = viewModel.Sustancia,
+                    Concentracion = viewModel.Concentracion,
+                    Costo = viewModel.Costo,
+                    PrecioUnidad = viewModel.PrecioUnidad,
+                    Indicaciones = viewModel.Indicaciones,
+                    Dosis = viewModel.Dosis,
+                    Creado = DateTime.Now,
+                    CreadoNombreUsuario = _user.GetUserName(),
+                    Modificado = DateTime.Now,
+                    ModificadoNombreUsuario = _user.GetUserName(),
+                    Inactivo = false
+
+            };
+
+                _context.Medicamentos.Add(newMedicamentos);
+
+                foreach(var item in viewModel.ProveedoresId)
+                {
+                    ProveedorMedicamentos proveedorMedicamentos = new()
+                    {
+                        ProveedoresId = item
+
+                    };
+
+                    newMedicamentos.ProveedoresMedicamentos.Add(proveedorMedicamentos);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProveedoresId"] = new SelectList(_context.Proveedores, "Codigo", "Nombre", viewModel.ProveedorId );
+            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             return View(viewModel);
         }
 
         // GET: Medicamentos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            /*
+            
             if (id == null || _context.Medicamentos == null)
             {
                 return NotFound();
             }
 
-            var medicamento = await _context.Medicamentos.FindAsync(id);
-            if (medicamento == null)
+            var medicamentos = await (from meds in _context.Medicamentos
+                                     select new MedicamentosViewModel
+                                     {
+
+                                         Codigo = meds.Codigo,
+                                         Nombre = meds.Nombre,
+                                         Categoria = meds.Categoria,
+                                         Sustancia = meds.Sustancia,
+                                         Concentracion = meds.Concentracion,
+                                         Costo = meds.Costo,
+                                         PrecioUnidad = meds.PrecioUnidad,
+                                         Indicaciones = meds.Indicaciones,
+                                         Dosis = meds.Dosis
+                                     }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+
+            if (medicamentos == null)
             {
                 return NotFound();
             }
-            */
-            return View();
+
+            medicamentos.ProveedoresId = await (from provMeds in _context.ProveedoresMedicamentos
+                                               .Where(x => x.MedicamentosId == medicamentos.Codigo)
+                                               .AsNoTracking()
+                                                join proveedores in _context.Proveedores on provMeds
+                                               .ProveedoresId equals proveedores.Codigo
+                                                select proveedores.Codigo).ToListAsync();
+
+            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.ValoresSeleccionados = medicamentos.ProveedoresId;
+           
+            return View(medicamentos);
         }
 
         // POST: Medicamentos/Edit/5
@@ -136,26 +228,61 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Marca,Categoria,Sustancia,UnidadesPorCaja,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis")] Medicamentos medicamento)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
         {
-            if (id != medicamento.Codigo)
+            if (id != viewModel.Codigo)
             {
                 return NotFound();
             }
+
+            ModelState.Remove("NombreProveedor");
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var editmedicamento = await _context.Medicamentos.Include(x => x.ProveedoresMedicamentos).
+                                       FirstOrDefaultAsync(y => y.Codigo == id);
 
-                    medicamento.Modificado = DateTime.Now;
-                    medicamento.ModificadoNombreUsuario = _user.GetUserName();
-                    _context.Update(medicamento);
+                    editmedicamento.Nombre = viewModel.Nombre;
+                    editmedicamento.Categoria = viewModel.Categoria;
+                    editmedicamento.Sustancia = viewModel.Sustancia;
+                    editmedicamento.Concentracion = viewModel.Concentracion;
+                    editmedicamento.Costo = viewModel.Costo;
+                    editmedicamento.PrecioUnidad = viewModel.PrecioUnidad;
+                    editmedicamento.Indicaciones = viewModel.Indicaciones;
+                    editmedicamento.Dosis = viewModel.Dosis;
+                    editmedicamento.Modificado = DateTime.Now;
+                    editmedicamento.ModificadoNombreUsuario = _user.GetUserName();
+                    _context.Update(editmedicamento);
+
+
+                    foreach(var proveedor in editmedicamento.ProveedoresMedicamentos.ToList())
+                    {
+                        if (!viewModel.ProveedoresId.Contains(proveedor.ProveedoresId))
+                        {
+                            editmedicamento.ProveedoresMedicamentos.Remove(proveedor);
+                        }
+                    }
+
+                    foreach(var newProveedorId in viewModel.ProveedoresId)
+                    {
+                        if(!editmedicamento.ProveedoresMedicamentos.Any(x=> x.ProveedoresId == newProveedorId))
+                        {
+                            var nuevoProv = new ProveedorMedicamentos
+                            {
+                                ProveedoresId = newProveedorId
+
+                            };
+                            editmedicamento.ProveedoresMedicamentos.Add(nuevoProv);
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MedicamentoExists(medicamento.Codigo))
+                    if (!MedicamentoExists(viewModel.Codigo))
                     {
                         return NotFound();
                     }
@@ -166,26 +293,67 @@ namespace ApotheGSF.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(medicamento);
+
+            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.ValoresSeleccionados = viewModel.ProveedoresId;
+            return View(viewModel);
         }
 
         // GET: Medicamentos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            /*
+           
             if (id == null || _context.Medicamentos == null)
             {
                 return NotFound();
             }
 
-            var medicamento = await _context.Medicamentos
-                .FirstOrDefaultAsync(m => m.Codigo == id);
+
+            var medicamento = await (from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                                     select new MedicamentosViewModel
+                                     {
+
+                                         Codigo = meds.Codigo,
+                                         Nombre = meds.Nombre,
+                                         Categoria = meds.Categoria,
+                                         Sustancia = meds.Sustancia,
+                                         Concentracion = meds.Concentracion,
+                                         Costo = meds.Costo,
+                                         PrecioUnidad = meds.PrecioUnidad,
+                                         Indicaciones = meds.Indicaciones,
+                                         Dosis = meds.Dosis,
+
+                                         NombreProveedor = string.Join(", ",
+                                         (from p in _context.Proveedores
+                                          .AsNoTracking()
+                                          join provMed in _context.ProveedoresMedicamentos
+                                          on new
+                                          {
+                                              ProveedoresId = p.Codigo,
+                                              MedicamentosId = meds.Codigo
+                                          } equals new
+                                          {
+                                              ProveedoresId = provMed.ProveedoresId,
+                                              MedicamentosId = provMed.MedicamentosId
+                                          }
+                                          select new Proveedores
+                                          {
+                                              Nombre = p.Nombre
+                                          }
+                                          ).Select(x => x.Nombre).ToList())
+
+                                     }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+
+
             if (medicamento == null)
             {
                 return NotFound();
             }
-            */
-            return View();
+           
+            return View(medicamento);
         }
 
         // POST: Medicamentos/Delete/5

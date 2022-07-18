@@ -11,13 +11,9 @@ namespace ApotheGSF.Models
         [StringLength(30)]
         public string Nombre { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        public string Marca { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Categoria { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Sustancia { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        public int UnidadesPorCaja { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Concentracion { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]

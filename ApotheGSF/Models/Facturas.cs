@@ -8,8 +8,11 @@ namespace ApotheGSF.Models
         [Key]
         public int Codigo { get; set; }
         public DateTime FechaCreacion { get; set; }
+       // [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public float SubTotal { get; set; }
+      //  [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public float Total { get; set; }
+       // [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string? Estado { get; set; }
 
         [Column("Creado", TypeName = "datetime")]

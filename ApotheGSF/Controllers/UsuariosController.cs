@@ -169,9 +169,13 @@ namespace ApotheGSF.Controllers
                                  {
                                      Id = u.Id,
                                      Nombre = u.Nombre,
+                                     Apellido = u.Apellido,
                                      Usuario = u.UserName,
                                      Email = u.Email,
                                      Telefono = u.PhoneNumber,
+                                     Cedula = u.Cedula,
+                                     FechaNacimiento = u.FechaNacimiento,
+                                     Direccion = u.Direccion,
                                      Rol = r.Name
                                  }).Where(x => x.Id == id).FirstOrDefaultAsync();
 

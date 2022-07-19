@@ -20,7 +20,7 @@
 							</div>
 							<div class="col-sm-8 row">
 								<div class="col-sm-9">
-									<input type="text" class="form-control" placeholder="0">
+									<input type="text" asp-for="Id" class="form-control" placeholder="0">
 								</div>
 								<div class="col-sm-1">
 									<button class="btn btn-primary" type="button">Buscar</button>
@@ -33,7 +33,7 @@
 								<label for="Nombre" class="col-form-label">Nombre</label>
 							</div>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" placeholder="Nombre">
+								<input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
 							</div>
 						</div>
 
@@ -42,7 +42,7 @@
 								<label for="Apellido" class="col-form-label">Appellido</label>
 							</div>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" placeholder="Apellido">
+								<input type="text" asp-for="Apellido" class="form-control" placeholder="Apellido">
 							</div>
 						</div>
 
@@ -51,7 +51,7 @@
 								<label for="Telefono" class="col-form-label">Teléfono</label>
 							</div>
 							<div class="col-sm-8">
-								<input type="tel" class="form-control" placeholder="___-____-____">
+								<input type="tel" asp-for="Telefono" class="form-control" placeholder="___-____-____">
 							</div>
 						</div>
 
@@ -60,7 +60,7 @@
 								<label for="Cedula" class="col-form-label">Cédula</label>
 							</div>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" placeholder="___-_______-_">
+								<input type="text" asp-for="Cedula" class="form-control" placeholder="___-_______-_">
 							</div>
 						</div>
 
@@ -69,7 +69,7 @@
 								<label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento</label>
 							</div>
 							<div class="col-sm-8">
-								<input type="Date" class="form-control">
+								<input type="Date" asp-for="FechaNacimiento" class="form-control">
 							</div>
 						</div>
 
@@ -78,7 +78,7 @@
 								<label for="Direccion" class="col-form-label">Dirección</label>
 							</div>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" placeholder="Dirección">
+								<input type="text" asp-for="Direccion" class="form-control" placeholder="Dirección">
 							</div>
 						</div>
 
@@ -87,7 +87,7 @@
 								<label for="Email" class="col-form-label">Email</label>
 							</div>
 							<div class="col-sm-8">
-								<input class="form-control" type="email" placeholder="Example@Something.com">
+								<input class="form-control" asp-for="Email" type="email" placeholder="Example@Something.com">
 							</div>
 						</div>
 
@@ -96,7 +96,7 @@
 								<label for="NombreUsuario" class="col-form-label">Nombre de Usuario</label>
 							</div>
 							<div class="col-sm-8">
-								<input class="form-control" type="text" placeholder="Nombre Usuario">
+								<input class="form-control" asp-for="Usuario" type="text" placeholder="Nombre Usuario">
 							</div>
 						</div>
 
@@ -105,7 +105,7 @@
 								<label for="Contrasena" class="col-form-label">Contraseña</label>
 							</div>
 							<div class="col-sm-8">
-								<input class="form-control" type="text" placeholder="Contraseña">
+								<input class="form-control" asp-for="Password" type="text" placeholder="Contraseña">
 							</div>
 						</div>
 
@@ -114,10 +114,11 @@
 								<label class="col-form-label" for="Roles">Roles</label>
 							</div>
 							<div class="col-sm-8">
-								<select class="form-control" name="EstadoCivil" id="EstadoCivil">
+								<select class="form-control" asp-for="Rol">
 									<option selected disabled>Seleccione Los roles del Usuario</option>
-									<option value="a">a</option>
-									<option value="e">e</option>
+									<option value="Administrador">Administrador</option>
+									<option value="Comprador">Comprador</option>
+									<option value="Vendedor">Vendedor</option>
 								</select>
 							</div>
 						</div>

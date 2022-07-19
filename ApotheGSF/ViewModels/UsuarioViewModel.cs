@@ -60,5 +60,6 @@ namespace ApotheGSF.ViewModels
 		public DateTime? Creado { get; set; }
 		[Display(Name = "Última Modificación")]
 		public DateTime? Modificado { get; set; }
-	}
+        public bool? Inactivo { get; set; }
+    }
 }

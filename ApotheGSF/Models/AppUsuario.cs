@@ -18,9 +18,6 @@ namespace ApotheGSF.Models
 
         public string? Cedula { get; set; }
         public string? Direccion { get; set; }
-        [NotMapped]
-        [Display(Name = "Rol")]
-        public string? Rol { get; set; }
         public ICollection<AppUsuarioRol> UsuariosRoles { get; set; }
         public DateTime? Creado { get; set; }
         public string? CreadoNombreUsuario { get; set; }

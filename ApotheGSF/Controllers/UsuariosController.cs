@@ -39,15 +39,15 @@ namespace ApotheGSF.Controllers
                             .AsQueryable()
                                join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
                                join r in _context.Roles on ur.RoleId equals r.Id
-                               select new AppUsuario
+                               select new UsuarioViewModel
                                {
                                    Id = u.Id,
                                    Nombre = u.Nombre,
-                                   UserName = u.UserName,
+                                   Apellido = u.Apellido,
+                                   Usuario = u.UserName,
                                    Email = u.Email,
-                                   PhoneNumber = u.PhoneNumber,
-                                   Inactivo = u.Inactivo,
-                                   Rol = r.Name
+                                   Rol = r.Name,
+                                   Inactivo = u.Inactivo
                                }).Where(x => x.Inactivo == false).ToListAsync();
 
             return lista != null ?
@@ -58,7 +58,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            /*
+
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -77,22 +77,27 @@ namespace ApotheGSF.Controllers
                                  {
                                      Id = u.Id,
                                      Nombre = u.Nombre,
+                                     Apellido = u.Apellido,
                                      Usuario = u.UserName,
+                                     FechaNacimiento = u.FechaNacimiento,
+                                     Cedula = u.Cedula,
                                      Email = u.Email,
                                      Telefono = u.PhoneNumber,
+                                     Direccion = u.Direccion,
                                      Rol = r.Name,
                                      Creado = u.Creado,
                                      Modificado = u.Modificado,
                                      ModificadoPor = x == null ? string.Empty : x.Nombre,
                                      CreadPor = x == null ? string.Empty : y.Nombre,
-                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+                                     Inactivo = u.Inactivo
+                                 }).Where(x => x.Id == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (usuario == null)
             {
                 return NotFound();
-            }*/
+            }
 
-            return View();
+            return View(usuario);
         }
 
         // GET: Usuarios/Create
@@ -150,7 +155,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            /*
+
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -164,9 +169,13 @@ namespace ApotheGSF.Controllers
                                  {
                                      Id = u.Id,
                                      Nombre = u.Nombre,
+                                     Apellido = u.Apellido,
                                      Usuario = u.UserName,
                                      Email = u.Email,
                                      Telefono = u.PhoneNumber,
+                                     Cedula = u.Cedula,
+                                     FechaNacimiento = u.FechaNacimiento,
+                                     Direccion = u.Direccion,
                                      Rol = r.Name
                                  }).Where(x => x.Id == id).FirstOrDefaultAsync();
 
@@ -174,8 +183,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-            */
-            return View();
+
+            return View(usuario);
         }
 
         // POST: Usuarios/Edit/5
@@ -243,21 +252,45 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            /*
+
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
             }
 
-            var appUser = await _context.AppUsuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (appUser == null)
+            var usuario = await (from u in _context.AppUsuarios
+                            .AsNoTracking()
+                            .AsQueryable()
+                                 join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
+                                 join r in _context.Roles on ur.RoleId equals r.Id
+                                 join creado in _context.AppUsuarios on u.CreadoNombreUsuario equals creado.CreadoNombreUsuario into lj2
+                                 from y in lj2.DefaultIfEmpty()
+                                 join modificado in _context.AppUsuarios on u.ModificadoNombreUsuario equals modificado.ModificadoNombreUsuario into lj
+                                 from x in lj.DefaultIfEmpty()
+                                 select new UsuarioViewModel
+                                 {
+                                     Id = u.Id,
+                                     Nombre = u.Nombre,
+                                     Apellido = u.Apellido,
+                                     Usuario = u.UserName,
+                                     FechaNacimiento = u.FechaNacimiento,
+                                     Cedula = u.Cedula,
+                                     Email = u.Email,
+                                     Telefono = u.PhoneNumber,
+                                     Direccion = u.Direccion,
+                                     Rol = r.Name,
+                                     Creado = u.Creado,
+                                     Modificado = u.Modificado,
+                                     ModificadoPor = x == null ? string.Empty : x.Nombre,
+                                     CreadPor = x == null ? string.Empty : y.Nombre,
+                                     Inactivo = u.Inactivo
+                                 }).Where(x => x.Id == id && x.Inactivo == false).FirstOrDefaultAsync();
+            if (usuario == null)
             {
                 return NotFound();
             }
-            */
 
-            return View();
+            return View(usuario);
         }
 
         // POST: Usuarios/Delete/5
@@ -286,7 +319,7 @@ namespace ApotheGSF.Controllers
 
         private bool AppUserExists(int id)
         {
-          return (_context.AppUsuarios?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.AppUsuarios?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

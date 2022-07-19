@@ -77,22 +77,27 @@ namespace ApotheGSF.Controllers
                                  {
                                      Id = u.Id,
                                      Nombre = u.Nombre,
+                                     Apellido = u.Apellido,
                                      Usuario = u.UserName,
+                                     FechaNacimiento = u.FechaNacimiento,
+                                     Cedula = u.Cedula,
                                      Email = u.Email,
                                      Telefono = u.PhoneNumber,
+                                     Direccion = u.Direccion,
                                      Rol = r.Name,
                                      Creado = u.Creado,
                                      Modificado = u.Modificado,
                                      ModificadoPor = x == null ? string.Empty : x.Nombre,
                                      CreadPor = x == null ? string.Empty : y.Nombre,
-                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+                                     Inactivo = u.Inactivo
+                                 }).Where(x => x.Id == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (usuario == null)
             {
                 return NotFound();
             }
 
-            return View();
+            return View(usuario);
         }
 
         // GET: Usuarios/Create

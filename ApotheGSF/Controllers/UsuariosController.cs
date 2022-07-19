@@ -44,6 +44,8 @@ namespace ApotheGSF.Controllers
                                    Id = u.Id,
                                    Nombre = u.Nombre,
                                    Apellido = u.Apellido,
+                                   Telefono = u.PhoneNumber,
+                                   Direccion = u.Direccion,
                                    Usuario = u.UserName,
                                    Email = u.Email,
                                    Rol = r.Name,
@@ -208,9 +210,13 @@ namespace ApotheGSF.Controllers
                 {
                     var antiguoUsuario = await _context.AppUsuarios.FirstOrDefaultAsync(x => x.Id == id);
                     antiguoUsuario.Nombre = viewModel.Nombre;
-                    antiguoUsuario.UserName = viewModel.Usuario;
-                    antiguoUsuario.Email = viewModel.Email;
+                    antiguoUsuario.Apellido = viewModel.Apellido;
                     antiguoUsuario.PhoneNumber = viewModel.Telefono;
+                    antiguoUsuario.Cedula = viewModel.Cedula;
+                    antiguoUsuario.FechaNacimiento = viewModel.FechaNacimiento;
+                    antiguoUsuario.Direccion = viewModel.Direccion;
+                    antiguoUsuario.Email = viewModel.Email;
+                    antiguoUsuario.UserName = viewModel.Usuario;
                     antiguoUsuario.Modificado = DateTime.Now;
                     antiguoUsuario.ModificadoNombreUsuario = _user.GetUserName();
 

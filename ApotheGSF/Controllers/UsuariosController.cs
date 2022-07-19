@@ -39,15 +39,15 @@ namespace ApotheGSF.Controllers
                             .AsQueryable()
                                join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
                                join r in _context.Roles on ur.RoleId equals r.Id
-                               select new AppUsuario
+                               select new UsuarioViewModel
                                {
                                    Id = u.Id,
                                    Nombre = u.Nombre,
-                                   UserName = u.UserName,
+                                   Apellido = u.Apellido,
+                                   Usuario = u.UserName,
                                    Email = u.Email,
-                                   PhoneNumber = u.PhoneNumber,
-                                   Inactivo = u.Inactivo,
-                                   Rol = r.Name
+                                   Rol = r.Name,
+                                   Inactivo = u.Inactivo
                                }).Where(x => x.Inactivo == false).ToListAsync();
 
             return lista != null ?
@@ -58,7 +58,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            /*
+
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -90,7 +90,7 @@ namespace ApotheGSF.Controllers
             if (usuario == null)
             {
                 return NotFound();
-            }*/
+            }
 
             return View();
         }
@@ -150,7 +150,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            /*
+
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
@@ -174,8 +174,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-            */
-            return View();
+
+            return View(usuario);
         }
 
         // POST: Usuarios/Edit/5

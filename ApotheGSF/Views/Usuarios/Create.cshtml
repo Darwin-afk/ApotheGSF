@@ -15,10 +15,8 @@
                     <!--datos-->
                     <div class="card-body">
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Nombre" class="col-form-label">Nombre</label>
-                            </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-6">
+                                <label for="Nombre" class="col-form-label">Nombre:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -26,117 +24,125 @@
                                     <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Apellido" class="col-form-label">Appellido</label>
-                            </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-6">
+                                <label for="Apellido" class="col-form-label">Appellido:</label>
                                 <div class="input-group">
-                                <div class="input-group-prepend">
+                                    <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
-                                <input type="text" asp-for="Apellido" class="form-control" placeholder="Apellido">
+                                    <input type="text" asp-for="Apellido" class="form-control" placeholder="Apellido">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Telefono" class="col-form-label">Teléfono</label>
-                            </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-6">
+                                <label for="Telefono" class="col-form-label">Teléfono:</label>
                                 <div class="input-group">
-                                <div class="input-group-prepend">
+                                    <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
                                     </div>
-                                <input type="tel" asp-for="Telefono" class="form-control" placeholder="___-____-____">
+                                    <input type="tel" asp-for="Telefono" class="form-control" placeholder="___-____-____">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Cedula" class="col-form-label">Cédula</label>
-                            </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-6">
+                                <label for="Cedula" class="col-form-label">Cédula:</label>
                                 <div class="input-group">
-                                <div class="input-group-prepend">
+                                    <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
                                     </div>
-                                <input type="text" asp-for="Cedula" class="form-control" placeholder="___-_______-_">
+                                    <input type="text" asp-for="Cedula" class="form-control" placeholder="___-_______-_">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento</label>
+                            <div class="col-sm-6">
+                                <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-cake-candles"></i></span>
+                                    </div>
+                                    <input type="text" asp-for="FechaNacimiento" class="form-control datetimepicker-input">
+                                    <div class="bootstrap-datetimepicker-widget dropdown-menu usetwentyfour botton float-right">
+                                        <div class="input-group-append" data-toggle="datetimepicker">
+                                            <div class="input-group-text">
+                                                <i class="fa-solid fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input type="Date" asp-for="FechaNacimiento" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label for="Direccion" class="col-form-label">Dirección</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="text" asp-for="Direccion" class="form-control" placeholder="Dirección">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-address-book"></i></span>
+                                    </div>
+                                    <input type="text" asp-for="Direccion" class="form-control" placeholder="Dirección">
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label for="Email" class="col-form-label">Email</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                    </div>
+                                    <input class="form-control" asp-for="Email" type="email" placeholder="Example@Something.com">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" asp-for="Email" type="email" placeholder="Example@Something.com">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label for="NombreUsuario" class="col-form-label">Nombre de Usuario</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" asp-for="Usuario" type="text" placeholder="Nombre Usuario">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input class="form-control" asp-for="Usuario" type="text" placeholder="Nombre Usuario">
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label for="Contrasena" class="col-form-label">Contraseña</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    </div>
+                                    <input class="form-control" asp-for="Password" type="text" placeholder="Contraseña">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" asp-for="Password" type="text" placeholder="Contraseña">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label class="col-form-label">Confirmar Contraseña</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" asp-for="ConfirmarPassword" type="text" placeholder="...">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    </div>
+                                    <input class="form-control" asp-for="ConfirmarPassword" type="text" placeholder="...">
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="col-form-label" for="Roles">Roles</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <select class="form-control" asp-for="Rol">
-                                    <option selected disabled>Seleccione un Rol</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Comprador">Comprador</option>
-                                    <option value="Vendedor">Vendedor</option>
-                                </select>
+                            <div class="col-sm-12">
+                                <label class="col-form-label" for="Roles">Rol</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <select class="form-control" asp-for="Rol">
+                                        <option selected disabled>Seleccione un Rol</option>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Comprador">Comprador</option>
+                                        <option value="Vendedor">Vendedor</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
                         <!--Fin datos-->
                     </div>
                     <div class="card-footer text-center" style="background-color:#006699 ;">

@@ -64,7 +64,7 @@ namespace ApotheGSF.Controllers
                                           }
                                           ).Select(x => x.Nombre).ToList())
 
-                                     }).ToListAsync();
+                                     }).Where(x=>x.Inactivo == false).ToListAsync();
 
             return lista != null ?
                 View(lista) :
@@ -371,7 +371,12 @@ namespace ApotheGSF.Controllers
             var medicamento = await _context.Medicamentos.FindAsync(id);
             if (medicamento != null)
             {
-                _context.Medicamentos.Remove(medicamento);
+                _context.Medicamentos.Update(medicamento);
+                medicamento.Modificado = DateTime.Now;
+                medicamento.ModificadoNombreUsuario = _user.GetUserName();
+                medicamento.Inactivo = true;
+                _context.Entry(medicamento).Property(c => c.Creado).IsModified = false;
+                _context.Entry(medicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
             }
             
             await _context.SaveChangesAsync();

@@ -26,6 +26,8 @@ namespace ApotheGSF.ViewModels
 
         public List<int>? ProveedoresId { get; set; }
         public string? NombreProveedor { get; set; }
-       
+
+        public bool Inactivo { get; set; }
+
     }
 }

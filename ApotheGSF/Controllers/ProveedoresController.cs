@@ -21,9 +21,12 @@ namespace ApotheGSF.Controllers
         private readonly ClaimsPrincipal _user;
 
 
-        public ProveedoresController(AppDbContext context)
+        public ProveedoresController(AppDbContext context,
+                             IHttpContextAccessor accessor
+            )
         {
             _context = context;
+            _user = accessor.HttpContext.User;
         }
 
         // GET: Proveedores

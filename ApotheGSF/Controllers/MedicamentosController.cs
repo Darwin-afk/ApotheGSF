@@ -17,9 +17,12 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
 
-        public MedicamentosController(AppDbContext context)
+        public MedicamentosController(AppDbContext context,
+                             IHttpContextAccessor accessor
+            )
         {
             _context = context;
+            _user = accessor.HttpContext.User;
         }
 
         // GET: Medicamentos

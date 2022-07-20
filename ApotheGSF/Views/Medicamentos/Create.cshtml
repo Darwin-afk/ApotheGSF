@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label class="col-form-label">Proveedores:</label>
-                                <div asp-nombres="@ViewBag.NombresProveedores" asp-valores="@ViewBag.CodigosProveedores" asp-valores-seleccionados=null asp-id=ProveedoresId></div>
+                                <select asp-for="ProveedoresId" class="form-control select2" asp-items="ViewBag.ProveedoresId"></select>
                             </div>
                         </div>
 

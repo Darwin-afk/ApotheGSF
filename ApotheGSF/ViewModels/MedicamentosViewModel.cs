@@ -8,8 +8,6 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Nombre { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        public string Marca { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Categoria { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Sustancia { get; set; }

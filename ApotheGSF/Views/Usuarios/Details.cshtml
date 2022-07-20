@@ -4,11 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details Usuario</h1>
+<h3><i class="fas fa-list"></i>&nbsp;Detalle Usuario</h3>
 
 <h3>Aqui estan los datos del Usuario</h3>
 <div>
-    <h4>Usuario</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -75,6 +74,6 @@
     
     <form asp-action="Details">
         <input type="hidden" asp-for="Id" />
-        <a asp-action="Index" type="button" class="btn btn-danger">Cerrar</a>
+        <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
     </form>
 </div>

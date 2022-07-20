@@ -93,7 +93,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
             
-            return View();
+            return View(proveedor);
         }
 
         // POST: Proveedores/Edit/5

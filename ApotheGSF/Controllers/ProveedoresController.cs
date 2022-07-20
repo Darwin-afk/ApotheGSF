@@ -71,6 +71,11 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
+                proveedor.Creado = DateTime.Now;
+                proveedor.CreadoNombreUsuario = _user.GetUserName();
+                proveedor.Modificado = DateTime.Now;
+                proveedor.ModificadoNombreUsuario = _user.GetUserName();
+                proveedor.Inactivo = false;
                 _context.Add(proveedor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Create));

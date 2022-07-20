@@ -128,8 +128,8 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             return View();
         }
 
@@ -178,8 +178,8 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             return View(viewModel);
         }
 
@@ -219,8 +219,8 @@ namespace ApotheGSF.Controllers
                                                .ProveedoresId equals proveedores.Codigo
                                                 select proveedores.Codigo).ToListAsync();
 
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             ViewBag.ValoresSeleccionados = medicamentos.ProveedoresId;
            
             return View(medicamentos);
@@ -297,8 +297,8 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             ViewBag.ValoresSeleccionados = viewModel.ProveedoresId;
             return View(viewModel);
         }

@@ -40,6 +40,7 @@ namespace ApotheGSF.Controllers
                                          Categoria = meds.Categoria,
                                          Sustancia = meds.Sustancia,
                                          Concentracion = meds.Concentracion,
+                                         UnidadesCaja = meds.UnidadesCaja,
                                          Costo = meds.Costo,
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
@@ -92,6 +93,7 @@ namespace ApotheGSF.Controllers
                                          Categoria = meds.Categoria,
                                          Sustancia = meds.Sustancia,
                                          Concentracion = meds.Concentracion,
+                                         UnidadesCaja = meds.UnidadesCaja,
                                          Costo = meds.Costo,
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones, 
@@ -128,8 +130,8 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             return View();
         }
 
@@ -150,6 +152,7 @@ namespace ApotheGSF.Controllers
                     Categoria = viewModel.Categoria,
                     Sustancia = viewModel.Sustancia,
                     Concentracion = viewModel.Concentracion,
+                    UnidadesCaja = viewModel.UnidadesCaja,
                     Costo = viewModel.Costo,
                     PrecioUnidad = viewModel.PrecioUnidad,
                     Indicaciones = viewModel.Indicaciones,
@@ -178,8 +181,8 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             return View(viewModel);
         }
 
@@ -201,6 +204,7 @@ namespace ApotheGSF.Controllers
                                          Categoria = meds.Categoria,
                                          Sustancia = meds.Sustancia,
                                          Concentracion = meds.Concentracion,
+                                         UnidadesCaja = meds.UnidadesCaja,
                                          Costo = meds.Costo,
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
@@ -219,8 +223,8 @@ namespace ApotheGSF.Controllers
                                                .ProveedoresId equals proveedores.Codigo
                                                 select proveedores.Codigo).ToListAsync();
 
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             ViewBag.ValoresSeleccionados = medicamentos.ProveedoresId;
            
             return View(medicamentos);
@@ -251,6 +255,7 @@ namespace ApotheGSF.Controllers
                     editmedicamento.Categoria = viewModel.Categoria;
                     editmedicamento.Sustancia = viewModel.Sustancia;
                     editmedicamento.Concentracion = viewModel.Concentracion;
+                    editmedicamento.UnidadesCaja = viewModel.UnidadesCaja;
                     editmedicamento.Costo = viewModel.Costo;
                     editmedicamento.PrecioUnidad = viewModel.PrecioUnidad;
                     editmedicamento.Indicaciones = viewModel.Indicaciones;
@@ -297,8 +302,8 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.CodigoProvs = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombreProvs = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
+            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
             ViewBag.ValoresSeleccionados = viewModel.ProveedoresId;
             return View(viewModel);
         }
@@ -324,6 +329,7 @@ namespace ApotheGSF.Controllers
                                          Categoria = meds.Categoria,
                                          Sustancia = meds.Sustancia,
                                          Concentracion = meds.Concentracion,
+                                         UnidadesCaja = meds.UnidadesCaja,
                                          Costo = meds.Costo,
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,

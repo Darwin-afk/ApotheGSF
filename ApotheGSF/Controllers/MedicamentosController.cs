@@ -45,6 +45,7 @@ namespace ApotheGSF.Controllers
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
                                          Dosis = meds.Dosis,
+                                         Inactivo = (bool)meds.Inactivo,
 
                                          NombreProveedor = string.Join(", ",
                                          (from p in _context.Proveedores

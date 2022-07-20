@@ -15,224 +15,71 @@
                     </div>
                     <!--datos-->
                     <div class="card-body">
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Matricula" class="col-form-label">Código</label>
-                            </div>                            
-                            <div class="col-sm-8 row">
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" placeholder="0">
-                                </div>
-                                <div class="col-sm-2">
-                                    <button class="btn btn-primary" type="button">Buscar</button>
-                                </div>                                
-                            </div>
-                        </div> 
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Cedula" class="col-form-label">Nombre</label>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Nombre:</label>
+                                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
                             </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" placeholder="Nombre">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Apellido" class="col-form-label">Marca</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" placeholder="Marca" required>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Proveedores:</label>
+                                <div asp-nombres="@ViewBag.NombresProveedores" asp-valores="@ViewBag.CodigosProveedores" asp-valores-seleccionados=null asp-id=ProveedoresId></div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="FechaIngreso" class="col-form-label">Proveedores</label>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Categoria:</label>
+                                <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
                             </div>
-                            <div asp-nombres="@ViewBag.NombresProveedores" asp-valores="@ViewBag.CodigosProveedores" asp-valores-seleccionados=null asp-id=ProveedoresId></div>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Sustancia:</label>
+                                <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
+                            </div>  
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Nombre" class="col-form-label">Fecha de Creación</label>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Concentración:</label>
+                                <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
                             </div>
-                            <div class="col-sm-8">
-                                <input type="date" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Apellido" class="col-form-label">Fecha de Adquisición</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="Date" class="form-control">
-                            </div> 
-                        </div> 
-                        
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Apellido" class="col-form-label">Fecha de Vencimiento</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="Date" class="form-control">
-                            </div> 
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Nacionalidad" class="col-form-label">Categoria</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" placeholder="Categoria">
-                            </div>
-                        </div>                        
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Telefono" class="col-form-label">Sustancia</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="email" placeholder="Sustancia">
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Unidades por Caja:</label>
+                                <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0 mg">
                             </div>
                         </div>
 
+
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Telefono" class="col-form-label">Cantidad</label>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Costo:</label>
+                                <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $">
                             </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="email" placeholder="0">
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Precio por Unidad:</label>
+                                <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Telefono" class="col-form-label">Concentración</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="email" class="form-control" name="Telefono"
-                                    placeholder="0 mg" id="Telefono">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label for="Email" class="col-form-label">Costo</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="Email"
-                                    placeholder="0.00 $" id="Email">
-                            </div>                            
-                        </div>
 
                         <div class="form-group row">                            
-                            <div class="col-sm-4">
-                                <label for="NombrePadre" class="col-form-label">Precio</label>
+                            <div class="col-sm-6">
+                                <label class="col-form-label">Indicaciones</label>
+                                <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
                             </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="NombrePadre"
-                                    id="NombrePadre" placeholder="0.00 $" maxlength="60">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">                            
-                            <div class="col-sm-4">
-                                <label for="NombrePadre" class="col-form-label">Precio por Unidad</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="NombrePadre"
-                                    id="NombrePadre" placeholder="0.00 $" maxlength="60">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">                            
-                            <div class="col-sm-4">
-                                <label for="NombreMadre" class="col-form-label">Indicaciones</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <textarea class="form-control" type="textarea" name="NombreMadre"
-                                    id="NombreMadre" placeholder="Indicaciones" maxlength="60" rows="3"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">                            
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label for="Direccion" class="col-form-label">Dosis</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" name="NombreMadre"
-                                    id="NombreMadre" placeholder="0" maxlength="60">
+                                <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="col-form-label" for="Carrera">Facturas</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" name="Direccion"
-                                    id="Direccion" placeholder="Factura" maxlength="100">
-                            </div>
-                        </div>
 
-                        <div class="form-group row">                            
-                            <div class="col-sm-4">
-                                <label for="NombreMadre" class="col-form-label">Creado</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="NombreMadre"
-                                    id="NombreMadre" placeholder="Creado" maxlength="60">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">                            
-                            <div class="col-sm-4">
-                                <label for="Direccion" class="col-form-label">CreadoId</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="NombreMadre"
-                                    id="NombreMadre" placeholder="0" maxlength="60">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="col-form-label" for="Carrera">Modificado</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="Direccion"
-                                    id="Direccion" placeholder="Modificado" maxlength="100">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="col-form-label" for="Carrera">ModificadoId</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="Direccion"
-                                    id="Direccion" placeholder="0" maxlength="100">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="col-form-label" for="Carrera">Inactivo</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" class="form-control" name="Direccion"
-                                    id="Direccion" placeholder="" maxlength="100">
-                            </div>
-                        </div>
                         <!--Fin datos-->
                     </div>
                     <div class="card-footer text-center" style="background-color:#009900 ;">
                         <!--Botones-->
                         <button class="btn btn-secondary" type="button">Nuevo</button>
-                        <button class="btn btn-primary" type="submit">Guardar</button>
+                        <button class="btn btn-primary" value="Create" type="submit">Guardar</button>
                         <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
                         <!--Fin Botones-->
                     </div>

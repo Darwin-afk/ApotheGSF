@@ -16,6 +16,8 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Concentracion { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        public int UnidadesCaja { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public int Costo { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public int PrecioUnidad { get; set; }

@@ -59,22 +59,15 @@
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento:</label>
-                                <div class="input-group">
+                                <div class="input-group prepend">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa-solid fa-cake-candles"></i></span>
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
-                                    <input type="text" asp-for="FechaNacimiento" class="form-control datetimepicker-input">
-                                    <div class="bootstrap-datetimepicker-widget dropdown-menu usetwentyfour botton float-right">
-                                        <div class="input-group-append" data-toggle="datetimepicker">
-                                            <div class="input-group-text">
-                                                <i class="fa-solid fa-calendar"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <input type="date" asp-for="FechaNacimiento" class="form-control datetimepicker-input">
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label for="Direccion" class="col-form-label">Dirección</label>
+                                <label for="Direccion" class="col-form-label">Dirección:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-address-book"></i></span>
@@ -86,7 +79,7 @@
 
                         <div class="form-group row">
                             <div class="col-sm-6">
-                                <label for="Email" class="col-form-label">Email</label>
+                                <label for="Email" class="col-form-label">Email:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
@@ -95,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label for="NombreUsuario" class="col-form-label">Nombre de Usuario</label>
+                                <label for="NombreUsuario" class="col-form-label">Nombre de Usuario:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -107,7 +100,7 @@
 
                         <div class="form-group row">
                             <div class="col-sm-6">
-                                <label for="Contrasena" class="col-form-label">Contraseña</label>
+                                <label for="Contrasena" class="col-form-label">Contraseña:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
@@ -116,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label class="col-form-label">Confirmar Contraseña</label>
+                                <label class="col-form-label">Confirmar Contraseña:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
@@ -128,7 +121,7 @@
 
                         <div class="form-group row">
                             <div class="col-sm-12">
-                                <label class="col-form-label" for="Roles">Rol</label>
+                                <label class="col-form-label" for="Roles">Rol:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>

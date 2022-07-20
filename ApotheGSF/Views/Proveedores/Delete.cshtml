@@ -21,12 +21,9 @@
                             </div>                            
                             <div class="col-sm-8 row">
                                 <div class="col-sm-10">
-                                    <input asp-for="Codigo" class="form-control" 
-                                    placeholder="0">
+                                    <input type="hidden" asp-for="Codigo" class="form-control" />
                                 </div>
-                                <div class="col-sm-2">
-                                    <a asp-action="Edit" class="btn btn-primary" type="button">Buscar</a>
-                                </div>                                
+                                                            
                             </div>
                         </div> 
 
@@ -113,7 +110,7 @@
                     </div>
                     <div class="card-footer text-center" style="background-color: #7F0099 ;">
                         <!--Botones-->
-                        <a class="btn btn-danger" type="button">Eliminar</a>
+                        <button class="btn btn-danger" type="submit">Eliminar</button>
                         <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
                         <!--Fin Botones-->
                     </div>

@@ -33,7 +33,7 @@ namespace ApotheGSF.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Proveedores != null ? 
-                          View(await _context.Proveedores.ToListAsync()) :
+                          View(await _context.Proveedores.Where(x=> x.Inactivo == false).ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Proveedores'  is null.");
         }
 
@@ -93,7 +93,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
             
-            return View();
+            return View(proveedor);
         }
 
         // POST: Proveedores/Edit/5
@@ -149,7 +149,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
             
-            return View();
+            return View(proveedor);
         }
 
         // POST: Proveedores/Delete/5
@@ -161,6 +161,9 @@ namespace ApotheGSF.Controllers
             {
                 return Problem("Entity set 'AppDbContext.Proveedores'  is null.");
             }
+
+
+
             var proveedor = await _context.Proveedores.FindAsync(id);
             if (proveedor != null)
             {

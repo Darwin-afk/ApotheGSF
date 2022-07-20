@@ -9,40 +9,40 @@ namespace ApotheGSF.Models
         public int Codigo { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Nombre")]
+        [Display(Name = "Nombre:")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "RNC")]
+        [Display(Name = "RNC:")]
        // [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{1})$", ErrorMessage = "RNC inválido")]
         public string RNC { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         // [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
-        [Display(Name = "Teléfono 1")]
+        [Display(Name = "Teléfono 1:")]
         public string Telefono1 { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         //  [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
-        [Display(Name = "Teléfono 2")]
+        [Display(Name = "Teléfono 2:")]
         public string Telefono2 { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         // [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Fax inválido")]
-        [Display(Name = "Fax")]
+        [Display(Name = "Fax:")]
         public string Fax { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Dirección")]
+        [Display(Name = "Dirección:")]
         public string Direccion { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Email")]
+        [Display(Name = "Email:")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "TerminosdePago")]
+        [Display(Name = "Terminos de Pago:")]
         public string TerminosdePago { get; set; }
 
         [Column("Creado", TypeName = "datetime")]

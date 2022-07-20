@@ -11,97 +11,101 @@
              <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
                 <div class="card">
                     <div class="card-header text-center" style="background-color: #7F0099;">
-                        <h3 class="display-8" style="color:white;">Create Proveedor</h3>
+                        <h3 class="display-8" style="color:white;"><i class="fas fa-flask"></i>&nbsp;Crear Proveedor</h3>
                     </div>
                     <!--datos-->
                     <div class="card-body">                        
                         <!--Nombre-->
                         <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label asp-for="Nombre" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input asp-for="Nombre" class="form-control" 
-                                placeholder="Nombre">
+                            <div class="col-sm-6">
+                                <label asp-for="RNC" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                    </div>
+                                <input type="text" asp-for="RNC" class="form-control" placeholder="RNC">
+                                </div>
                             </div>
                         </div>
                         
                         <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label asp-for="RNC" class="col-form-label"></label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input asp-for="RNC" class="form-control" placeholder="RNC">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label asp-for="Telefono1" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                    </div>
+                                <input type="tel" class="form-control" asp-for="Telefono1" placeholder="___-____-____">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input type="tel" class="form-control" asp-for="Telefono1"
-                                placeholder="___-____-____">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label asp-for="Telefono2" class="col-form-label"></label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="tel" class="form-control" asp-for="Telefono2"
-                                placeholder="___-____-____">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                    </div>
+                                <input type="tel" class="form-control" asp-for="Telefono2" placeholder="___-____-____">
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label asp-for="Fax" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                    </div>
+                                <input type="text" asp-for="Fax" class="form-control" placeholder="Fax">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input asp-for="Fax" class="form-control"
-                                placeholder="Fax" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label asp-for="Direccion" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa-solid fa-address-book"></i></span>
+                                    </div>
+                                <input type="text" asp-for="Direccion" class="form-control" placeholder="Direccion">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" asp-for="Direccion" >
-                            </div>
-                        </div>                        
+                        </div>
 
                         <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label asp-for="Email" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                <input type="email" asp-for="Email" class="form-control" placeholder="Example@Something.com">
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <input asp-for="Email" class="form-control" type="email"  >
+                            <div class="col-sm-6">
+                                <label asp-for="TerminosdePago" class="col-form-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                                    </div>
+                                <input type="text" asp-for="TerminosdePago" class="form-control" placeholder="Terminos">
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label asp-for="TerminosdePago" class="col-form-label">Terminos de Pagos</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input  asp-for="TerminosdePago" class="form-control"
-                                    placeholder="Terminos">
-                            </div>                            
-                        </div>
-
-                   
-   
+                        </div>     
                         <!--Fin datos-->
                     </div>
                     <div class="card-footer text-center" style="background-color: #7F0099 ;">
                         <!--Botones-->
-                        <button class="btn btn-secondary" type="reset">Nuevo</button>
-                        <button class="btn btn-primary" type="submit">Guardar</button>
-                        <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
+                        <button class="btn btn-secondary" type="reset"><i class="fas fa-file"></i>&nbsp;Nuevo</button>
+                        <button class="btn btn-success" value="Create" type="submit"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+                        <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
                         <!--Fin Botones-->
                     </div>
                 </div>

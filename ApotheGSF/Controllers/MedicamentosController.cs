@@ -131,8 +131,7 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
-            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre");
             return View();
         }
 
@@ -182,8 +181,7 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre");
             return View(viewModel);
         }
 
@@ -224,10 +222,8 @@ namespace ApotheGSF.Controllers
                                                .ProveedoresId equals proveedores.Codigo
                                                 select proveedores.Codigo).ToListAsync();
 
-            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
-            ViewBag.ValoresSeleccionados = medicamentos.ProveedoresId;
-           
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre",medicamentos.ProveedoresId);
+
             return View(medicamentos);
         }
 
@@ -303,9 +299,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.CodigosProveedores = (List<int>)_context.Proveedores.Select(x => x.Codigo).ToList();
-            ViewBag.NombresProveedores = (List<string>)_context.Proveedores.Select(x => x.Nombre).ToList();
-            ViewBag.ValoresSeleccionados = viewModel.ProveedoresId;
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", viewModel.ProveedoresId);
             return View(viewModel);
         }
 

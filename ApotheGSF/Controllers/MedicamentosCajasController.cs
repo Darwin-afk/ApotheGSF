@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
+using ApotheGSF.ViewModels;
 
 namespace ApotheGSF.Controllers
 {
@@ -30,7 +31,7 @@ namespace ApotheGSF.Controllers
                                            .AsNoTracking()
                                            .AsQueryable()
                                            join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
-                                           select new MedicamentosCajas
+                                           select new MedicamentosCajasViewModel
                                            {
                                                CajaId = mc.CajaId,
                                                MedicamentoId = mc.MedicamentoId,
@@ -63,16 +64,16 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CantidadUnidad,FechaAdquirido,FechaVencimiento,Detallada")] MedicamentosCajas medicamentosCajas)
+        public async Task<IActionResult> Create([Bind("CantidadUnidad,FechaAdquirido,FechaVencimiento,Detallada")] MedicamentosCajasViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(medicamentosCajas);
+                _context.Add(viewModel);// cambiar
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
-            return View(medicamentosCajas);
+            return View(viewModel);
         }
 
         // GET: MedicamentosCajas/Edit/5
@@ -83,7 +84,21 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var medicamentosCajas = await _context.MedicamentosCajas.FindAsync(id);
+            var medicamentosCajas = await (from mc in _context.MedicamentosCajas
+                                           .AsNoTracking()
+                                           .AsQueryable()
+                                           join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
+                                           select new MedicamentosCajasViewModel
+                                           {
+                                               CajaId = mc.CajaId,
+                                               MedicamentoId = mc.MedicamentoId,
+                                               NombreMedicamento = m.Nombre,
+                                               CantidadUnidad = mc.CantidadUnidad,
+                                               FechaAdquirido = mc.FechaAdquirido,
+                                               FechaVencimiento = mc.FechaVencimiento,
+                                               Detallada = mc.Detallada
+                                           }).Where(x => x.CajaId == id).FirstOrDefaultAsync();
+
             if (medicamentosCajas == null)
             {
                 return NotFound();
@@ -108,7 +123,7 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
-                    _context.Update(medicamentosCajas);
+                    _context.Update(medicamentosCajas);//cambiar
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -140,7 +155,7 @@ namespace ApotheGSF.Controllers
                                            .AsNoTracking()
                                            .AsQueryable()
                                            join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
-                                           select new MedicamentosCajas
+                                           select new MedicamentosCajasViewModel
                                            {
                                                CajaId = mc.CajaId,
                                                MedicamentoId = mc.MedicamentoId,

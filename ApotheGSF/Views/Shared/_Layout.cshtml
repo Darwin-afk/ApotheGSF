@@ -1,115 +1,112 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - ApotheGSF</title>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/lib/admin-lte/css/adminlte.min.css" />
-	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/ApotheGSF.styles.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ApotheGSF</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/admin-lte/css/adminlte.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ApotheGSF.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
 
 </head>
 <body class="bg-dark hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ApotheGSF</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" style="color: white;" asp-controller="Facturas" asp-action="Create">
-								Facturar
-							</a>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Registros
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Create">Usuario</a></li>
-								<li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Create">Medicamento</a></li>
-								<li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create">Proveedores</a></li>
-							</ul>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Consultas
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Index">Usuario</a></li>
-								<li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index">Medicamento</a></li>
-								<li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
-								<li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Index">Facturas</a></li>
-							</ul>
-						</li>
-						@*
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Reportes
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Details">Factura</a></li>
-								<li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Details">Proveedores</a></li>
-							</ul>
-						</li>
-						*@
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ApotheGSF</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <div class="input-group">
+                                <a class="nav-link" style="color: #990000;" asp-controller="Facturas" asp-action="Create"><i class="fa-solid fa-cash-register"></i>&nbsp;
+                                Facturar
+                            </a>
+                            </div>
+                            
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Registros
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Create">Usuario</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Create">Medicamento</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create">Proveedores</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Consultas
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Index">Usuario</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index">Medicamento</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Index">Facturas</a></li>
+                            </ul>
+                        </li>
+                        @*
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Reportes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Details">Factura</a></li>
+                        <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Details">Proveedores</a></li>
+                        </ul>
+                        </li>
+                        *@
 
-					</ul>
-					<ul class="navbar-nav ml-auto dropstart">
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								User X
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item text-dark" href="#">Perfil</a></li>
-								<li><a class="dropdown-item text-dark" href="#">Cambiar Contraseña</a></li>
-								<li><a class="dropdown-item text-dark" href="#">Log Out</a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
+                    </ul>
+                    <ul class="navbar-nav ml-auto dropstart">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                User X
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" href="#">Perfil</a></li>
+                                <li><a class="dropdown-item text-dark" href="#">Cambiar Contraseña</a></li>
+                                <li><a class="dropdown-item text-dark" href="#">Log Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2022 - ApotheGSF - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-		</div>
-	</footer>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
-	<script src="~/lib/admin-lte/js/adminlte.min.js"></script>
-	<script src="~/lib/select2/js/select2.full.min.js"></script>
-	<script src="~/lib/font-awesome/js/all.min.js"></script>
-	
-	<script type="text/javascript">
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - ApotheGSF - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/admin-lte/js/adminlte.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.min.js"></script>
+
+    <script type="text/javascript">
         $(document).ready(function() {
             $('.select2').select2();
         });
     </script>
 
-	@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>

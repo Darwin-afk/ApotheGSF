@@ -16,6 +16,7 @@ namespace ApotheGSF.Models
         public DateTime FechaAdquirido { get; set; }
         public DateTime FechaVencimiento { get; set; }
         public bool Detallada { get; set; }
+        public bool Inactivo { get; set; }
 
         public MedicamentosCajas()
         {

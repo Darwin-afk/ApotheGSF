@@ -18,14 +18,6 @@ namespace ApotheGSF.Controllers
             _context = context;
         }
 
-        // GET: MedicamentosCajas
-        public async Task<IActionResult> Index()
-        {
-              return _context.MedicamentosCajas != null ? 
-                          View(await _context.MedicamentosCajas.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.MedicamentosCajas'  is null.");
-        }
-
         // GET: MedicamentosCajas/Details/5
         public async Task<IActionResult> Details(int? id)
         {

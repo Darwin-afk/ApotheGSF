@@ -39,6 +39,7 @@ namespace ApotheGSF.Controllers
         // GET: MedicamentosCajas/Create
         public IActionResult Create()
         {
+            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
             return View();
         }
 
@@ -47,7 +48,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CajaId,CantidadUnidad,FechaAdquirido,FechaVencimiento,Detallada")] MedicamentosCajas medicamentosCajas)
+        public async Task<IActionResult> Create([Bind("CantidadUnidad,FechaAdquirido,FechaVencimiento,Detallada")] MedicamentosCajas medicamentosCajas)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +56,7 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
             return View(medicamentosCajas);
         }
 
@@ -71,6 +73,7 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
+            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentosId);
             return View(medicamentosCajas);
         }
 
@@ -106,6 +109,7 @@ namespace ApotheGSF.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentosId);
             return View(medicamentosCajas);
         }
 

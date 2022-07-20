@@ -4,58 +4,77 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-11">
-    <div class="card">
-        <div class="card-header text-center" style="background-color:#006699;">
-            <h3 class="display-8" style="color:white;">Consulta de Usuarios</h3>
-        </div>
-        <!--datos-->
-        <div class="card-body">
-            <div class="form-group row">
+<h1>Details Usuario</h1>
 
-                <div class="col-sm-7 row">
-                    <div class="col-sm-2">
-                        <label class="col-form-label">Desde</label>
-                    </div>
-                    <div class="col-sm-4">
-                        <input type="date" />
-                    </div>
-                    <div class="col-sm-2">
-                        <label class="col-form-label">Hasta</label>
-                    </div>
-                    <div class="col-sm-4">
-                        <input type="date">
-                    </div>
-                </div>
-
-                <div class="col-sm-4 row">
-                    <div class="col-sm-2">
-                        <Label class="col-form-label">Filtro</Label>
-                    </div>
-                    <div class="col-sm-10">
-                        <select class="form-control" name="EstadoCivil" id="EstadoCivil">
-                            <option selected disabled></option>
-                            <option value="Casado">Id</option>
-                            <option value="Soltero">Nombre</option>
-                            <option value="Soltero">Rol</option>
-                            <option value="Soltero">FechaNacimiento</option>
-                            <option value="Soltero">Cedula</option>
-                            <option value="Soltero">NombreUsuario</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-sm-1">
-                    <button class="btn btn-primary" type="button">Buscar </button>
-                </div>
-            </div>
-        </div>
-        <!--Botones-->
-        <div class="card-footer text-center" style="background-color:#006699 ;">
-
-            <a class="btn btn-danger" asp-controller="Usuarios" asp-action="Index" type="button">Cerrar</a>
-
-        </div>
-        <!--Fin Botones-->
-    </div>
+<h3>Aqui estan los datos del Usuario</h3>
+<div>
+    <h4>Usuario</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Apellido)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Apellido)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cedula)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cedula)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaNacimiento)
+        </dd>        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Direccion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Usuario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Usuario)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rol)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rol)
+        </dd>
+    </dl>
+    
+    <form asp-action="Details">
+        <input type="hidden" asp-for="Id" />
+        <a asp-action="Index" type="button" class="btn btn-danger">Cerrar</a>
+    </form>
 </div>

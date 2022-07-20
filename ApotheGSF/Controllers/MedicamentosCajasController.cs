@@ -26,8 +26,23 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var medicamentosCajas = await _context.MedicamentosCajas
-                .FirstOrDefaultAsync(m => m.CajaId == id);
+            var medicamentosCajas = await (from mc in _context.MedicamentosCajas
+                                           .AsNoTracking()
+                                           .AsQueryable()
+                                           join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
+                                           select new MedicamentosCajas
+                                           {
+                                               CajaId = mc.CajaId,
+                                               MedicamentoId = mc.MedicamentoId,
+                                               NombreMedicamento = m.Nombre,
+                                               CantidadUnidad = mc.CantidadUnidad,
+                                               FechaAdquirido = mc.FechaAdquirido,
+                                               FechaVencimiento = mc.FechaVencimiento,
+                                               Detallada = mc.Detallada
+                                           }).Where(x => x.CajaId == id).FirstOrDefaultAsync();
+
+            //var medicamentosCajas = await _context.MedicamentosCajas
+            //    .FirstOrDefaultAsync(m => m.CajaId == id);
             if (medicamentosCajas == null)
             {
                 return NotFound();

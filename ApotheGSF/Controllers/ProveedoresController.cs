@@ -67,14 +67,10 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago,Creado,CreadoId,Modificado,ModificadoId,Inactivo")] Proveedores proveedor)
+        public async Task<IActionResult> Create([Bind("Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago")] Proveedores proveedor)
         {
             if (ModelState.IsValid)
             {
-                proveedor.Creado = DateTime.Now;
-                proveedor.CreadoNombreUsuario = _user.GetUserName();
-                proveedor.Modificado = DateTime.Now;
-                proveedor.ModificadoNombreUsuario = _user.GetUserName(); 
                 _context.Add(proveedor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Create));
@@ -105,7 +101,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago,Creado,CreadoId,Modificado,ModificadoId,Inactivo")] Proveedores proveedor)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago")] Proveedores proveedor)
         {
             if (id != proveedor.Codigo)
             {
@@ -168,7 +164,12 @@ namespace ApotheGSF.Controllers
             var proveedor = await _context.Proveedores.FindAsync(id);
             if (proveedor != null)
             {
-                _context.Proveedores.Remove(proveedor);
+                _context.Proveedores.Update(proveedor);
+                proveedor.Modificado = DateTime.Now;
+                proveedor.ModificadoNombreUsuario = _user.GetUserName();
+                proveedor.Inactivo = true;
+                _context.Entry(proveedor).Property(c => c.Creado).IsModified = false;
+                _context.Entry(proveedor).Property(c => c.CreadoNombreUsuario).IsModified = false;
             }
             
             await _context.SaveChangesAsync();

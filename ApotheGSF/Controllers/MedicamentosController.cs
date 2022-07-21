@@ -126,7 +126,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            ViewBag.Inventario = _context.MedicamentosCajas.Where(m => m.MedicamentoId == medicamento.Codigo).ToList();
+            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.MedicamentoId == medicamento.Codigo).ToList();
             return View(medicamento);
         }
 
@@ -142,7 +142,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,UnidadesCaja,Costo,PrecioUnidad,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
         {
             ModelState.Remove("NombreProveedor");
 
@@ -331,6 +331,7 @@ namespace ApotheGSF.Controllers
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
                                          Dosis = meds.Dosis,
+                                         Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count,
 
                                          NombreProveedor = string.Join(", ",
                                          (from p in _context.Proveedores

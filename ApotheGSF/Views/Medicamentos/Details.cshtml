@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    int i = 1;
 }
 <h3><i class="fas fa-list"></i>&nbsp;Detalle Medicamento</h3>
 
@@ -9,80 +10,126 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Codigo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Codigo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nombre)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NombreProveedor)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NombreProveedor)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Categoria)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Categoria)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Sustancia)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Sustancia)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Concentracion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Concentracion)
-        </dd>         
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cajas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cajas)
-        </dd>       
-        <dt class = "col-sm-2">
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UnidadesCaja)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UnidadesCaja)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Costo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Costo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PrecioUnidad)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PrecioUnidad)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Indicaciones)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Indicaciones)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Dosis)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Dosis)
         </dd>
     </dl>
-    
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Cantidad Unidad
+                </th>
+                <th>
+                    Fecha Vencimiento
+                </th>
+                <th>
+                    Detallada
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Inventario)
+            {
+                <tr>
+                    <td>
+                        @i
+                    </td>
+                    <td>
+                        @item.CantidadUnidad
+                    </td>
+                    <td>
+                        @item.FechaVencimiento.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @if (item.Detallada == true)
+                        {
+                            @:Si
+                        }
+                        else
+                        {
+                            @:No
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "MedicamentosCajas", new { id = item.CajaId})">Editar</a> |
+                        <a href="@Url.Action("Details", "MedicamentosCajas", new { id = item.CajaId})">Detalle</a> |
+                        <a href="@Url.Action("Delete", "MedicamentosCajas", new { id = item.CajaId})">Eliminar</a>
+                    </td>
+                </tr>
+                i = i + 1;
+            }
+        </tbody>
+    </table>
+
     <form asp-action="Details">
         <input type="hidden" asp-for="Codigo" />
         <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>

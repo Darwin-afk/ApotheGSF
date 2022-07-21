@@ -126,6 +126,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            ViewBag.Inventario = _context.MedicamentosCajas.Where(m => m.MedicamentoId == medicamento.Codigo).ToList();
             return View(medicamento);
         }
 

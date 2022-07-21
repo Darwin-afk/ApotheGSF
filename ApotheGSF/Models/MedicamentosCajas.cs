@@ -12,8 +12,6 @@ namespace ApotheGSF.Models
         public virtual Medicamentos? Medicamentos { get; set; }
         public int CantidadUnidad { get; set; }
         public DateTime FechaAdquirido { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaVencimiento { get; set; }
         public bool Detallada { get; set; }
         public bool Inactivo { get; set; }

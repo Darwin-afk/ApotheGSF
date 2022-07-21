@@ -98,25 +98,13 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var medicamentosCajas = await (from mc in _context.MedicamentosCajas
-                                           .AsNoTracking()
-                                           .AsQueryable()
-                                           join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
-                                           select new MedicamentosCajasViewModel
-                                           {
-                                               CajaId = mc.CajaId,
-                                               MedicamentoId = mc.MedicamentoId,
-                                               NombreMedicamento = m.Nombre,
-                                               CantidadUnidad = mc.CantidadUnidad,
-                                               FechaAdquirido = mc.FechaAdquirido,
-                                               FechaVencimiento = mc.FechaVencimiento,
-                                               Detallada = mc.Detallada
-                                           }).Where(x => x.CajaId == id).FirstOrDefaultAsync();
+            var medicamentosCajas = await _context.MedicamentosCajas.FindAsync(id);
 
             if (medicamentosCajas == null)
             {
                 return NotFound();
             }
+
             ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
             return View(medicamentosCajas);
         }
@@ -126,7 +114,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CajaId,CantidadUnidad,FechaAdquirido,FechaVencimiento,Detallada")] MedicamentosCajas medicamentosCajas)
+        public async Task<IActionResult> Edit(int id, [Bind("CajaId,MedicamentoId,CantidadUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajas medicamentosCajas)
         {
             if (id != medicamentosCajas.CajaId)
             {
@@ -137,7 +125,9 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
-                    _context.Update(medicamentosCajas);//cambiar
+                    _context.Update(medicamentosCajas);
+                    _context.Entry(medicamentosCajas).Property(m => m.Detallada).IsModified = false;
+                    _context.Entry(medicamentosCajas).Property(m => m.Inactivo).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

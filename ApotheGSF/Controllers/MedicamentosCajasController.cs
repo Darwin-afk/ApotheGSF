@@ -55,7 +55,7 @@ namespace ApotheGSF.Controllers
         // GET: MedicamentosCajas/Create
         public IActionResult Create()
         {
-            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
             return View();
         }
 
@@ -64,15 +64,27 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CantidadUnidad,FechaAdquirido,FechaVencimiento,Detallada")] MedicamentosCajasViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("MedicamentoId,Cajas,FechaAdquirido,FechaVencimiento")] MedicamentosCajasViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(viewModel);// cambiar
+                MedicamentosCajas medicamentoCaja = new();
+                medicamentoCaja.CantidadUnidad = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
+                                                                            .Select(m => m.UnidadesCaja)
+                                                                            .FirstOrDefaultAsync();
+                medicamentoCaja.MedicamentoId = viewModel.MedicamentoId;
+                medicamentoCaja.FechaAdquirido = viewModel.FechaAdquirido;
+                medicamentoCaja.FechaVencimiento = viewModel.FechaVencimiento;
+                medicamentoCaja.Detallada = false;
+                medicamentoCaja.Inactivo = false;
+
+                for(int i = 0; i < viewModel.Cajas; i++)
+                    _context.Add(medicamentoCaja);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
             return View(viewModel);
         }
 
@@ -103,7 +115,7 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
             return View(medicamentosCajas);
         }
 
@@ -139,7 +151,7 @@ namespace ApotheGSF.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MedicamentoId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
             return View(medicamentosCajas);
         }
 

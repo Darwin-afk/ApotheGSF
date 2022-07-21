@@ -4,10 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 <div class="form-group row">
-	<div class="form-group col-sm-10">
-		<form asp-action="Edit">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
+    <div class="form-group col-sm-10">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
                 <div class="card">
                     <div class="card-header text-center" style="background-color:#009900;">
                         <h3 class="display-8" style="color:white;"><i class="fa-solid fa-capsules"></i>&nbsp;Modificar Medicamento</h3>
@@ -21,7 +21,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
-                                <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
+                                    <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -30,8 +30,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-flask"></i></span>
                                     </div>
-                                <div asp-nombres="@ViewBag.NombresProveedores" asp-valores="@ViewBag.CodigosProveedores" asp-valores-seleccionados=null asp-id=ProveedoresId></div>
-                            </div>
+                                    <div>
+                                        <select asp-for="ProveedoresId" class="form-control select2" asp-items="ViewBag.ProveedoresId"></select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -42,7 +44,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-tags"></i></span>
                                     </div>
-                                <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
+                                    <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -51,9 +53,9 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
                                     </div>
-                                <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
+                                    <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
                                 </div>
-                            </div>  
+                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -63,7 +65,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-pills"></i></span>
                                     </div>
-                                <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
+                                    <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -72,7 +74,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-tablets"></i></span>
                                     </div>
-                                <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0">
+                                    <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0">
                                 </div>
                             </div>
                         </div>
@@ -85,7 +87,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
-                                <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $">
+                                    <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -94,21 +96,21 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
-                                <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $">
+                                    <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $">
                                 </div>
                             </div>
                         </div>
 
 
-                        <div class="form-group row">                            
+                        <div class="form-group row">
                             <div class="col-sm-6">
                                 <label class="col-form-label">Indicaciones</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-list"></i></span>
                                     </div>
-                                <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
-                            </div>
+                                    <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
+                                </div>
                             </div>
                             <div class="col-sm-6">
                                 <label for="Direccion" class="col-form-label">Dosis</label>
@@ -116,7 +118,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
                                     </div>
-                                <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
+                                    <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
                                 </div>
                             </div>
                         </div>
@@ -130,12 +132,14 @@
                     </div>
                 </div>
             </div>
-		</form>
-	</div>
-	<div class="col-sm-2">
-	</div>
+        </form>
+    </div>
+    <div class="col-sm-2">
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

@@ -2,67 +2,61 @@
 @inject IOptions<AppSettings> appSettings
 
 @{
-    ViewData["Title"] = "Conectarse al Sistema";
-    Layout = "_LayoutHome";
+	ViewData["Title"] = "Conectarse al Sistema";
+	Layout = "_LayoutHome";
 }
 
-<form asp-action="login" asp-controller="home" class="form-signin" method="post" asp-route-returnurl="@Model.ReturnUrl">
-    <div class="container shadow-lg p-3 rb-5 bg-white rounded col-sm-4">
-        <div class="Card">
-            <div class="card-header text-center" style="background-color:#0080FF;">
-                @*<h4><strong>@appSettings.Value.Nombre.ToUpper()</strong></h4>*@
-                <h4 style="color:white;">Botica Popular</h4>
-                <h5 style="color:white;">Santa Rosa de Lima</h5>
-                <p style="color:white;">
-                    Ingrese sus credenciales
-                </p>
-            </div>
+	<form asp-action="login" asp-controller="home" class="form-signin" method="post" asp-route-returnurl="@Model.ReturnUrl">
+		<div class="container shadow-lg p-3 rb-5 bg-white rounded col-sm-4">
+			<div class="Card">
+				<div class="card-header text-center" style="background-color:#0080FF;">
+					@*<h4><strong>@appSettings.Value.Nombre.ToUpper()</strong></h4>*@
+					<h4 style="color:white;">Botica Popular</h4>
+					<h5 style="color:white;">Santa Rosa de Lima</h5>
+					<p style="color:white;">
+						Ingrese sus credenciales
+					</p>			
+				</div>
+			
+				<div class="card-body">
+					<p id="profile-name" class="profile-name-card"></p>
 
-            <div class="card-body">
-                <p id="profile-name" class="profile-name-card"></p>
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<span id="reauth-email" class="reauth-email"></span>
 
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <span id="reauth-email" class="reauth-email"></span>
+					<div class="form-group input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<input asp-for="Usuario" class="form-control" placeholder="Usuario" autofocus required>
+						<span asp-validation-for="Usuario" class="text-danger"></span>
+					</div>
 
-                <div class="form-group">
-                    <label>User:</label>
-                        <div class="input-group">                            
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            </div>
-                            <input asp-for="Usuario" class="form-control" placeholder="Usuario" autofocus required>
-                        </div>
-                        <span asp-validation-for="Usuario" class="text-danger"></span>
-                    
-                </div>
+					<div class="form-group input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						<input asp-for="Password" class="form-control" placeholder="Contraseña" required>
+						<span asp-validation-for="Password" class="text-danger"></span>
+					</div>
+					@*	<div id="remember" class="checkbox">
+					<label>
+					<input type="checkbox" asp-for="RememberMe"> Recordarme
+					</label>
+					</div>
+					*@
+				</div>
 
-                <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input asp-for="Password" class="form-control" placeholder="Contraseña" required>
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                @*	<div id="remember" class="checkbox">
-                <label>
-                <input type="checkbox" asp-for="RememberMe"> Recordarme
-                </label>
-                </div>
-                *@
-            </div>
-
-            <div class="card-footer" style="background-color:#0080FF;">
-                <input type="submit" class="btn btn-lg btn-block btn-primary btn-signin" value="LogIn" />
-                <br />
-                <p style="font-size:12px;text-align:center;color:white;">
-                    Para soporte técnico, nos puede contactar en el 8X9.XXX.XXXX
-                </p>
-            </div>
+				<div class="card-footer" style="background-color:#0080FF;">
+					<input type="submit" class="btn btn-lg btn-block btn-primary btn-signin" value="LogIn"/>
+					<br />
+					<p style="font-size:12px;text-align:center;color:white;">
+						Para soporte técnico, nos puede contactar en el 8X9.XXX.XXXX
+					</p>
+				</div>			
 
 
-            @*
-            <a href="#" class="forgot-password">
-            ¿Olvidó su contraseña?
-            </a>
-            *@<!-- /card-container -->
-        </div>
-    </div><!-- /container -->
-</form><!-- /form -->
+			@*
+			<a href="#" class="forgot-password">
+			¿Olvidó su contraseña?
+			</a>
+			*@<!-- /card-container -->
+			</div>
+		</div><!-- /container -->
+	</form><!-- /form -->

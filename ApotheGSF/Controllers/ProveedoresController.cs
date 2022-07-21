@@ -53,7 +53,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
            
-            return View();
+            return View(proveedor);
         }
 
         // GET: Proveedores/Create

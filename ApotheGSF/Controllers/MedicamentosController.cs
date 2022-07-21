@@ -46,6 +46,7 @@ namespace ApotheGSF.Controllers
                                          Indicaciones = meds.Indicaciones,
                                          Dosis = meds.Dosis,
                                          Inactivo = (bool)meds.Inactivo,
+                                         Cajas = _context.MedicamentosCajas.Where(m=>m.MedicamentoId == meds.Codigo).ToList().Count,
 
                                          NombreProveedor = string.Join(", ",
                                          (from p in _context.Proveedores

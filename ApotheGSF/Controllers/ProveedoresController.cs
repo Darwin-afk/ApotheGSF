@@ -119,6 +119,7 @@ namespace ApotheGSF.Controllers
                 {
                     proveedor.Modificado = DateTime.Now;
                     proveedor.ModificadoNombreUsuario = _user.GetUserName();
+                    proveedor.Inactivo = false;
                     _context.Update(proveedor);
                     await _context.SaveChangesAsync();
                 }

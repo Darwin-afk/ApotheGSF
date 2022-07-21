@@ -33,8 +33,6 @@ namespace ApotheGSF.Controllers
                                            join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
-                                               CajaId = mc.CajaId,
-                                               MedicamentoId = mc.MedicamentoId,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
@@ -42,8 +40,6 @@ namespace ApotheGSF.Controllers
                                                Detallada = mc.Detallada
                                            }).Where(x => x.CajaId == id).FirstOrDefaultAsync();
 
-            //var medicamentosCajas = await _context.MedicamentosCajas
-            //    .FirstOrDefaultAsync(m => m.CajaId == id);
             if (medicamentosCajas == null)
             {
                 return NotFound();

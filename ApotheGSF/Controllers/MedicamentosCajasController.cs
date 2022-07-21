@@ -68,21 +68,27 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
-                MedicamentosCajas medicamentoCaja = new();
-                medicamentoCaja.CantidadUnidad = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
+                var unidades = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
                                                                             .Select(m => m.UnidadesCaja)
                                                                             .FirstOrDefaultAsync();
-                medicamentoCaja.MedicamentoId = viewModel.MedicamentoId;
-                medicamentoCaja.FechaAdquirido = viewModel.FechaAdquirido;
-                medicamentoCaja.FechaVencimiento = viewModel.FechaVencimiento;
-                medicamentoCaja.Detallada = false;
-                medicamentoCaja.Inactivo = false;
 
                 for(int i = 0; i < viewModel.Cajas; i++)
+                {
+                    MedicamentosCajas medicamentoCaja = new();
+                    medicamentoCaja.CantidadUnidad = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
+                                                                                .Select(m => m.UnidadesCaja)
+                                                                                .FirstOrDefaultAsync();
+                    medicamentoCaja.MedicamentoId = viewModel.MedicamentoId;
+                    medicamentoCaja.FechaAdquirido = viewModel.FechaAdquirido;
+                    medicamentoCaja.FechaVencimiento = viewModel.FechaVencimiento;
+                    medicamentoCaja.Detallada = false;
+                    medicamentoCaja.Inactivo = false;
+
                     _context.Add(medicamentoCaja);
+                }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
             return View(viewModel);

@@ -9,11 +9,11 @@
 	<form asp-action="login" asp-controller="home" class="form-signin" method="post" asp-route-returnurl="@Model.ReturnUrl">
 		<div class="container shadow-lg p-3 rb-5 bg-white rounded col-sm-4">
 			<div class="Card">
-				<div class="card-header text-center" style="background-color:lightgray;">
+				<div class="card-header text-center" style="background-color:#0080FF;">
 					@*<h4><strong>@appSettings.Value.Nombre.ToUpper()</strong></h4>*@
-					<h4>Botica Popular</h4>
-					<h5>Santa Rosa de Lima</h5>
-					<p>
+					<h4 style="color:white;">Botica Popular</h4>
+					<h5 style="color:white;">Santa Rosa de Lima</h5>
+					<p style="color:white;">
 						Ingrese sus credenciales
 					</p>			
 				</div>
@@ -43,10 +43,10 @@
 					*@
 				</div>
 
-				<div class="card-footer" style="background-color:lightgray;">
-					<input type="submit" class="btn btn-lg btn-primary btn-block btn-signin" value="Entrar" />
+				<div class="card-footer" style="background-color:#0080FF;">
+					<input type="submit" class="btn btn-lg btn-primary btn-signin" value="LogIn" />
 					<br />
-					<p style="font-size:12px;text-align:center;">
+					<p style="font-size:12px;text-align:center;color:white;">
 						Para soporte técnico, nos puede contactar en el 8X9.XXX.XXXX
 					</p>
 				</div>			

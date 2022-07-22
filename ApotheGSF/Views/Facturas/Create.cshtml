@@ -1,110 +1,162 @@
-﻿@model ApotheGSF.Models.Facturas
+﻿@model ApotheGSF.ViewModels.FacturaViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
-<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-11">
-    <div class="card">
-        <div class="card-header text-center" style="background-color:#990000;">
-            <h3 class="display-8" style="color:white;">Facturacion de Medicamento</h3>
-        </div>
-        <!--datos-->
-        <div class="card-body">
-            <div class="form-group row">
-                <div class="col-sm-2">
-                    <label for="Matricula" class="col-form-label">Código</label>
-                </div>
 
-                <div class="col-sm-6 row">
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="Matricula" id="Matricula"
-                               placeholder="0">
-                    </div>
-                    <div class="col-sm-3">
-                        <button class="btn btn-primary" type="button">Buscar</button>
-                    </div>
-                </div>
-
-                <div class="col-sm-4 row">
-                    <div class="col-sm-6">
-                        <label for="Cedula" class="col-form-label">Fecha Creacion</label>
-                    </div>
-                    <div class="col-sm-6">
-                        <input type="date" class="form-control" placeholder="">
-                    </div>
-                </div>
+<form asp-action="Create" id="form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-11">
+        <div class="card">
+            <div class="card-header text-center" style="background-color:#990000;">
+                <h3 class="display-8" style="color:white;">Facturacion de Medicamento</h3>
             </div>
+            <!--datos-->
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <label for="Matricula" class="col-form-label">Código</label>
+                    </div>
 
-
-
-
-            <div class="col-sm-12">
-                <label for="Medicamentos" class="col-form-label">Medicamentos</label>
-            </div>
-
-
-            <div class="col-sm-12">
-                <textarea type="textarea" class="form-control" placeholder="Medicamentos" required
-                rows="15"></textarea>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-sm-8">
-                    <div class="form-group col-sm-8 row">
-                        <div class="col-sm-4">
-                            <label for="Estado" class="col-form-label">Estado</label>
+                    <div class="col-sm-6 row">
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="Matricula" id="Matricula"
+                                   placeholder="0">
                         </div>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" placeholder="...">
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary" type="button">Buscar</button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 row">
+                        <div class="col-sm-6">
+                            <label for="Cedula" class="col-form-label">Fecha Creacion</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+
+                <!--Agregar Medicamento-->
+                <div class="form-group row">
+                    <div class="col-sm-3 row">
+                        <div class="col">
+                            <label class="col-form-label">Medicamento</label>
+                            <select asp-for="MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 row">
+                        <div class="col">
+                            <label class="col-form-label">TipoCantidad</label>
+                            <select asp-for="TipoCantidad" class="form-control">
+                                <option value="1">Cajas</option>
+                                <option value="2">Unidades</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 row">
+                        <div class="col">
+                            <label class="col-form-label">Cantidad</label>
+                            <input asp-for="Cantidad" type="number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 row">
+                        <div class="col">
+                            <input class="btn btn-primary" type="button" id="AgregarMedicamento" value="Agregar" />
+                        </div>
+                    </div>
+                </div>
+
+                <!--Detalle-->
+                <div class="tableFixHead">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Medicamento
+                                </th>
+                                <th>
+                                    Tipo Cantidad
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    Precio
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="ListaDetalle">
+                            @Html.EditorFor(model => model.MedicamentosDetalle)
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-8">
+                        <div class="form-group col-sm-8 row">
+                            <div class="col-sm-4">
+                                <label for="Estado" class="col-form-label">Estado</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" placeholder="...">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
                         </div>
                     </div>
                     <div class="col-sm-4">
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="FechaIngreso" class="col-form-label">SubTotal</label>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="FechaIngreso" class="col-form-label">SubTotal</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" asp-for="SubTotal" class="form-control" placeholder="0.00 $">
+                            </div>
                         </div>
-                        <div class="col-sm-8">
-                            <input type="tel" class="form-control" placeholder="0.00 $">
-                        </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="Nombre" class="col-form-label">ITBIS</label>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="Nombre" class="col-form-label">ITBIS</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" placeholder="0.00 $" required>
+                            </div>
                         </div>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" placeholder="0.00 $" required>
-                        </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="Apellido" class="col-form-label">Total</label>
-                        </div>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" placeholder="0.00 $" >
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="Apellido" class="col-form-label">Total</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" placeholder="0.00 $">
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!--Fin datos-->
             </div>
-
-            <!--Fin datos-->
-        </div>
-        <div class="card-footer text-center" style="background-color:#990000 ;">
-            <!--Botones-->
-            <button class="btn btn-secondary" type="button">Nuevo</button>
-            <button class="btn btn-primary" type="submit">Facturar</button>
-            <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
-            <!--Fin Botones-->
+            <div class="card-footer text-center" style="background-color:#990000 ;">
+                <!--Botones-->
+                <button class="btn btn-secondary" type="button">Nuevo</button>
+                <input type="submit" value="Facturar" id="Validar" class="btn btn-primary" />
+                <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
+                <!--Fin Botones-->
+            </div>
         </div>
     </div>
-</div>
+</form>
+
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/js/AgregarFacturaDetalle.js"></script>
+
     }

@@ -1,0 +1,96 @@
+﻿@model ApotheGSF.Clases.MedicamentosDetalle
+
+@for (int j = 0; j < Model.CajasId.Count; j++)
+{
+    @Html.HiddenFor(model => Model.CajasId[j])
+}
+
+<tr>
+    <td>
+        <input type="hidden" asp-for="NombreMedicamento" />
+        @Model.NombreMedicamento
+    </td>
+    <td>
+        <input type="hidden" asp-for="TipoCantidad" />
+        @if (Model.TipoCantidad == 1)
+        {
+            @:Cajas
+        }
+        else
+        {
+            @:Unidades
+        }
+    </td>
+    <td>
+        <input type="hidden" asp-for="Cantidad" />
+        @Model.Cantidad
+    </td>
+    <td>
+        <input type="hidden" asp-for="Precio" />
+        @Model.Precio
+    </td>
+    <td>
+        <input type="hidden" asp-for="Total" />
+        @Model.Total
+    </td>
+</tr>
+
+@*<div class="tableFixHead">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Medicamento
+                </th>
+                <th>
+                    Tipo Cantidad
+                </th>
+                <th>
+                    Cantidad
+                </th>
+                <th>
+                    Precio
+                </th>
+                <th>
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Model.NombreMedicamento
+                </td>
+                <td>
+                    @if (Model.TipoCantidad == 1)
+                    {
+                        @:Cajas
+                    }
+                    else
+                    {
+                        @:Unidades
+                    }
+                </td>
+                <td>
+                    @Model.Cantidad
+                </td>
+                <td>
+                    @Model.Precio
+                </td>
+                <td>
+                    @Model.Total
+                </td>
+                @{
+                    i = i + 1;
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
+*@

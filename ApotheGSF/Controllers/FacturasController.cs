@@ -27,9 +27,9 @@ namespace ApotheGSF.Controllers
         // GET: Facturas
         public async Task<IActionResult> Index()
         {
-              return _context.Facturas != null ? 
-                          View(await _context.Facturas.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Facturas'  is null.");
+            return _context.Facturas != null ?
+                        View(await _context.Facturas.ToListAsync()) :
+                        Problem("Entity set 'AppDbContext.Facturas'  is null.");
         }
 
         // GET: Facturas/Details/5
@@ -54,46 +54,49 @@ namespace ApotheGSF.Controllers
         // GET: Facturas/Create
         public IActionResult Create()
         {
-            return View();
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+            return View(new FacturaViewModel());
         }
 
         // POST: Facturas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[Bind("Codigo,FechaCreacion,SubTotal,Total,Estado,Medicamentos")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,FechaCreacion,SubTotal,Total,Estado,Medicamentos")] FacturaViewModel viewModel)
+        public List<MedicamentosDetalle> Create([Bind("Codigo,FechaCreacion,SubTotal,Total,Estado,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                List<FacturaMedicamentosCajas> facturaMedicamentos = new();
-                foreach (var i in viewModel.Medicamentos)
-                {
-                    facturaMedicamentos.Add(new FacturaMedicamentosCajas
-                    {
-                        CajaId = i.CajaId,
-                        CantidadUnidad = i.CantidadUnidad,
-                        Precio = i.Precio
-                    });
-                }
+            return viewModel.MedicamentosDetalle;
+            //if (ModelState.IsValid)
+            //{
+            //    List<FacturaMedicamentosCajas> facturaMedicamentos = new();
+            //    //foreach (var i in viewModel.MedicamentosDetalle)
+            //    //{
+            //    //    facturaMedicamentos.Add(new FacturaMedicamentosCajas
+            //    //    {
+            //    //        CajaId = i.CajaId,
+            //    //        CantidadUnidad = i.CantidadUnidad,
+            //    //        Precio = i.Precio
+            //    //    });
+            //    //}
 
-                Facturas nuevaFactura = new()
-                {
-                    FechaCreacion = viewModel.FechaCreacion,
-                    SubTotal = viewModel.SubTotal,
-                    Total = viewModel.Total,
-                    Estado = viewModel.Estado,
-                    FacturasMedicamentosCajas = facturaMedicamentos,
-                    Creado = DateTime.Now,
-                    Modificado = DateTime.Now,
-                    Inactivo = false
-                };
+            //    Facturas nuevaFactura = new()
+            //    {
+            //        FechaCreacion = viewModel.FechaCreacion,
+            //        SubTotal = viewModel.SubTotal,
+            //        Total = viewModel.Total,
+            //        Estado = viewModel.Estado,
+            //        FacturasMedicamentosCajas = facturaMedicamentos,
+            //        Creado = DateTime.Now,
+            //        Modificado = DateTime.Now,
+            //        Inactivo = false
+            //    };
 
-                _context.Add(nuevaFactura);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(viewModel);
+            //    _context.Add(nuevaFactura);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(viewModel);
         }
 
         // GET: Facturas/Edit/5
@@ -196,14 +199,98 @@ namespace ApotheGSF.Controllers
             {
                 _context.Facturas.Remove(factura);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FacturaExists(int id)
         {
-          return (_context.Facturas?.Any(e => e.Codigo == id)).GetValueOrDefault();
+            return (_context.Facturas?.Any(e => e.Codigo == id)).GetValueOrDefault();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AgregarMedicamento([Bind("MedicamentosDetalle", "MedicamentoId", "TipoCantidad", "Cantidad")] FacturaViewModel viewModel)
+        {
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId).Include(m => m.MedicamentosCajas).FirstOrDefaultAsync();
+            MedicamentosDetalle detalle;
+            var medicamentosCajas = medicamento.MedicamentosCajas.Where(mc => mc.CantidadUnidad != 0).ToList();
+            var medicamentosCajasSinDetalle = medicamentosCajas.Where(mc => mc.Detallada == false).ToList();
+            var medicamentosCajasConDetalle = medicamentosCajas.Where(mc => mc.Detallada == true).ToList();
+
+            if (viewModel.TipoCantidad == 1)//Cajas
+            {
+                //En caso de que se quiera agregar mas cajas de lo que se tenga en inventario
+                if (viewModel.Cantidad > medicamentosCajasSinDetalle.Count())
+                {
+                    return PartialView("MedicamentosDetalles", viewModel);
+                }
+
+                detalle = new()
+                {
+                    CajasId = new List<int>(),
+                    NombreMedicamento = medicamento.Nombre,
+                    TipoCantidad = viewModel.TipoCantidad,
+                    Cantidad = viewModel.Cantidad,
+                    Precio = medicamento.PrecioUnidad * medicamento.UnidadesCaja,
+                    Total = medicamento.PrecioUnidad * medicamento.UnidadesCaja * viewModel.Cantidad
+                };
+
+                for (int i = 0; i < viewModel.Cantidad; i++)
+                {
+                    detalle.CajasId.Add(medicamentosCajasSinDetalle[i].CajaId);
+                }
+
+                viewModel.MedicamentosDetalle.Add(detalle);
+                return PartialView("MedicamentosDetalles", viewModel);
+            }
+            else//Unidades
+            {
+                //En caso de que se quiera agregar mas unidades de lo que se puede tener en una caja
+                if (viewModel.Cantidad > medicamento.UnidadesCaja)
+                {
+                    return PartialView("MedicamentosDetalles", viewModel);
+                }
+
+                foreach (var item in medicamentosCajasConDetalle)
+                {
+                    if (item.CantidadUnidad >= viewModel.Cantidad)
+                    {
+                        detalle = new()
+                        {
+                            CajasId = new() { item.CajaId },
+                            NombreMedicamento = medicamento.Nombre,
+                            TipoCantidad = viewModel.TipoCantidad,
+                            Cantidad = viewModel.Cantidad,
+                            Precio = medicamento.PrecioUnidad,
+                            Total = medicamento.PrecioUnidad * viewModel.Cantidad
+                        };
+                        viewModel.MedicamentosDetalle.Add(detalle);
+                        return PartialView("MedicamentosDetalles", viewModel);
+                    }
+                }
+
+                if (medicamentosCajasSinDetalle.Count() > 0)
+                {
+                    detalle = new()
+                    {
+                        CajasId = new() { medicamentosCajasSinDetalle[0].CajaId },
+                        NombreMedicamento = medicamento.Nombre,
+                        TipoCantidad = viewModel.TipoCantidad,
+                        Cantidad = viewModel.Cantidad,
+                        Precio = medicamento.PrecioUnidad,
+                        Total = medicamento.PrecioUnidad * viewModel.Cantidad
+                    };
+                }
+                else
+                {
+                    detalle = new() { Cantidad = 0 };
+                }
+
+                viewModel.MedicamentosDetalle.Add(detalle);
+                return PartialView("MedicamentosDetalles", viewModel);
+            }
         }
     }
 }

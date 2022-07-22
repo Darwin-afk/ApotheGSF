@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Create";
+
+    int MedicamentoId = 0;
+    int TipoCantidad = 1;
+    int Cantidad = 0;
 }
 
 <form asp-action="Create" id="form">
@@ -43,13 +47,13 @@
                     <div class="col-sm-3 row">
                         <div class="col">
                             <label class="col-form-label">Medicamento</label>
-                            <select asp-for="MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
+                            <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
                         </div>
                     </div>
                     <div class="col-sm-3 row">
                         <div class="col">
                             <label class="col-form-label">TipoCantidad</label>
-                            <select asp-for="TipoCantidad" class="form-control">
+                            <select asp-for="@TipoCantidad" class="form-control">
                                 <option value="1">Cajas</option>
                                 <option value="2">Unidades</option>
                             </select>
@@ -58,7 +62,7 @@
                     <div class="col-sm-2 row">
                         <div class="col">
                             <label class="col-form-label">Cantidad</label>
-                            <input asp-for="Cantidad" type="number" class="form-control" />
+                            <input asp-for="@Cantidad" type="number" class="form-control" />
                         </div>
                     </div>
                     <div class="col-sm-3 row">

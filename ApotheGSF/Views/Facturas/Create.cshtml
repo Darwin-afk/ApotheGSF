@@ -13,44 +13,48 @@
     <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-11">
         <div class="card">
             <div class="card-header text-center" style="background-color:#990000;">
-                <h3 class="display-8" style="color:white;">Facturacion de Medicamento</h3>
+                <h3 class="display-8" style="color:white;"><i class="fa-solid fa-cash-register"></i>&nbsp;Facturacion de Medicamento&nbsp;<i class="fa-solid fa-cash-register"></i></h3>
             </div>
             <!--datos-->
             <div class="card-body">
                 <div class="form-group row">
-                    <div class="col-sm-2">
-                        <label for="Matricula" class="col-form-label">Código</label>
+                    <div class="col-sm-1">
+                        <label class="col-form-label">Código</label>
                     </div>
 
-                    <div class="col-sm-6 row">
+                    <div class="col-sm-2 row">
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="Matricula" id="Matricula"
-                                   placeholder="0">
+                            <input type="text" class="form-control" placeholder="0">
                         </div>
                         <div class="col-sm-3">
                             <button class="btn btn-primary" type="button">Buscar</button>
                         </div>
                     </div>
 
-                    <div class="col-sm-4 row">
-                        <div class="col-sm-6">
+                    <div class="col-sm-9 row text-end">
+                        @* 
+
+                        // La Fecha seria mejor colocarla en la accion facturar como DateTime.Now al momento de realizar la Factura
+
+                        <div class="col-sm-9">
                             <label for="Cedula" class="col-form-label">Fecha Creacion</label>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <input type="date" class="form-control" placeholder="">
                         </div>
+                        *@
                     </div>
                 </div>
 
                 <!--Agregar Medicamento-->
                 <div class="form-group row">
-                    <div class="col-sm-3 row">
+                    <div class="col-sm-3">
                         <div class="col">
                             <label class="col-form-label">Medicamento</label>
                             <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
                         </div>
                     </div>
-                    <div class="col-sm-3 row">
+                    <div class="col-sm-3">
                         <div class="col">
                             <label class="col-form-label">TipoCantidad</label>
                             <select asp-for="@TipoCantidad" class="form-control">
@@ -59,15 +63,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-2 row">
+                    <div class="col-sm-6">
                         <div class="col">
                             <label class="col-form-label">Cantidad</label>
-                            <input asp-for="@Cantidad" type="number" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-sm-3 row">
-                        <div class="col">
-                            <input class="btn btn-primary" type="button" id="AgregarMedicamento" value="Agregar" />
+                            <div class="form-group input-group col">
+                            <input asp-for="@Cantidad" type="number" class="form-control col-sm-5" />
+                            <span class="text-end col-sm-7"><input class="btn btn-primary" type="button" id="AgregarMedicamento" value="Agregar" /></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,9 +150,9 @@
             </div>
             <div class="card-footer text-center" style="background-color:#990000 ;">
                 <!--Botones-->
-                <button class="btn btn-secondary" type="button">Nuevo</button>
-                <input type="submit" value="Facturar" id="Validar" class="btn btn-primary" />
-                <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button">Cerrar</a>
+                <button class="btn btn-secondary" type="reset" style="background-color:#B3B3B3;color:black;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" id="Validar" class="btn" style="background-color:#F5F5DC;"><i class="fa-solid fa-cash-register"></i>&nbsp;Facturar</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <a class="btn" asp-controller="Home" asp-action="Index" type="button" style="background-color:#FF8C19;color:black;"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
                 <!--Fin Botones-->
             </div>
         </div>

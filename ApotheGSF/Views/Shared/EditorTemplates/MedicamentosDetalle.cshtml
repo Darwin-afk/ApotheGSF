@@ -1,5 +1,7 @@
 ﻿@model ApotheGSF.Clases.MedicamentosDetalle
 
+<input type="hidden" asp-for="DetalleId"/>
+
 @for (int j = 0; j < Model.CajasId.Count; j++)
 {
     @Html.HiddenFor(model => Model.CajasId[j])
@@ -34,7 +36,6 @@
         @Model.Total
     </td>
     <td>
-        @*<input class="btn btn-danger" type="button" id="RemoverMedicamento" value="Remover" />*@
-        <i class="fas fa-trash-alt" type="button" style="color:red;" id="RemocerMedicamento"></i>
+        <i class="fas fa-trash-alt" type="button" style="color:red;" onclick="RemoverDetalle(@Model.DetalleId)"></i>
     </td>
 </tr>

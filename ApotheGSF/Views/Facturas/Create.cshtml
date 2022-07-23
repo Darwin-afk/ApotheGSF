@@ -68,7 +68,7 @@
                             <label class="col-form-label">Cantidad</label>
                             <div class="form-group input-group col">
                             <input asp-for="@Cantidad" type="number" class="form-control col-sm-5" />
-                            <span class="text-end col-sm-7"><input class="btn btn-primary" type="button" id="AgregarMedicamento" value="Agregar" /></span>
+                            <span class="text-end col-sm-7"><button class="btn btn-primary" onclick="AgregarDetalle()" type="button">Agregar</button></span>
                             </div>
                         </div>
                     </div>
@@ -165,5 +165,6 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script src="~/js/AgregarFacturaDetalle.js"></script>
+    <script src="~/js/RemoverFacturaDetalle.js"></script>
 
     }

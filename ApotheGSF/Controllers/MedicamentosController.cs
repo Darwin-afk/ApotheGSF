@@ -234,7 +234,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,UnidadesCaja,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
         {
             if (id != viewModel.Codigo)
             {

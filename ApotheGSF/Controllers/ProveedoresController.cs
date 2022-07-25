@@ -32,6 +32,7 @@ namespace ApotheGSF.Controllers
         // GET: Proveedores
         public async Task<IActionResult> Index()
         {
+            List<Proveedores> proveedor = await _context.Proveedores.Where(x => x.Inactivo == false).ToListAsync();
               return _context.Proveedores != null ? 
                           View(await _context.Proveedores.Where(x=> x.Inactivo == false).ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Proveedores'  is null.");
@@ -46,8 +47,8 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var proveedor = await _context.Proveedores
-                .FirstOrDefaultAsync(m => m.Codigo == id);
+            var proveedor = _context.Proveedores
+                .FirstOrDefault();
             if (proveedor == null)
             {
                 return NotFound();

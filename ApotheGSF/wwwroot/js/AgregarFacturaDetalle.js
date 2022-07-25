@@ -4,8 +4,13 @@
         data: $('#form').serialize() + "&MedicamentoId=@MedicamentoId&TipoCantidad=@TipoCantidad&Cantidad=@Cantidad",
         type: "POST",
         url: '/Facturas/AgregarMedicamento',
-        success: function (partialView) {
-            $('#ListaDetalle').html(partialView);
+        success: function (resultado) {
+            if (resultado.error) {
+                alert(resultado.mensaje);
+            }
+            else {
+                $('#ListaDetalle').html(resultado.partial);
+            }
         }
     });
 };

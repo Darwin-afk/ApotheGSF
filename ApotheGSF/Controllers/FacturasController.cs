@@ -58,22 +58,24 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Facturas/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
-            //FacturaViewModel factura = new FacturaViewModel()
-            //{
-            //    MedicamentosDetalle = new List<MedicamentosDetalle>()
-            //    {
-            //        new MedicamentosDetalle
-            //        {
-            //            DetalleId = 3,
-            //            CajasId = new List<int>()
+            //obtener lista de medicamentos que no esten inactivos
+            var medicamentos = await(from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                              select new MedicamentosViewModel
+                              {
 
-            //        }
-            //    }
-            //};
-            //return View(factura);
+                                  Codigo = meds.Codigo,
+                                  Nombre = meds.Nombre,
+                                  Inactivo = (bool)meds.Inactivo,
+                                  Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+
+                              }).Where(x => x.Inactivo == false).ToListAsync();
+            //usar los medicamentos que tengan alguna caja en inventario
+            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
             return View(new FacturaViewModel());
         }
 

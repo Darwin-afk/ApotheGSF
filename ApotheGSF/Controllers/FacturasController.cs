@@ -58,64 +58,134 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Facturas/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
-            //FacturaViewModel factura = new FacturaViewModel()
-            //{
-            //    MedicamentosDetalle = new List<MedicamentosDetalle>()
-            //    {
-            //        new MedicamentosDetalle
-            //        {
-            //            DetalleId = 3,
-            //            CajasId = new List<int>()
+            //obtener lista de medicamentos que no esten inactivos
+            var medicamentos = await (from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                                      select new MedicamentosViewModel
+                                      {
 
-            //        }
-            //    }
-            //};
-            //return View(factura);
+                                          Codigo = meds.Codigo,
+                                          Nombre = meds.Nombre,
+                                          Inactivo = (bool)meds.Inactivo,
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+
+                                      }).Where(x => x.Inactivo == false).ToListAsync();
+            //usar los medicamentos que tengan alguna caja en inventario
+            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
             return View(new FacturaViewModel());
         }
 
         // POST: Facturas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[Bind("Codigo,FechaCreacion,SubTotal,Total,Estado,Medicamentos")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public List<MedicamentosDetalle> Create([Bind("Codigo,FechaCreacion,SubTotal,Total,Estado,MedicamentosDetalle")] FacturaViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("SubTotal,Total,Estado,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
-            return viewModel.MedicamentosDetalle;
-            //if (ModelState.IsValid)
-            //{
-            //    List<FacturaMedicamentosCajas> facturaMedicamentos = new();
-            //    //foreach (var i in viewModel.MedicamentosDetalle)
-            //    //{
-            //    //    facturaMedicamentos.Add(new FacturaMedicamentosCajas
-            //    //    {
-            //    //        CajaId = i.CajaId,
-            //    //        CantidadUnidad = i.CantidadUnidad,
-            //    //        Precio = i.Precio
-            //    //    });
-            //    //}
+            string error = VerificarInventario(viewModel.MedicamentosDetalle);//talvez deba ser por referencia\
+            //
 
-            //    Facturas nuevaFactura = new()
-            //    {
-            //        FechaCreacion = viewModel.FechaCreacion,
-            //        SubTotal = viewModel.SubTotal,
-            //        Total = viewModel.Total,
-            //        Estado = viewModel.Estado,
-            //        FacturasMedicamentosCajas = facturaMedicamentos,
-            //        Creado = DateTime.Now,
-            //        Modificado = DateTime.Now,
-            //        Inactivo = false
-            //    };
+            //si hubo alguno error al verificial la disponibilidad en el inventario se regresa al view
+            if (!error.Equals(""))//si no esta vacio
+            {
+                ModelState.AddModelError("", error);
+            }
 
-            //    _context.Add(nuevaFactura);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //return View(viewModel);
+            if (ModelState.IsValid)
+            {
+                List<FacturaMedicamentosCajas> facturaMedicamentos = new();
+                //foreach (var i in viewModel.MedicamentosDetalle)
+                //{
+                //    facturaMedicamentos.Add(new FacturaMedicamentosCajas
+                //    {
+                //        CajaId = i.CajaId,
+                //        CantidadUnidad = i.CantidadUnidad,
+                //        Precio = i.Precio
+                //    });
+                //}
+
+                Facturas nuevaFactura = new()
+                {
+                    FechaCreacion = viewModel.FechaCreacion,
+                    SubTotal = viewModel.SubTotal,
+                    Total = viewModel.Total,
+                    Estado = viewModel.Estado,
+                    FacturasMedicamentosCajas = facturaMedicamentos,
+                    Creado = DateTime.Now,
+                    Modificado = DateTime.Now,
+                    Inactivo = false
+                };
+
+                _context.Add(nuevaFactura);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(viewModel);
+        }
+
+        public string VerificarInventario(List<MedicamentosDetalle> medicamentosDetalles)
+        {
+            List<string> errores = new();
+            //por cada detalle de medicamentosDetalle
+            foreach (var detalle in medicamentosDetalles)
+            {
+                //si el tipoCantidad es caja
+                if (detalle.TipoCantidad == 1)//caja
+                {
+                    //por cada cajaId del detalle
+                    for (int i = 0; i < detalle.CajasId.Count; i++)
+                    {
+                        //verificar si esta inactivo
+                        if (_context.MedicamentosCajas.Where(mc => mc.CajaId == detalle.CajasId[i]).FirstOrDefault().Inactivo)
+                        {
+                            //obtener un listo con todos los detalles del mismo medicamento
+                            List<MedicamentosDetalle> otrosMedicamentos = medicamentosDetalles.Where(md => md.NombreMedicamento == detalle.NombreMedicamento).ToList();
+                            List<int> cajasOcupadas = new();
+                            foreach (var otrosDetalle in otrosMedicamentos)
+                            {
+                                cajasOcupadas.AddRange(otrosDetalle.CajasId);
+                            }
+                            //obtener un cajaId que no sea igual a algun cajaId del listado
+                            int medicamentoId = _context.Medicamentos.Where(m => m.Nombre == detalle.NombreMedicamento).FirstOrDefault().Codigo;
+                            List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.MedicamentoId == medicamentoId && mc.Inactivo == false && mc.Detallada == false).ToList();
+
+                            for (int j = 0; j < cajas.Count; j++)//excluir las cajas ocupadas
+                            {
+                                if (cajasOcupadas.Contains(cajas[j].CajaId))
+                                {
+                                    cajas.Remove(cajas[j]);
+                                    j--;
+                                }
+                            }
+
+                            if (cajas.Count > 0)
+                            {
+                                //entonces remplazar el cajaId inactivo por el nuevo cajaId
+                                detalle.CajasId[i] = cajas.FirstOrDefault().CajaId;
+                            }
+                            else
+                            {
+                                //si no hay algun otro cajaId para remplazarlo se mostrar un error en el view
+                                return "No hay existencia suficiente para el medicamento({detalle.DetalleId + 1}).";
+                            }
+                        }
+                    }
+                }
+                else//unidades
+                {
+                    //obtener el listado de detalles agrupados por medicamentos
+                    //obtener el listado de
+
+
+                }
+
+            }
+
+            return "";
         }
 
         // GET: Facturas/Edit/5
@@ -252,7 +322,7 @@ namespace ApotheGSF.Controllers
                 {
                     if (item.NombreMedicamento.Equals(medicamento.Nombre))
                     {
-                        foreach(var cajaId in item.CajasId)
+                        foreach (var cajaId in item.CajasId)
                         {
                             if (!cajasUsadas.Contains(cajaId))//si la caja no se ha verificado ya, para que asi no existan duplicados
                             {
@@ -321,24 +391,45 @@ namespace ApotheGSF.Controllers
         {
             int cantidadUsar = 0;
             int cantidadUsada = 0;
-            int cantidadExtra = 0;
+            int cantidadCajas = 0;
             MedicamentosCajas? cajaDetallada = null;
             List<MedicamentosCajas> cajas = medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
 
+            //mientras la cantidad que se desea agregar es mayor o igual a las unidadesCaja del medicamento
+            while(cantidad >= medicamento.UnidadesCaja)
+            {
+                //agregar la cantidad de cajas que se agregar y se disminuira de la cantidad de unidades
+                cantidadCajas++;
+                cantidad -= medicamento.UnidadesCaja;
+            }
+
+            //si hay cajas que agregar en vez de unidades
+            if(cantidadCajas > 0)
+            {
+                viewModel = AgregarCaja(viewModel, medicamento, 1, cantidadCajas, cajasUsar, cajasUsadas).viewModel;
+            }
+
+            //si se quiso agregar unidades pero la cantidad era suficiente para que sean cajas
+            if(cantidad == 0)
+            {
+                return GenerarPartialView(false, "", viewModel);
+            }
+
+            //si existen registros con el mismo medicamento
             if (cajasUsadas.Count > 0)
             {
-                //--cantidadUsada = suma de las cantidades de todas las cajas
-                foreach(var caja in cajas)
+                //--cantidadUsada = suma de las cantidades de todas las cajas del mismo medicamento
+                foreach (var caja in cajas)
                 {
                     if (cajasUsadas.Contains(caja.CajaId))
                         cantidadUsada += caja.CantidadUnidad;
                 }
 
                 //--cantidadUsada -= cada cantidad en los detalles
-                var detallesAnteriores = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre);
+                var detallesAnteriores = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre).ToList();
                 foreach (var detalle in detallesAnteriores)
                 {
-                    if(detalle.TipoCantidad == 1)
+                    if (detalle.TipoCantidad == 1)
                         cantidadUsada -= detalle.CantidadUnidad * medicamento.UnidadesCaja;
                     else
                         cantidadUsada -= detalle.CantidadUnidad;
@@ -348,6 +439,7 @@ namespace ApotheGSF.Controllers
                 {
                     cajasUsar.Add(detallesAnteriores.Where(da => da.TipoCantidad == 2).Last().CajasId.Last());
                     cantidadUsar += cantidadUsada;
+                    cantidadUsada = 0;
                 }
 
                 for (int i = 0; i < cajas.Count; i++)//excluir las cajas ya usadas
@@ -428,6 +520,7 @@ namespace ApotheGSF.Controllers
                 error = error,
                 mensaje = mensaje,
                 partial = viewContent,
+                viewModel = viewModel
             };
         }
 
@@ -444,8 +537,7 @@ namespace ApotheGSF.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public IActionResult RemoverMedicamento([Bind("MedicamentosDetalle")] FacturaViewModel viewModel, int RemoverId)
         {
             viewModel.MedicamentosDetalle.RemoveAt(RemoverId);

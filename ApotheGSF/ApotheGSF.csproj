@@ -26,4 +26,10 @@
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.19" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\img\Icon\PortraitLogo.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

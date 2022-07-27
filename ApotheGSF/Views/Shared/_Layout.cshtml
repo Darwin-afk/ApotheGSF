@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ApotheGSF</title>
+    <title>ApotheGSF</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/admin-lte/css/adminlte.min.css" />
@@ -12,18 +12,30 @@
     <link rel="stylesheet" href="~/ApotheGSF.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
 
+    <link rel="icon" type="image/x-icon" href="~/img/Icon/iconTitle.jpg">
+    <style>
+        li:hover{
+            font-size:16.5px;
+            background-color:#3B444A;
+        }
+
+    </style>
+
 </head>
-<body class="bg-dark hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
+<body class="bg-dark hold-transition sidebar-mini">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3 fixed-top">
+            
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ApotheGSF</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <div class="input-group">
                                 <a class="nav-link" asp-controller="Facturas" asp-action="Create"><i class="fa-solid fa-cash-register"></i>&nbsp;
@@ -38,7 +50,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Create"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Usuario</a></li>
-                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Create"><i class="fa-solid fa-capsules" style="color:#009900;"></i>&nbsp;Medicamento</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Create"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Medicamento</a></li>
                                 <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
                             </ul>
                         </li>
@@ -48,7 +60,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Index"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Usuario</a></li>
-                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index"><i class="fa-solid fa-capsules" style="color:#009900;"></i>&nbsp;Medicamento</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Medicamento</a></li>
                                 <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Index"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
                                 <li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Index"><i class="fa-solid fa-list-check" style="color:#990000;"></i>&nbsp;Facturas</a></li>
                             </ul>
@@ -92,6 +104,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div style="margin-top:70px;"></div>
             @RenderBody()
         </main>
     </div>

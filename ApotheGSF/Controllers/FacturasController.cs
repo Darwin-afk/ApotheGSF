@@ -378,6 +378,9 @@ namespace ApotheGSF.Controllers
                     }
                 }
 
+                //obtener el detalle Id de la caja
+                detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().DetalleId;
+
                 existente = true;
             }
 

@@ -1,6 +1,5 @@
 ﻿function AgregarDetalle() {
     $.ajax({
-        async: true,
         data: $('#form').serialize() + "&MedicamentoId=@MedicamentoId&TipoCantidad=@TipoCantidad&Cantidad=@Cantidad",
         type: "POST",
         url: '/Facturas/AgregarMedicamento',
@@ -10,6 +9,9 @@
             }
             else {
                 $('#ListaDetalle').html(resultado.partial);
+
+                document.getElementById('SubTotal').value = resultado.subtotal;
+                document.getElementById('Total').value = resultado.subtotal * 1.18;
             }
         }
     });

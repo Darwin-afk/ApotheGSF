@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using ApotheGSF.Clases;
+using ReflectionIT.Mvc.Paging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,14 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddPaging(options => {
+    options.ViewName = "Bootstrap4";
+    options.HtmlIndicatorDown = " <span>&darr;</span>";
+    options.HtmlIndicatorUp = " <span>&uarr;</span>";
+    options.PageParameterName = "pageindex";
+});
+
 
 var app = builder.Build();
 

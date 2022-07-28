@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using ApotheGSF.Clases;
+using System.Text;
+using System.Linq.Dynamic.Core;
+using ReflectionIT.Mvc.Paging;
 
 namespace ApotheGSF.Controllers
 {
@@ -30,12 +33,38 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Proveedores
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
         {
-            List<Proveedores> proveedor = await _context.Proveedores.Where(x => x.Inactivo == false).ToListAsync();
-              return _context.Proveedores != null ? 
-                          View(await _context.Proveedores.Where(x=> x.Inactivo == false).ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Proveedores'  is null.");
+            StringBuilder filtro = new StringBuilder(" Inactivo == false ");
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
+            }
+
+            List<Proveedores> listado = new List<Proveedores>();
+            if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
+            {
+                listado = await _context.Proveedores.Where(filtro.ToString()).ToListAsync();
+
+                listado = listado.Where(x => x.Inactivo == false).ToList();
+            }
+
+            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;
+            var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
+            model.RouteValue = new RouteValueDictionary {
+                            { "filter", filter}
+            };
+            model.Action = "Index";
+
+            return model != null ?
+                View(model) :
+                Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");
+            ;
+
+            //List<Proveedores> proveedor = await _context.Proveedores.Where(x => x.Inactivo == false).ToListAsync();
+            //  return _context.Proveedores != null ? 
+            //              View(await _context.Proveedores.Where(x=> x.Inactivo == false).ToListAsync()) :
+            //              Problem("Entity set 'AppDbContext.Proveedores'  is null.");
         }
 
         // GET: Proveedores/Details/5

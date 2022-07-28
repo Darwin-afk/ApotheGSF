@@ -10,6 +10,9 @@ using ApotheGSF.ViewModels;
 using System.Security.Claims;
 using ApotheGSF.Clases;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using ReflectionIT.Mvc.Paging;
+using System.Linq.Dynamic.Core;
 
 namespace ApotheGSF.Controllers
 {
@@ -32,29 +35,50 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
         {
-            var lista = await (from u in _context.AppUsuarios
-                            .AsNoTracking()
-                            .AsQueryable()
-                               join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
-                               join r in _context.Roles on ur.RoleId equals r.Id
-                               select new UsuarioViewModel
-                               {
-                                   Id = u.Id,
-                                   Nombre = u.Nombre,
-                                   Apellido = u.Apellido,
-                                   Telefono = u.PhoneNumber,
-                                   Direccion = u.Direccion,
-                                   Usuario = u.UserName,
-                                   Email = u.Email,
-                                   Rol = r.Name,
-                                   Inactivo = u.Inactivo
-                               }).Where(x => x.Inactivo == false).ToListAsync();
+            StringBuilder filtro = new StringBuilder(" Inactivo == false ");
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
+            }
 
-            return lista != null ?
-                    View(lista) :
-                    Problem("Entity set 'AppDbContext.AppUsuario'  is null.");
+            List<UsuarioViewModel> listado = new List<UsuarioViewModel>();
+            if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
+            {
+                listado = await (from u in _context.AppUsuarios
+                               .AsNoTracking()
+                               .AsQueryable()
+                                 join ur in _context.AppUsuariosRoles on u.Id equals ur.UserId
+                                 join r in _context.Roles on ur.RoleId equals r.Id
+                                 select new UsuarioViewModel
+                                 {
+                                     Id = u.Id,
+                                     Nombre = u.Nombre,
+                                     Apellido = u.Apellido,
+                                     Telefono = u.PhoneNumber,
+                                     Direccion = u.Direccion,
+                                     Usuario = u.UserName,
+                                     Email = u.Email,
+                                     Rol = r.Name,
+                                     Inactivo = u.Inactivo
+
+                                 }).Where(filtro.ToString()).ToListAsync();
+
+                listado = listado.Where(x => x.Inactivo == false).ToList();
+            }
+            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;
+            var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
+            model.RouteValue = new RouteValueDictionary {
+                            { "filter", filter}
+            };
+            model.Action = "Index";
+
+            return model != null ?
+                View(model) :
+                Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");
+            ;
+
         }
 
         // GET: Usuarios/Details/5

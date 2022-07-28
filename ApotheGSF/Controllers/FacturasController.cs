@@ -12,6 +12,9 @@ using ApotheGSF.Clases;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using System.Text;
+using ReflectionIT.Mvc.Paging;
+using System.Linq.Dynamic.Core;
 
 namespace ApotheGSF.Controllers
 {
@@ -31,30 +34,124 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Facturas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
         {
-            return _context.Facturas != null ?
-                        View(await _context.Facturas.ToListAsync()) :
-                        Problem("Entity set 'AppDbContext.Facturas'  is null.");
+            StringBuilder filtro = new StringBuilder(" Inactivo == false ");
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());//verificar para fecha
+            }
+
+            List<Facturas> listado = new List<Facturas>();
+            if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
+            {
+                listado = await _context.Facturas.Where(filtro.ToString()).ToListAsync();
+
+                listado = listado.Where(x => x.Inactivo == false).ToList();
+            }
+
+            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;//verificar para fecha
+            var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
+            model.RouteValue = new RouteValueDictionary {
+                            { "filter", filter}
+            };
+            model.Action = "Index";
+
+            return model != null ?
+                View(model) :
+                Problem("Entity set 'ApplicationDbContext.Facturas' is null.");
         }
 
         // GET: Facturas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            /*
             if (id == null || _context.Facturas == null)
             {
                 return NotFound();
             }
 
-            var factura = await _context.Facturas
-                .FirstOrDefaultAsync(m => m.Codigo == id);
+            //obtener facturaViewModel
+            //en facturaViewModel obtener medicamentos
+
+            var factura = await (from f in _context.Facturas
+                               .AsNoTracking()
+                               .AsQueryable()
+                                 select new FacturaViewModel
+                                 {
+                                     Codigo = f.Codigo,
+                                     SubTotal = f.SubTotal,
+                                     Total = f.Total,
+                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+
             if (factura == null)
             {
                 return NotFound();
             }
-            */
-            return View();
+
+            /*
+             * DetalleId = numero que ingrementa con cada detalle
+             * CajasId = en FacturaMedicamentoCaja reunir todas con el mismo cajaId que tengan el mismo nombre medicamento
+             * NombreMedicamento = por medio de cajaId obtener el nombreMedicamento
+             * TipoCantidad = en FacturaMedicamentosCajas
+             * Cantidad = suma de cajas con el mismo medicamento y tipoCantidad
+             * Precio = del precioUnidad del medicamento (y si tipoCantidad es caja: * medicamento.cajaUnidad)
+             * Total = Precio * cantidad
+             */
+
+            //agrupar todos los facturamedicamentocaja que tengan el mismo nombremedicamento y tipocantidad bajo el mismo detalle
+
+            //obtener listado de facturamedicamentocaja con facturaId == factura.codigo
+            List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.FacturaId == factura.Codigo).ToList();
+            //crear listado de detalle
+            List<MedicamentosDetalle> listaDetalle = new();
+            //obtener listado de cajas
+            List<MedicamentosCajas> cajas = _context.MedicamentosCajas.ToList();
+            MedicamentosCajas caja;
+
+            //do-while(facturasCajas.count > 0)
+            do
+            {
+                //crear un medicamentoDetalle con el primer elemento de facturasCajas
+                MedicamentosDetalle detalle = new MedicamentosDetalle()
+                {
+                    DetalleId = listaDetalle.Count,
+                    CajasId = new List<int>() { facturasCajas[0].CajaId },
+                    TipoCantidad = facturasCajas[0].TipoCantidad,
+                    Cantidad = facturasCajas[0].CantidadUnidad,
+                    Precio = facturasCajas[0].Precio
+                };
+
+                caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
+                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+
+                //excluir ese elemento de facturasCajas
+                facturasCajas.RemoveAt(0);
+
+                //obtener el nombreMedicamento del primer elemento de facturasCajas
+                caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
+                string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+
+                //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
+                while(nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
+                {
+                    //add(cajaId, cantidad)
+                    detalle.CajasId.Add(facturasCajas[0].CajaId);
+                    detalle.Cantidad += facturasCajas[0].CantidadUnidad;
+
+                    //excluir ese elemento de facturasCajas
+                    facturasCajas.RemoveAt(0);
+                }
+
+                //al final del mientras calcular el total del detalle
+                detalle.Total = detalle.Cantidad * detalle.Precio;
+
+                listaDetalle.Add(detalle);
+
+            } while (facturasCajas.Count > 0);
+
+            factura.MedicamentosDetalle = listaDetalle;
+            
+            return View(factura);
         }
 
         // GET: Facturas/Create
@@ -171,6 +268,7 @@ namespace ApotheGSF.Controllers
                                 facturaCaja = new()
                                 {
                                     CajaId = cajaId,
+                                    TipoCantidad = 1,
                                     CantidadUnidad = 1,
                                     Precio = detalle.Precio,
                                 };
@@ -187,11 +285,9 @@ namespace ApotheGSF.Controllers
                                 facturaCaja = new()
                                 {
                                     CajaId = cajaId,
+                                    TipoCantidad = 2,
                                     Precio = detalle.Precio,
                                 };
-
-                                facturaCaja.CajaId = cajaId;
-                                facturaCaja.Precio = detalle.Precio;
 
                                 MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
 
@@ -785,14 +881,14 @@ namespace ApotheGSF.Controllers
                 viewModel.MedicamentosDetalle[i].DetalleId = i;
             }
 
-            return Json(GenerarPartialView(false,"", viewModel));
+            return Json(GenerarPartialView(false, "", viewModel));
         }
 
         private float CalcularSubTotal(FacturaViewModel viewModel)
         {
             float subTotal = 0;
 
-            foreach(var detalle in viewModel.MedicamentosDetalle)
+            foreach (var detalle in viewModel.MedicamentosDetalle)
             {
                 subTotal += detalle.Total;
             }

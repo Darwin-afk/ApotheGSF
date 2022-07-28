@@ -121,18 +121,18 @@ namespace ApotheGSF.Controllers
                             //se guarda en una variable la cantidad del detalle
                             var cantidadUsada = detalle.Cantidad;
                             //por cada cajaId
-                            foreach(var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CajasId)
                             {
                                 //obtener la caja del cajaId
                                 MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
 
                                 //si la cantidad de la caja es mayor a la cantidad usada
-                                if(caja.CantidadUnidad > cantidadUsada)
+                                if (caja.CantidadUnidad > cantidadUsada)
                                 {
                                     caja.CantidadUnidad -= cantidadUsada;
                                     caja.Detallada = true;
                                 }
-                                else if(caja.CantidadUnidad == cantidadUsada)
+                                else if (caja.CantidadUnidad == cantidadUsada)
                                 {
                                     caja.CantidadUnidad = 0;
                                     caja.Inactivo = true;
@@ -164,18 +164,47 @@ namespace ApotheGSF.Controllers
 
                     _context.Facturas.Add(nuevaFactura);
 
-                    //foreach (var detalle in viewModel.MedicamentosDetalle)
-                    //{
-                    //    FacturaMedicamentosCajas facturaCaja = new()
-                    //    {
-                    //        ProveedoresId = item
+                    foreach (var detalle in viewModel.MedicamentosDetalle)
+                    {
+                        FacturaMedicamentosCajas facturaCaja = new();
 
-                    //    };
+                        if (detalle.TipoCantidad == 1)
+                        {
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                facturaCaja.CajaId = cajaId;
+                                facturaCaja.CantidadUnidad = 1;
+                                facturaCaja.Precio = detalle.Precio;
+                            }
+                        }
+                        else
+                        {
+                            int cantidadUsada = detalle.Cantidad;
 
-                    //    newMedicamentos.ProveedoresMedicamentos.Add(proveedorMedicamentos);
-                    //}
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                facturaCaja.CajaId = cajaId;
+                                facturaCaja.Precio = detalle.Precio;
+
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+
+                                if (caja.CantidadUnidad > cantidadUsada)
+                                {
+                                    facturaCaja.CantidadUnidad = caja.CantidadUnidad;
+                                    cantidadUsada -= caja.CantidadUnidad;
+                                }
+                                else
+                                {
+                                    facturaCaja.CantidadUnidad = cantidadUsada;
+                                }
+                            }
+                        }
+                        nuevaFactura.FacturasMedicamentosCajas.Add(facturaCaja);
+                    }
+
+                    await _context.SaveChangesAsync();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     ModelState.AddModelError("", e.Message);
                     return View(viewModel);
@@ -246,7 +275,7 @@ namespace ApotheGSF.Controllers
                             //obtiene el detalle en cajas del medicamento
                             var detalleCajas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == detalle.NombreMedicamento && md.TipoCantidad == 1).FirstOrDefault();
                             //si el detalle no es null
-                            if(detalleCajas != null)
+                            if (detalleCajas != null)
                             {
                                 //excluye las cajas del detalle en cajas
                                 cajas = ExcluirCajas(cajas, detalleCajas.CajasId);
@@ -256,12 +285,12 @@ namespace ApotheGSF.Controllers
                             int cantidadUsar = 0;
 
                             //agregar a nuevasCajas cajasId hasta que la cantidadUnidad de las cajas sea mayor o igual a la cantidad del detalle
-                            for(int j = 0; j < cajas.Count; j++)
+                            for (int j = 0; j < cajas.Count; j++)
                             {
                                 nuevaCajas.Add(cajas[i].CajaId);
                                 cantidadUsar += cajas[i].CantidadUnidad;
 
-                                if(cantidadUsar >= detalle.Cantidad)
+                                if (cantidadUsar >= detalle.Cantidad)
                                 {
                                     detalle.CajasId = nuevaCajas;
                                     break;
@@ -269,7 +298,7 @@ namespace ApotheGSF.Controllers
                             }
 
                             //si se alcanzo el final de la lista sin tener la cantidad suficiente de unidades
-                            if(cantidadUsar < detalle.Cantidad)
+                            if (cantidadUsar < detalle.Cantidad)
                             {
                                 return "No hay existencia suficiente para el medicamento({detalle.DetalleId + 1}).";
                             }
@@ -278,12 +307,12 @@ namespace ApotheGSF.Controllers
                     }
                     //verificar si la cantidad de las cajas usadas es mayor o igual a la cantidad del detalle
                     int cantidadUsada = 0;
-                    foreach(var caja in cajas)
+                    foreach (var caja in cajas)
                     {
                         cantidadUsada += caja.CantidadUnidad;
                     }
 
-                    if(cantidadUsada < detalle.Cantidad)
+                    if (cantidadUsada < detalle.Cantidad)
                     {
                         //sino, se reasigna
 
@@ -649,7 +678,7 @@ namespace ApotheGSF.Controllers
             return GenerarPartialView(true, "Cantidad Superior a la existente", viewModel);
         }
 
-       private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int> cajasUsar, bool existente, int detalleId)
+        private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int> cajasUsar, bool existente, int detalleId)
         {
             if (existente == true)
             {

@@ -9,7 +9,6 @@ namespace ApotheGSF.ViewModels
         public int Codigo { get; set; }
         public float SubTotal { get; set; }
         public float Total { get; set; }
-        public string? Estado { get; set; }
         public List<MedicamentosDetalle> MedicamentosDetalle { get; set; }
         public DateTime? Creado { get; set; }
         public int? CreadoId { get; set; }
@@ -20,6 +19,8 @@ namespace ApotheGSF.ViewModels
         public FacturaViewModel()
         {
             MedicamentosDetalle = new List<MedicamentosDetalle>();
+            SubTotal = 0;
+            Total = 0;
         }
 
         

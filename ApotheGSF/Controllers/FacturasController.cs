@@ -84,8 +84,17 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubTotal,Total,Estado,MedicamentosDetalle")] FacturaViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
+            viewModel.SubTotal = 0;
+
+            foreach (var detalle in viewModel.MedicamentosDetalle)
+            {
+                viewModel.SubTotal += detalle.Total;
+            }
+
+            viewModel.Total = viewModel.SubTotal * 1.18f;
+
             string error = VerificarInventario(ref viewModel);
 
             //si hubo alguno error al verificial la disponibilidad en el inventario se regresa al view
@@ -154,7 +163,6 @@ namespace ApotheGSF.Controllers
                     {
                         SubTotal = viewModel.SubTotal,
                         Total = viewModel.Total,
-                        Estado = viewModel.Estado,
                         Creado = DateTime.Now,
                         CreadoNombreUsuario = _user.GetUserName(),
                         Modificado = DateTime.Now,
@@ -166,15 +174,20 @@ namespace ApotheGSF.Controllers
 
                     foreach (var detalle in viewModel.MedicamentosDetalle)
                     {
-                        FacturaMedicamentosCajas facturaCaja = new();
+                        FacturaMedicamentosCajas facturaCaja;
 
                         if (detalle.TipoCantidad == 1)
                         {
                             foreach (var cajaId in detalle.CajasId)
                             {
-                                facturaCaja.CajaId = cajaId;
-                                facturaCaja.CantidadUnidad = 1;
-                                facturaCaja.Precio = detalle.Precio;
+                                facturaCaja = new()
+                                {
+                                    CajaId = cajaId,
+                                    CantidadUnidad = 1,
+                                    Precio = detalle.Precio,
+                                };
+
+                                nuevaFactura.FacturasMedicamentosCajas.Add(facturaCaja);
                             }
                         }
                         else
@@ -183,6 +196,12 @@ namespace ApotheGSF.Controllers
 
                             foreach (var cajaId in detalle.CajasId)
                             {
+                                facturaCaja = new()
+                                {
+                                    CajaId = cajaId,
+                                    Precio = detalle.Precio,
+                                };
+
                                 facturaCaja.CajaId = cajaId;
                                 facturaCaja.Precio = detalle.Precio;
 
@@ -197,9 +216,10 @@ namespace ApotheGSF.Controllers
                                 {
                                     facturaCaja.CantidadUnidad = cantidadUsada;
                                 }
+
+                                nuevaFactura.FacturasMedicamentosCajas.Add(facturaCaja);
                             }
                         }
-                        nuevaFactura.FacturasMedicamentosCajas.Add(facturaCaja);
                     }
 
                     await _context.SaveChangesAsync();
@@ -209,10 +229,24 @@ namespace ApotheGSF.Controllers
                     ModelState.AddModelError("", e.Message);
                     return View(viewModel);
                 }
-
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            //obtener lista de medicamentos que no esten inactivos
+            var medicamentos = await (from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                                      select new MedicamentosViewModel
+                                      {
+
+                                          Codigo = meds.Codigo,
+                                          Nombre = meds.Nombre,
+                                          Inactivo = (bool)meds.Inactivo,
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+
+                                      }).Where(x => x.Inactivo == false).ToListAsync();
+            //usar los medicamentos que tengan alguna caja en inventario
+            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
             return View(viewModel);
         }
 
@@ -456,7 +490,7 @@ namespace ApotheGSF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AgregarMedicamento([Bind("MedicamentosDetalle")] FacturaViewModel viewModel, int MedicamentoId, int TipoCantidad, int Cantidad)
+        public async Task<ActionResult> AgregarMedicamento(FacturaViewModel viewModel, int MedicamentoId, int TipoCantidad, int Cantidad)
         {
             List<int>? cajasUsar = null;
             List<int>? cajasUsadas = null;
@@ -734,7 +768,8 @@ namespace ApotheGSF.Controllers
                 error = error,
                 mensaje = mensaje,
                 partial = viewContent,
-                viewModel = viewModel
+                viewModel = viewModel,
+                subtotal = CalcularSubTotal(viewModel)
             };
         }
 
@@ -752,7 +787,7 @@ namespace ApotheGSF.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoverMedicamento([Bind("MedicamentosDetalle")] FacturaViewModel viewModel, int RemoverId)
+        public IActionResult RemoverMedicamento(FacturaViewModel viewModel, int RemoverId)
         {
             viewModel.MedicamentosDetalle.RemoveAt(RemoverId);
 
@@ -764,6 +799,18 @@ namespace ApotheGSF.Controllers
 
             ModelState.Clear();// para quitar el input anterior
             return PartialView("MedicamentosDetalles", viewModel);
+        }
+
+        private float CalcularSubTotal(FacturaViewModel viewModel)
+        {
+            float subTotal = 0;
+
+            foreach(var detalle in viewModel.MedicamentosDetalle)
+            {
+                subTotal += detalle.Total;
+            }
+
+            return subTotal;
         }
     }
 }

@@ -9,6 +9,9 @@ using ApotheGSF.Models;
 using System.Security.Claims;
 using ApotheGSF.Clases;
 using ApotheGSF.ViewModels;
+using System.Text;
+using ReflectionIT.Mvc.Paging;
+using System.Linq.Dynamic.Core;
 
 namespace ApotheGSF.Controllers
 {
@@ -26,51 +29,68 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Medicamentos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
         {
+            StringBuilder filtro = new StringBuilder(" Inactivo == false ");
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
+            }
 
-            var lista = await (from meds in _context.Medicamentos
+            List<MedicamentosViewModel> listado = new List<MedicamentosViewModel>();
+            if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
+            {
+                listado = await (from meds in _context.Medicamentos
                                .AsNoTracking()
                                .AsQueryable()
-                                     select new MedicamentosViewModel
-                                     {
+                                 select new MedicamentosViewModel
+                                 {
 
-                                         Codigo = meds.Codigo,
-                                         Nombre = meds.Nombre,
-                                         Categoria = meds.Categoria,
-                                         Sustancia = meds.Sustancia,
-                                         Concentracion = meds.Concentracion,
-                                         UnidadesCaja = meds.UnidadesCaja,
-                                         Costo = meds.Costo,
-                                         PrecioUnidad = meds.PrecioUnidad,
-                                         Indicaciones = meds.Indicaciones,
-                                         Dosis = meds.Dosis,
-                                         Inactivo = (bool)meds.Inactivo,
-                                         Cajas = _context.MedicamentosCajas.Where(m=>m.MedicamentoId == meds.Codigo).ToList().Count,
+                                     Codigo = meds.Codigo,
+                                     Nombre = meds.Nombre,
+                                     Categoria = meds.Categoria,
+                                     Sustancia = meds.Sustancia,
+                                     Concentracion = meds.Concentracion,
+                                     UnidadesCaja = meds.UnidadesCaja,
+                                     Costo = meds.Costo,
+                                     PrecioUnidad = meds.PrecioUnidad,
+                                     Indicaciones = meds.Indicaciones,
+                                     Dosis = meds.Dosis,
+                                     Inactivo = (bool)meds.Inactivo,
+                                     Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count,
 
-                                         NombreProveedor = string.Join(", ",
-                                         (from p in _context.Proveedores
-                                          .AsNoTracking()
-                                          join provMed in _context.ProveedoresMedicamentos
-                                          on new
-                                          {
-                                              ProveedoresId = p.Codigo,
-                                              MedicamentosId = meds.Codigo
-                                          } equals new
-                                          {
-                                              ProveedoresId = provMed.ProveedoresId,
-                                              MedicamentosId = provMed.MedicamentosId
-                                          }
-                                          select new Proveedores
-                                          {
-                                              Nombre = p.Nombre
-                                          }
-                                          ).Select(x => x.Nombre).ToList())
+                                     NombreProveedor = string.Join(", ",
+                                     (from p in _context.Proveedores
+                                      .AsNoTracking()
+                                      join provMed in _context.ProveedoresMedicamentos
+                                      on new
+                                      {
+                                          ProveedoresId = p.Codigo,
+                                          MedicamentosId = meds.Codigo
+                                      } equals new
+                                      {
+                                          ProveedoresId = provMed.ProveedoresId,
+                                          MedicamentosId = provMed.MedicamentosId
+                                      }
+                                      select new Proveedores
+                                      {
+                                          Nombre = p.Nombre
+                                      }
+                                      ).Select(x => x.Nombre).ToList())
 
-                                     }).Where(x=>x.Inactivo == false).ToListAsync();
+                                 }).Where(filtro.ToString()).ToListAsync();
 
-            return lista != null ?
-                View(lista) :
+                listado = listado.Where(x  => x.Inactivo == false).ToList();
+            }
+            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;
+            var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
+            model.RouteValue = new RouteValueDictionary {
+                            { "filter", filter}
+            };
+            model.Action = "Index";
+            
+            return model != null ?
+                View(model) :
                 Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");
                 ;
         }

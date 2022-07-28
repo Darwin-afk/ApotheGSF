@@ -1,31 +1,49 @@
-﻿@model IEnumerable<ApotheGSF.ViewModels.MedicamentosViewModel>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<ApotheGSF.ViewModels.MedicamentosViewModel>
+@using ApotheGSF.Models;
+@using ReflectionIT.Mvc.Paging;
 
 @{
     ViewData["Title"] = "Index";
 }
+
+
+
 
 <h3><i class="fas fa-capsules"></i>&nbsp;Menu Medicamento</h3>
 
 <p>
     <a asp-action="Create">Crear Nuevo</a>
 </p>
+<div class="row">
+    <div class="col-md-4">
+        <form method="get" class="form-inline" asp-action="Index">
+            <div class="input-group mb-3">
+                <input type="text" name="filter" class="form-control" placeholder="Filtro" 
+                        aria-label="Filtro" aria-describedby="btnSubmit"
+                        value="@Model.RouteValue["Filter"]"/>
+                <button class="btn btn-outline-secondary" type="submit" id="btnSubmit">Buscar</button>
+            </div>
+            <input type="hidden" value="1" name="search" />
+        </form>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.SortableHeaderFor(model => model.Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NombreProveedor)
+                @Html.SortableHeaderFor(model => model.NombreProveedor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sustancia)
+                @Html.SortableHeaderFor(model => model.Sustancia)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Costo)
+                @Html.SortableHeaderFor(model => model.Costo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cajas)
+                @Html.SortableHeaderFor(model => model.Cajas)
             </th>
             <th></th>
         </tr>
@@ -51,9 +69,12 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Codigo" style="color:#FFB300;"><i class="fas fa-pencil-alt"></i></a> |
                 <a asp-action="Details" asp-route-id="@item.Codigo" style="color:white;"><i class="fas fa-align-justify"></i></a> |
-                <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:red;"><i class="fas fa-trash-alt"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+<nav aria-label="navigation">
+    <vc:pager paging-list="@Model" />
+</nav>

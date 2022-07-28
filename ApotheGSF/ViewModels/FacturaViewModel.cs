@@ -7,7 +7,6 @@ namespace ApotheGSF.ViewModels
     public class FacturaViewModel
     {
         public int Codigo { get; set; }
-        public DateTime FechaCreacion { get; set; }
         public float SubTotal { get; set; }
         public float Total { get; set; }
         public string? Estado { get; set; }

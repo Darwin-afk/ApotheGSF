@@ -96,30 +96,91 @@ namespace ApotheGSF.Controllers
 
             if (ModelState.IsValid)
             {
-                List<FacturaMedicamentosCajas> facturaMedicamentos = new();
-                //foreach (var i in viewModel.MedicamentosDetalle)
-                //{
-                //    facturaMedicamentos.Add(new FacturaMedicamentosCajas
-                //    {
-                //        CajaId = i.CajaId,
-                //        CantidadUnidad = i.CantidadUnidad,
-                //        Precio = i.Precio
-                //    });
-                //}
-
-                Facturas nuevaFactura = new()
+                try
                 {
-                    FechaCreacion = viewModel.FechaCreacion,
-                    SubTotal = viewModel.SubTotal,
-                    Total = viewModel.Total,
-                    Estado = viewModel.Estado,
-                    FacturasMedicamentosCajas = facturaMedicamentos,
-                    Creado = DateTime.Now,
-                    Modificado = DateTime.Now,
-                    Inactivo = false
-                };
+                    //actualizar los medicamentos cajas por cada detalle
+                    foreach (var detalle in viewModel.MedicamentosDetalle)
+                    {
+                        if (detalle.TipoCantidad == 1)//si el detalle es tipo caja
+                        {
+                            //por cada cajaId
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                //obtener la caja del cajaId
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
 
-                _context.Add(nuevaFactura);
+                                //la cantidad de la caja es cero y inactivo es true
+                                caja.CantidadUnidad = 0;
+                                caja.Inactivo = true;
+
+                                _context.Update(caja);
+                            }
+                        }
+                        else //si el detalle es tipo unidad
+                        {
+                            //se guarda en una variable la cantidad del detalle
+                            var cantidadUsada = detalle.Cantidad;
+                            //por cada cajaId
+                            foreach(var cajaId in detalle.CajasId)
+                            {
+                                //obtener la caja del cajaId
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+
+                                //si la cantidad de la caja es mayor a la cantidad usada
+                                if(caja.CantidadUnidad > cantidadUsada)
+                                {
+                                    caja.CantidadUnidad -= cantidadUsada;
+                                    caja.Detallada = true;
+                                }
+                                else if(caja.CantidadUnidad == cantidadUsada)
+                                {
+                                    caja.CantidadUnidad = 0;
+                                    caja.Inactivo = true;
+                                }
+                                else//caja.CantidadUnidad < cantidadUsada
+                                {
+                                    cantidadUsada -= caja.CantidadUnidad;
+
+                                    caja.CantidadUnidad = 0;
+                                    caja.Inactivo = true;
+                                }
+                                _context.Update(caja);
+                            }
+                        }
+                    }
+
+                    //agregar la nueva factura
+                    Facturas nuevaFactura = new()
+                    {
+                        SubTotal = viewModel.SubTotal,
+                        Total = viewModel.Total,
+                        Estado = viewModel.Estado,
+                        Creado = DateTime.Now,
+                        CreadoNombreUsuario = _user.GetUserName(),
+                        Modificado = DateTime.Now,
+                        ModificadoNombreUsuario = _user.GetUserName(),
+                        Inactivo = false
+                    };
+
+                    _context.Facturas.Add(nuevaFactura);
+
+                    //foreach (var detalle in viewModel.MedicamentosDetalle)
+                    //{
+                    //    FacturaMedicamentosCajas facturaCaja = new()
+                    //    {
+                    //        ProveedoresId = item
+
+                    //    };
+
+                    //    newMedicamentos.ProveedoresMedicamentos.Add(proveedorMedicamentos);
+                    //}
+                }
+                catch(Exception e)
+                {
+                    ModelState.AddModelError("", e.Message);
+                    return View(viewModel);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

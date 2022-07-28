@@ -14,6 +14,7 @@
 
     <link rel="icon" type="image/x-icon" href="~/img/Icon/iconTitle.jpg">
     <style>
+
         li:hover{
           font-size:16.5px;
           background-color:#3B444A;
@@ -21,10 +22,11 @@
 
         .dropdown-content {
           display: none;
-          right: 0;
         }
 
-        .dropdown:hover .dropdown-menu {display: block;}
+        li.drop1:hover .dropdown-menu {
+            display: block;        
+        }
 
     </style>
 
@@ -52,16 +54,8 @@
                             </div>
 
                         </li>
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle">Dropdown</a>
-                          <ul class="dropdown-menu">
-                                <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Create"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Usuario</a></li>
-                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Create"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Medicamento</a></li>
-                                <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
-                          </ul>
-                        </li>
 
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown drop1">
                             <a class="nav-link dropdown-toggle" disabled href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-list-check"></i>&nbsp;
                                 Registros
@@ -72,7 +66,7 @@
                                 <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown drop1">
                             <a class="nav-link dropdown-toggle" disabled href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-bars-staggered"></i>&nbsp;
                                 Consultas
@@ -107,7 +101,7 @@
 
                     </ul>
                     <ul class="navbar-nav ml-auto dropstart">
-                        <li class="nav-item dropdown" >
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user"></i>&nbsp;
                                 User X

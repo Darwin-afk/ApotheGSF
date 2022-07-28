@@ -5,73 +5,83 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h3><i class="fas fa-flask"></i>&nbsp;Menu Proveedor</h3>
-
-<p>
-    <a asp-action="Create">Crear Nuevo</a>
-</p>
-<div class="row">
-    <div class="col-md-4">
-        <form method="get" class="form-inline" asp-action="Index">
-            <div class="input-group mb-3">
-                <input type="text" name="filter" class="form-control" placeholder="Filtro" 
-                        aria-label="Filtro" aria-describedby="btnSubmit"
-                        value="@Model.RouteValue["Filter"]"/>
-                <button class="btn btn-outline-secondary" type="submit" id="btnSubmit">Buscar</button>
-            </div>
-            <input type="hidden" value="1" name="search" />
-        </form>
+<div class="form-group row">
+    <div class="col-sm-3">
+        <div class="row">
+            <form method="get" class="form-inline" asp-action="Index">
+                <div class="input-group mb-3">
+                    <input type="text" name="filter" class="form-control" placeholder="Filtro"
+                           aria-label="Filtro" aria-describedby="btnSubmit"
+                           value="@Model.RouteValue["Filter"]" />
+                    <button class="btn btn-outline-secondary" type="submit" id="btnSubmit">Buscar</button>
+                </div>
+                <input type="hidden" value="1" name="search" />
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <h3 class="text-center"><i class="fas fa-flask"></i>&nbsp;Consulta de Proveedores&nbsp<i class="fas fa-flask"></i></h3>
+    </div>
+    <div class="col-sm-3">
     </div>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.SortableHeaderFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.SortableHeaderFor(model => model.RNC)
-            </th>
-            <th>
-                @Html.SortableHeaderFor(model => model.Telefono1)
-            </th>
-            <th>
-                @Html.SortableHeaderFor(model => model.Telefono2)
-            </th>
-            <th>
-                @Html.SortableHeaderFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RNC)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Codigo" style="color:#FFB300;"><i class="fas fa-pencil-alt"></i></a> |
-                <a asp-action="Details" asp-route-id="@item.Codigo" style="color:white;"><i class="fas fa-align-justify"></i></a> |
-                <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-<nav aria-label="navigation">
-    <vc:pager paging-list="@Model" />
-</nav>
+
+<div class="container shadow-lg p-3 rb-5 bg-light rounded col-md-12">
+    <div class="card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.RNC)
+                    </th>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.Telefono1)
+                    </th>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.Telefono2)
+                    </th>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.Email)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RNC)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Telefono1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Telefono2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Codigo" style="color:#FFB300;"><i class="fas fa-pencil-alt"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Codigo" style="color:black;"><i class="fas fa-align-justify"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="text-center">
+    <nav aria-label="navigation">
+        <vc:pager paging-list="@Model" />
+    </nav>
+</div>

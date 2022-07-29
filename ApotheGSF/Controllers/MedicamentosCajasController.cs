@@ -33,6 +33,7 @@ namespace ApotheGSF.Controllers
                                            join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
+                                               CajaId = mc.CajaId,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
@@ -161,6 +162,7 @@ namespace ApotheGSF.Controllers
                                            join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
+                                               CajaId = mc.CajaId,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,

@@ -164,7 +164,8 @@ namespace ApotheGSF.Models
                 Creado = DateTime.Now,
                 Modificado = DateTime.Now,
                 SecurityStamp = string.Empty,
-                LockoutEnabled = true
+                LockoutEnabled = true,
+                Inactivo = false
             });
 
             modelBuilder.Entity<AppUsuarioRol>().HasData(new AppUsuarioRol

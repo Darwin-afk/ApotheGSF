@@ -71,9 +71,6 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            //obtener facturaViewModel
-            //en facturaViewModel obtener medicamentos
-
             var factura = await (from f in _context.Facturas
                                .AsNoTracking()
                                .AsQueryable()
@@ -89,18 +86,6 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            /*
-             * DetalleId = numero que ingrementa con cada detalle
-             * CajasId = en FacturaMedicamentoCaja reunir todas con el mismo cajaId que tengan el mismo nombre medicamento
-             * NombreMedicamento = por medio de cajaId obtener el nombreMedicamento
-             * TipoCantidad = en FacturaMedicamentosCajas
-             * Cantidad = suma de cajas con el mismo medicamento y tipoCantidad
-             * Precio = del precioUnidad del medicamento (y si tipoCantidad es caja: * medicamento.cajaUnidad)
-             * Total = Precio * cantidad
-             */
-
-            //agrupar todos los facturamedicamentocaja que tengan el mismo nombremedicamento y tipocantidad bajo el mismo detalle
-
             //obtener listado de facturamedicamentocaja con facturaId == factura.codigo
             List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.FacturaId == factura.Codigo).ToList();
             //crear listado de detalle
@@ -109,7 +94,6 @@ namespace ApotheGSF.Controllers
             List<MedicamentosCajas> cajas = _context.MedicamentosCajas.ToList();
             MedicamentosCajas caja;
 
-            //do-while(facturasCajas.count > 0)
             do
             {
                 //crear un medicamentoDetalle con el primer elemento de facturasCajas
@@ -189,7 +173,7 @@ namespace ApotheGSF.Controllers
         {
             string error = VerificarInventario(ref viewModel);
 
-            //si hubo alguno error al verificial la disponibilidad en el inventario se regresa al view
+            //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
             if (!error.Equals(""))//si no esta vacio
             {
                 ModelState.AddModelError("", error);
@@ -469,33 +453,96 @@ namespace ApotheGSF.Controllers
         // GET: Facturas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            /*
             if (id == null || _context.Facturas == null)
             {
                 return NotFound();
             }
 
             var factura = await (from f in _context.Facturas
-                                 .AsNoTracking()
-                                 .AsQueryable()
-                                 .Include(fmc => fmc.FacturasMedicamentosCajas)
-                                 join fm in _context.FacturasMedicamentosCajas on f.Codigo equals fm.FacturaId
+                               .AsNoTracking()
+                               .AsQueryable()
                                  select new FacturaViewModel
                                  {
                                      Codigo = f.Codigo,
-                                     FechaCreacion = f.FechaCreacion,
                                      SubTotal = f.SubTotal,
                                      Total = f.Total,
-                                     Estado = f.Estado,
-                                     Medicamentos = (List<FacturaMedicamentosCajas>)f.FacturasMedicamentosCajas
                                  }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
 
             if (factura == null)
             {
                 return NotFound();
             }
-            */
-            return View();
+
+            //obtener listado de facturamedicamentocaja con facturaId == factura.codigo
+            List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.FacturaId == factura.Codigo).ToList();
+            //crear listado de detalle
+            List<MedicamentosDetalle> listaDetalle = new();
+            //obtener listado de cajas
+            List<MedicamentosCajas> cajas = _context.MedicamentosCajas.ToList();
+            MedicamentosCajas caja;
+
+            do
+            {
+                //crear un medicamentoDetalle con el primer elemento de facturasCajas
+                MedicamentosDetalle detalle = new MedicamentosDetalle()
+                {
+                    DetalleId = listaDetalle.Count,
+                    CajasId = new List<int>() { facturasCajas[0].CajaId },
+                    TipoCantidad = facturasCajas[0].TipoCantidad,
+                    Cantidad = facturasCajas[0].CantidadUnidad,
+                    Precio = facturasCajas[0].Precio
+                };
+
+                caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
+                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+
+                //excluir ese elemento de facturasCajas
+                facturasCajas.RemoveAt(0);
+
+                //obtener el nombreMedicamento del primer elemento de facturasCajas si quedan otras facturasCajas
+                if (facturasCajas.Count > 0)
+                {
+                    caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
+                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+
+                    //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
+                    while (nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
+                    {
+                        //add(cajaId, cantidad)
+                        detalle.CajasId.Add(facturasCajas[0].CajaId);
+                        detalle.Cantidad += facturasCajas[0].CantidadUnidad;
+
+                        //excluir ese elemento de facturasCajas
+                        facturasCajas.RemoveAt(0);
+                    }
+                }
+
+                //al final del mientras calcular el total del detalle
+                detalle.Total = detalle.Cantidad * detalle.Precio;
+
+                listaDetalle.Add(detalle);
+
+            } while (facturasCajas.Count > 0);
+
+            factura.MedicamentosDetalle = listaDetalle;
+
+            //obtener lista de medicamentos que no esten inactivos
+            var medicamentos = await (from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                                      select new MedicamentosViewModel
+                                      {
+
+                                          Codigo = meds.Codigo,
+                                          Nombre = meds.Nombre,
+                                          Inactivo = (bool)meds.Inactivo,
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+
+                                      }).Where(x => x.Inactivo == false).ToListAsync();
+            //usar los medicamentos que tengan alguna caja en inventario
+            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
+            return View(factura);
         }
 
         // POST: Facturas/Edit/5
@@ -503,9 +550,9 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo")] Facturas factura)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
-            if (id != factura.Codigo)
+            if (id != viewModel.Codigo)
             {
                 return NotFound();
             }
@@ -514,23 +561,182 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
-                    _context.Update(factura);
+                    //buscar la factura anterior
+                    Facturas facturaAnterior = _context.Facturas.Where(f => f.Codigo == viewModel.Codigo).Include(f => f.FacturasMedicamentosCajas).FirstOrDefault();
+                    //desactivar la factura anterior
+                    facturaAnterior.Inactivo = true;
+                    _context.Update(facturaAnterior);
+
+                    //devolver la cantidad de cajas usadas
+                    foreach (var facturaCaja in facturaAnterior.FacturasMedicamentosCajas)
+                    {
+                        //obtener la caja del cajaId
+                        MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == facturaCaja.CajaId).FirstOrDefault();
+
+                        if (facturaCaja.TipoCantidad == 1)//caja
+                        {
+                            //obtener el medicamento de la caja.MedicamentoId
+                            Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault();
+
+                            caja.CantidadUnidad = medicamento.UnidadesCaja;
+                        }
+                        else//unidades
+                        {
+                            caja.CantidadUnidad += facturaCaja.CantidadUnidad;
+                        }
+
+                        //update a la caja
+                        _context.Update(caja);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    string error = VerificarInventario(ref viewModel);
+
+                    //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
+                    if (!error.Equals(""))//si no esta vacio
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+
+                    //actualizar los medicamentos cajas por cada detalle
+                    foreach (var detalle in viewModel.MedicamentosDetalle)
+                    {
+                        if (detalle.TipoCantidad == 1)//si el detalle es tipo caja
+                        {
+                            //por cada cajaId
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                //obtener la caja del cajaId
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+
+                                //la cantidad de la caja es cero
+                                caja.CantidadUnidad = 0;
+
+                                _context.Update(caja);
+                            }
+                        }
+                        else //si el detalle es tipo unidad
+                        {
+                            //se guarda en una variable la cantidad del detalle
+                            var cantidadUsada = detalle.Cantidad;
+                            //por cada cajaId
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                //obtener la caja del cajaId
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+
+                                //si la cantidad de la caja es mayor a la cantidad usada
+                                if (caja.CantidadUnidad > cantidadUsada)
+                                {
+                                    caja.CantidadUnidad -= cantidadUsada;
+                                    caja.Detallada = true;
+                                }
+                                else if (caja.CantidadUnidad == cantidadUsada)
+                                {
+                                    caja.CantidadUnidad = 0;
+                                }
+                                else//caja.CantidadUnidad < cantidadUsada
+                                {
+                                    cantidadUsada -= caja.CantidadUnidad;
+
+                                    caja.CantidadUnidad = 0;
+                                }
+                                _context.Update(caja);
+                            }
+                        }
+                    }
+
+                    //agregar la nueva factura
+                    Facturas nuevaFactura = new()
+                    {
+                        SubTotal = viewModel.SubTotal,
+                        Total = viewModel.Total,
+                        Creado = DateTime.Now,
+                        CreadoNombreUsuario = _user.GetUserName(),
+                        Modificado = DateTime.Now,
+                        ModificadoNombreUsuario = _user.GetUserName(),
+                        Inactivo = false
+                    };
+
+                    _context.Facturas.Add(nuevaFactura);
+
+                    foreach (var detalle in viewModel.MedicamentosDetalle)
+                    {
+                        FacturaMedicamentosCajas facturaCaja;
+
+                        if (detalle.TipoCantidad == 1)
+                        {
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                facturaCaja = new()
+                                {
+                                    CajaId = cajaId,
+                                    TipoCantidad = 1,
+                                    CantidadUnidad = 1,
+                                    Precio = detalle.Precio,
+                                };
+
+                                nuevaFactura.FacturasMedicamentosCajas.Add(facturaCaja);
+                            }
+                        }
+                        else
+                        {
+                            int cantidadUsada = detalle.Cantidad;
+
+                            foreach (var cajaId in detalle.CajasId)
+                            {
+                                facturaCaja = new()
+                                {
+                                    CajaId = cajaId,
+                                    TipoCantidad = 2,
+                                    Precio = detalle.Precio,
+                                };
+
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+
+                                if (caja.CantidadUnidad > cantidadUsada)
+                                {
+                                    facturaCaja.CantidadUnidad = detalle.Cantidad;
+                                    cantidadUsada -= caja.CantidadUnidad;
+                                }
+                                else
+                                {
+                                    facturaCaja.CantidadUnidad = cantidadUsada;
+                                }
+
+                                nuevaFactura.FacturasMedicamentosCajas.Add(facturaCaja);
+                            }
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!FacturaExists(factura.Codigo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", e.Message);
+                    return View(viewModel);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(factura);
+
+            //obtener lista de medicamentos que no esten inactivos
+            var medicamentos = await (from meds in _context.Medicamentos
+                               .AsNoTracking()
+                               .AsQueryable()
+                                      select new MedicamentosViewModel
+                                      {
+
+                                          Codigo = meds.Codigo,
+                                          Nombre = meds.Nombre,
+                                          Inactivo = (bool)meds.Inactivo,
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+
+                                      }).Where(x => x.Inactivo == false).ToListAsync();
+            //usar los medicamentos que tengan alguna caja en inventario
+            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
+            return View(viewModel);
         }
 
         // GET: Facturas/Delete/5
@@ -564,7 +770,8 @@ namespace ApotheGSF.Controllers
             var factura = await _context.Facturas.FindAsync(id);
             if (factura != null)
             {
-                _context.Facturas.Remove(factura);
+                factura.Inactivo = true;
+                _context.Update(factura);
             }
 
             await _context.SaveChangesAsync();

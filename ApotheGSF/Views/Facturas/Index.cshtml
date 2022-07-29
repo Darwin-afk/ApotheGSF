@@ -1,4 +1,6 @@
 ﻿@model ReflectionIT.Mvc.Paging.PagingList<ApotheGSF.Models.Facturas>
+@using ApotheGSF.Models;
+@using ReflectionIT.Mvc.Paging;
 
 @{
     ViewData["Title"] = "Index";
@@ -9,21 +11,57 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form method="get" class="form-inline" asp-action="Index">
+    <div class="input-group mb-3">
+        <input type="text" name="filter" class="form-control" placeholder="Filtro"
+               aria-label="Filtro" aria-describedby="btnSubmit"
+               value="@Model.RouteValue["Filter"]" />
+        <button class="btn btn-outline-secondary" type="submit" id="btnSubmit">Buscar</button>
+    </div>
+    <input type="hidden" value="1" name="search" />
+</form>
+
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Creado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Codigo" style="color:#00FFFF;"><i class="fas fa-pencil-alt"></i></a> |
-                <a asp-action="Details" asp-route-id="@item.Codigo" style="color:white;"><i class="fas fa-align-justify"></i></a> |
-                <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:red;"><i class="fas fa-trash-alt"></i></a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Creado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Codigo" style="color:#00FFFF;"><i class="fas fa-pencil-alt"></i></a> |
+                    <a asp-action="Details" asp-route-id="@item.Codigo" style="color:white;"><i class="fas fa-align-justify"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:red;"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<div class="text-center">
+    <nav aria-label="navigation">
+        <vc:pager paging-list="@Model" />
+    </nav>
+</div>

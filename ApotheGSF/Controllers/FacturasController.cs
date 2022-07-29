@@ -39,7 +39,8 @@ namespace ApotheGSF.Controllers
             StringBuilder filtro = new StringBuilder(" Inactivo == false ");
             if (!string.IsNullOrWhiteSpace(filter))
             {
-                filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());//verificar para fecha
+                //verificar para fecha
+                //filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
             }
 
             List<Facturas> listado = new List<Facturas>();
@@ -50,7 +51,7 @@ namespace ApotheGSF.Controllers
                 listado = listado.Where(x => x.Inactivo == false).ToList();
             }
 
-            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;//verificar para fecha
+            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Creado" : sortExpression;//verificar para fecha
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
             model.RouteValue = new RouteValueDictionary {
                             { "filter", filter}
@@ -127,19 +128,22 @@ namespace ApotheGSF.Controllers
                 //excluir ese elemento de facturasCajas
                 facturasCajas.RemoveAt(0);
 
-                //obtener el nombreMedicamento del primer elemento de facturasCajas
-                caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
-                string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
-
-                //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
-                while(nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
+                //obtener el nombreMedicamento del primer elemento de facturasCajas si quedan otras facturasCajas
+                if(facturasCajas.Count > 0)
                 {
-                    //add(cajaId, cantidad)
-                    detalle.CajasId.Add(facturasCajas[0].CajaId);
-                    detalle.Cantidad += facturasCajas[0].CantidadUnidad;
+                    caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
+                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
 
-                    //excluir ese elemento de facturasCajas
-                    facturasCajas.RemoveAt(0);
+                    //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
+                    while (nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
+                    {
+                        //add(cajaId, cantidad)
+                        detalle.CajasId.Add(facturasCajas[0].CajaId);
+                        detalle.Cantidad += facturasCajas[0].CantidadUnidad;
+
+                        //excluir ese elemento de facturasCajas
+                        facturasCajas.RemoveAt(0);
+                    }
                 }
 
                 //al final del mientras calcular el total del detalle
@@ -293,7 +297,7 @@ namespace ApotheGSF.Controllers
 
                                 if (caja.CantidadUnidad > cantidadUsada)
                                 {
-                                    facturaCaja.CantidadUnidad = caja.CantidadUnidad;
+                                    facturaCaja.CantidadUnidad = detalle.Cantidad;
                                     cantidadUsada -= caja.CantidadUnidad;
                                 }
                                 else

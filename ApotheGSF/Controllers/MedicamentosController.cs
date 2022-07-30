@@ -91,6 +91,14 @@ namespace ApotheGSF.Controllers
             };
             model.Action = "Index";
 
+            if(string.IsNullOrWhiteSpace(filter))
+            {
+                ViewBag.Filtro = "";
+            }
+            else
+                ViewBag.Filtro = filter;
+
+
             return model != null ?
                 View(model) :
                 Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");

@@ -80,7 +80,7 @@
         </table>
     </div>
     <div>
-        <a class="btn" onclick="Reporte(filter)">Facturar</a>
+        <a class="btn" onclick='Reporte("@ViewBag.Filtro")'>Generar Reporte</a>
     </div>
 </div>
 
@@ -95,7 +95,7 @@
 @section Scripts {
     <script>
         function Reporte(filtro) {
-            var url = '@Url.Action("ReporteInventario","Medicamentos")?filter=' + filtro.value;
+            var url = '@Url.Action("ReporteInventario","Medicamentos")?filter=' + filtro;
             window.open(url, "_blank");
         };
     </script>

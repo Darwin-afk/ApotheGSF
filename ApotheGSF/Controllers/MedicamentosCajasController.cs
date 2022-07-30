@@ -105,8 +105,8 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
+            ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault().Nombre;
 
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
             return View(medicamentosCajas);
         }
 
@@ -129,6 +129,7 @@ namespace ApotheGSF.Controllers
                     _context.Update(medicamentosCajas);
                     _context.Entry(medicamentosCajas).Property(m => m.Detallada).IsModified = false;
                     _context.Entry(medicamentosCajas).Property(m => m.Inactivo).IsModified = false;
+                    _context.Entry(medicamentosCajas).Property(m => m.MedicamentoId).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -142,9 +143,9 @@ namespace ApotheGSF.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction( "Details","Medicamentos", new { id = medicamentosCajas.MedicamentoId});
             }
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre", medicamentosCajas.MedicamentoId);
+            ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault().Nombre;
             return View(medicamentosCajas);
         }
 

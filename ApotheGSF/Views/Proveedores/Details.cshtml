@@ -3,70 +3,86 @@
 @{
     ViewData["Title"] = "Details";
 }
-<h3><i class="fas fa-list"></i>&nbsp;Detalle Proveedor</h3>
+<h3 class="text-center"><i class="fas fa-list"></i>&nbsp;Detalle Proveedor&nbsp<i class="fas fa-list"></i></h3>
 
-<h3>Aqui estan los datos del Proveedor</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RNC)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RNC)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefono1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Telefono1)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefono2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Telefono2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fax)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fax)
-        </dd>        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Direccion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Direccion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TerminosdePago)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TerminosdePago)
-        </dd>
-    </dl>
-    
-    <form asp-action="Details">
-        <input type="hidden" asp-for="Codigo" />
-        <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
-    </form>
+<div class="container shadow-lg p-3 rb-5 bg-light rounded col-md-6">
+    <div class="card">
+        <div class="card-header text-center" style="background-color:#E8E8E8">
+            <h3>Información del Proveedor</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Codigo)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Codigo)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RNC)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.RNC)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Telefono1)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Telefono1)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Telefono2)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Telefono2)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Fax)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Fax)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Direccion)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Direccion)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TerminosdePago)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.TerminosdePago)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="card-footer" style="background-color:#E8E8E8">
+            <form asp-action="Details">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="hidden" asp-for="Codigo" />
+                    </div>
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-4 text-end">
+                        <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

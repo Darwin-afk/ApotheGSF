@@ -4,134 +4,160 @@
     ViewData["Title"] = "Details";
     int i = 1;
 }
-<h3><i class="fas fa-list"></i>&nbsp;Detalle Medicamento</h3>
+<h3 class="text-center"><i class="fas fa-list"></i>&nbsp;Detalle Medicamento&nbsp<i class="fas fa-list"></i></h3>
 
-<h3>Aqui estan los datos del Medicamento</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreProveedor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NombreProveedor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Categoria)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Categoria)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Sustancia)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Sustancia)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Concentracion)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Concentracion)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UnidadesCaja)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UnidadesCaja)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Costo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Costo)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecioUnidad)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrecioUnidad)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Indicaciones)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Indicaciones)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Dosis)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Dosis)
-        </dd>
-    </dl>
+<div class="container shadow-lg p-3 rb-5 bg-light rounded col-md-12">
+    <div class="card">
+        <div class="card-header text-center" style="background-color:#E8E8E8">
+            <h3>Información del Medicamento</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <dl class="row">
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Codigo)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Nombre)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.NombreProveedor)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.NombreProveedor)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Categoria)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Categoria)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Sustancia)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Sustancia)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Concentracion)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Concentracion)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.UnidadesCaja)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.UnidadesCaja)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Costo)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Costo)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.PrecioUnidad)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.PrecioUnidad)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Indicaciones)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Indicaciones)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.Dosis)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Dosis)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-sm-8">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Caja
+                                </th>
+                                <th>
+                                    Cantidad Unidad
+                                </th>
+                                <th>
+                                    Fecha Vencimiento
+                                </th>
+                                <th>
+                                    Detallada
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Inventario)
+                            {
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.CantidadUnidad
+                                    </td>
+                                    <td>
+                                        @item.FechaVencimiento.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @if (item.Detallada == true)
+                                        {
+                                            @:Si
+                                        }
+                                        else
+                                        {
+                                            @:No
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "MedicamentosCajas", new { id = item.CajaId})" style="color:#FFB300;"><i class="fas fa-pencil-alt"></i></a> |
+                                        <a href="@Url.Action("Details", "MedicamentosCajas", new { id = item.CajaId})" style="color:black;"><i class="fas fa-align-justify"></i></a> |
+                                        <a href="@Url.Action("Delete", "MedicamentosCajas", new { id = item.CajaId})" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                                i = i + 1;
+                            }
+                        </tbody>
+                        @*
+                        <div class="text-center">
+                        <nav aria-label="navigation">
+                        <vc:pager paging-list="@ViewBag" />
+                        </nav>
+                        </div>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="background-color:#E8E8E8">
+            <form asp-action="Details">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="hidden" asp-for="Codigo" />
+                    </div>
+                    <div class="col-sm-4">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    #
-                </th>
-                <th>
-                    Cantidad Unidad
-                </th>
-                <th>
-                    Fecha Vencimiento
-                </th>
-                <th>
-                    Detallada
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ViewBag.Inventario)
-            {
-                <tr>
-                    <td>
-                        @i
-                    </td>
-                    <td>
-                        @item.CantidadUnidad
-                    </td>
-                    <td>
-                        @item.FechaVencimiento.ToString("dd/MM/yyyy")
-                    </td>
-                    <td>
-                        @if (item.Detallada == true)
-                        {
-                            @:Si
-                        }
-                        else
-                        {
-                            @:No
-                        }
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Edit", "MedicamentosCajas", new { id = item.CajaId})" style="color:#FFB300;"><i class="fas fa-pencil-alt"></i></a> |
-                        <a href="@Url.Action("Details", "MedicamentosCajas", new { id = item.CajaId})" style="color:white;"><i class="fas fa-align-justify"></i></a> |
-                        <a href="@Url.Action("Delete", "MedicamentosCajas", new { id = item.CajaId})" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
-                    </td>
-                </tr>
-                i = i + 1;
-            }
-        </tbody>
-    </table>
-
-    <form asp-action="Details">
-        <input type="hidden" asp-for="Codigo" />
-        <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
-    </form>
+                    </div>
+                    <div class="col-sm-4 text-end">
+                        <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

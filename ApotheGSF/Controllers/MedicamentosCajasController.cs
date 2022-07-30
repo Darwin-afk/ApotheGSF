@@ -69,7 +69,7 @@ namespace ApotheGSF.Controllers
                                                                             .Select(m => m.UnidadesCaja)
                                                                             .FirstOrDefaultAsync();
 
-                for(int i = 0; i < viewModel.Cajas; i++)
+                for (int i = 0; i < viewModel.Cajas; i++)
                 {
                     MedicamentosCajas medicamentoCaja = new();
                     medicamentoCaja.CantidadUnidad = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
@@ -122,8 +122,18 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            //obtener el medicamento de la caja
+            Medicamentos medicamento = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault();
+            //si cantidadUnidad es mayor  unidadesCaja del medicamento se regresa el error
+            if (medicamentosCajas.CantidadUnidad > medicamento.UnidadesCaja)
             {
+                ModelState.AddModelError("", "Cantidad Superior a la Valida");
+            }
+
+            if (ModelState.IsValid && medicamentosCajas.CantidadUnidad <= medicamento.UnidadesCaja)
+            {
+
+
                 try
                 {
                     _context.Update(medicamentosCajas);
@@ -143,7 +153,7 @@ namespace ApotheGSF.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction( "Details","Medicamentos", new { id = medicamentosCajas.MedicamentoId});
+                return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.MedicamentoId });
             }
             ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault().Nombre;
             return View(medicamentosCajas);
@@ -194,14 +204,14 @@ namespace ApotheGSF.Controllers
                 _context.MedicamentosCajas.Update(medicamentosCajas);
                 medicamentosCajas.Inactivo = true;
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool MedicamentosCajasExists(int id)
         {
-          return (_context.MedicamentosCajas?.Any(e => e.CajaId == id)).GetValueOrDefault();
+            return (_context.MedicamentosCajas?.Any(e => e.CajaId == id)).GetValueOrDefault();
         }
     }
 }

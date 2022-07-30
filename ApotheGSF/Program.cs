@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using ApotheGSF.Clases;
 using ReflectionIT.Mvc.Paging;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,5 +79,7 @@ app.UseCookiePolicy();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+RotativaConfiguration.Setup(builder.Environment.WebRootPath, "../Rotativa");
 
 app.Run();

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ApotheGSF.ViewModels.MedicamentosViewModel>
+
+@{
+    Layout = null;
+}
+
+<div class="container shadow-lg p-3 rb-5 bg-light rounded col-md-12">
+    <div class="card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NombreProveedor)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Sustancia)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Costo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cajas)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombreProveedor)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sustancia)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Costo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cajas)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

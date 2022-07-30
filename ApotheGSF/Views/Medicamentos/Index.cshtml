@@ -11,7 +11,7 @@
         <div class="row">
             <form method="get" class="form-inline" asp-action="Index">
                 <div class="input-group mb-3">
-                    <input type="text" name="filter" class="form-control" placeholder="Filtro"
+                    <input type="text" id="filter" name="filter" class="form-control" placeholder="Filtro"
                            aria-label="Filtro" aria-describedby="btnSubmit"
                            value="@Model.RouteValue["Filter"]" />
                     <button class="btn btn-outline-secondary" type="submit" id="btnSubmit">Buscar</button>
@@ -79,10 +79,25 @@
             </tbody>
         </table>
     </div>
+    <div>
+        <a class="btn" onclick="Reporte(filter)">Facturar</a>
+    </div>
 </div>
+
+
 
 <div class="text-center">
     <nav aria-label="navigation">
         <vc:pager paging-list="@Model" />
     </nav>
 </div>
+
+@section Scripts {
+    <script>
+        function Reporte(filtro) {
+            var url = '@Url.Action("ReporteInventario","Medicamentos")?filter=' + filtro.value;
+            window.open(url, "_blank");
+        };
+    </script>
+
+    }

@@ -157,6 +157,7 @@ namespace ApotheGSF.Controllers
             }
 
             ModelState.Remove("Nombre");//no se toma en cuenta el nombre al validar
+            ModelState.Remove("Apellido");//no se toma en cuenta el apellido al validar
 
             if (ModelState.IsValid)
             {

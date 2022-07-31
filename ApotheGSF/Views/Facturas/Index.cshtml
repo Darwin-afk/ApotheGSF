@@ -14,9 +14,12 @@
 
 <form method="get" class="form-inline" asp-action="Index">
     <div class="input-group mb-3">
-        <input type="text" name="filter" class="form-control" placeholder="Filtro"
-               aria-label="Filtro" aria-describedby="btnSubmit"
-               value="@Model.RouteValue["Filter"]" />
+        <input type="datetime-local" name="desde" class="form-control" placeholder="Desde"
+               aria-label="Desde" aria-describedby="btnSubmit"
+               value="@Model.RouteValue["Desde"]" />
+        <input type="datetime-local" name="hasta" class="form-control" placeholder="Hasta"
+               aria-label="Hasta" aria-describedby="btnSubmit"
+               value="@Model.RouteValue["Hasta"]" />
         <button class="btn btn-outline-secondary" type="submit" id="btnSubmit">Buscar</button>
     </div>
     <input type="hidden" value="1" name="search" />
@@ -60,8 +63,22 @@
     </tbody>
 </table>
 
+<div>
+    <a class="btn" onclick='Reporte("@ViewBag.Desde", "@ViewBag.Hasta")'>Generar Reporte</a>
+</div>
+
 <div class="text-center">
     <nav aria-label="navigation">
         <vc:pager paging-list="@Model" />
     </nav>
 </div>
+
+@section Scripts {
+    <script>
+        function Reporte(desde, hasta) {
+            var url = '@Url.Action("ReporteFacturas","Facturas")?desde=' + desde + '&hasta=' + hasta;
+            window.open(url, "_blank");
+        };
+    </script>
+
+    }

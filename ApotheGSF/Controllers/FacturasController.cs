@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.Text;
 using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
+using Rotativa.AspNetCore;
 
 namespace ApotheGSF.Controllers
 {
@@ -34,14 +35,15 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Facturas
-        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
+        public async Task<IActionResult> Index(DateTime desde, DateTime hasta, int pageindex = 1, string sortExpression = "", int search = 0)
         {
             StringBuilder filtro = new StringBuilder(" Inactivo == false ");
-            if (!string.IsNullOrWhiteSpace(filter))
-            {
-                //verificar para fecha
-                //filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
-            }
+
+            if (desde > default(DateTime))
+                filtro.AppendFormat("  && Creado >= DateTime({0},{1},{2},{3},{4},{5})", desde.Year, desde.Month, desde.Day, desde.Hour, desde.Minute, desde.Second);
+
+            if(hasta > default(DateTime))
+                filtro.AppendFormat("  && Creado <= DateTime({0},{1},{2},{3},{4},{5})", hasta.Year, hasta.Month, hasta.Day, hasta.Hour, hasta.Minute, hasta.Second);
 
             List<Facturas> listado = new List<Facturas>();
             if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
@@ -54,9 +56,14 @@ namespace ApotheGSF.Controllers
             sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Creado" : sortExpression;//verificar para fecha
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
             model.RouteValue = new RouteValueDictionary {
-                            { "filter", filter}
+                            { "desde", desde},
+                {"hasta", hasta }
             };
+
             model.Action = "Index";
+
+            ViewBag.Desde = desde;
+            ViewBag.Hasta = hasta;
 
             return model != null ?
                 View(model) :
@@ -113,7 +120,7 @@ namespace ApotheGSF.Controllers
                 facturasCajas.RemoveAt(0);
 
                 //obtener el nombreMedicamento del primer elemento de facturasCajas si quedan otras facturasCajas
-                if(facturasCajas.Count > 0)
+                if (facturasCajas.Count > 0)
                 {
                     caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
                     string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
@@ -138,7 +145,7 @@ namespace ApotheGSF.Controllers
             } while (facturasCajas.Count > 0);
 
             factura.MedicamentosDetalle = listaDetalle;
-            
+
             return View(factura);
         }
 
@@ -1105,6 +1112,24 @@ namespace ApotheGSF.Controllers
             }
 
             return subTotal;
+        }
+
+        public async Task<IActionResult> ReporteFacturas(string desde, string hasta)
+        {
+            DateTime Desde = DateTime.Parse(desde);
+            DateTime Hasta = DateTime.Parse(hasta);
+
+            StringBuilder filtro = new StringBuilder(" Inactivo == false ");
+
+            if (Desde > default(DateTime))
+                filtro.AppendFormat("  && Creado >= DateTime({0},{1},{2},{3},{4},{5})", Desde.Year, Desde.Month, Desde.Day, Desde.Hour, Desde.Minute, Desde.Second);
+
+            if (Hasta > default(DateTime))
+                filtro.AppendFormat("  && Creado <= DateTime({0},{1},{2},{3},{4},{5})", Hasta.Year, Hasta.Month, Hasta.Day, Hasta.Hour, Hasta.Minute, Hasta.Second);
+
+            List<Facturas> facturas = await _context.Facturas.Where(filtro.ToString()).ToListAsync();
+
+            return new ViewAsPdf("ReporteFacturas", facturas);
         }
     }
 }

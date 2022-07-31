@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Rotativa\" />
+    <Folder Include="wwwroot\img\users\" />
   </ItemGroup>
 
 </Project>

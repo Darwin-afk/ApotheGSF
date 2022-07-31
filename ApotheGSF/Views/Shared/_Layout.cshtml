@@ -110,15 +110,25 @@
                     </ul>
                     <ul class="navbar-nav ml-auto dropstart">
                         <li class="nav-item dropdown drop3">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user"></i>&nbsp;
-                                User X
+                                @User.GetUserName()
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item text-dark" href="#"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Perfil</a></li>
-                                <li><a class="dropdown-item text-dark" href="#"><i class="fa-solid fa-lock" style="color:#CF810C;"></i>&nbsp;Cambiar Contraseña</a></li>
-                                <li><a class="dropdown-item text-dark" href="#"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#990000;"></i>&nbsp;Log Out</a></li>
-                            </ul>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="PerfilUsuario" asp-route-id="@User.GetUserID()"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Perfil</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="CambiarPassword"><i class="fa-solid fa-lock" style="color:#CF810C;"></i>&nbsp;Cambiar Contraseña</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#990000;"></i>&nbsp;Log Out</a></li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-controller="Home" asp-action="Login">
+                                    Login
+                                </a>
+                            }
+
                         </li>
                     </ul>
                 </div>

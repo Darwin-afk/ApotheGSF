@@ -113,7 +113,7 @@ namespace ApotheGSF.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccesoDenegado()
@@ -157,6 +157,7 @@ namespace ApotheGSF.Controllers
             }
 
             ModelState.Remove("Nombre");//no se toma en cuenta el nombre al validar
+            ModelState.Remove("Apellido");//no se toma en cuenta el apellido al validar
 
             if (ModelState.IsValid)
             {
@@ -164,7 +165,7 @@ namespace ApotheGSF.Controllers
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, modelo.Password);
                 if (result.Succeeded)
-                    return RedirectToAction("Index", "Personas");
+                    return RedirectToAction("Index", "Home");
                 else
                     ModelState.AddModelError("", result.Errors.FirstOrDefault().ToString());
             }

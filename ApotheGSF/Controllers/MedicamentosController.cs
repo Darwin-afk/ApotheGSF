@@ -59,7 +59,7 @@ namespace ApotheGSF.Controllers
                                      Indicaciones = meds.Indicaciones,
                                      Dosis = meds.Dosis,
                                      Inactivo = (bool)meds.Inactivo,
-                                     Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count,
+                                     Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo && m.Inactivo == false).ToList().Count,
 
                                      NombreProveedor = string.Join(", ",
                                      (from p in _context.Proveedores
@@ -157,7 +157,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.MedicamentoId == medicamento.Codigo).ToList();
+            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.MedicamentoId == medicamento.Codigo && m.Inactivo == false).ToList();
             return View(medicamento);
         }
 

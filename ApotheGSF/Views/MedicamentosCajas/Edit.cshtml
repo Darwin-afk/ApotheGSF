@@ -60,10 +60,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-center" style="background-color:#994400;">
-                        <input type="hidden" asp-for="MedicamentoId"/>
-                        <input type="hidden" asp-for="CajaId" />
-                        <button type="submit" value="Modificar" class="btn" style="background-color:#008F00;color:white;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+                    <div class="card-footer" style="background-color:#994400;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <input type="hidden" asp-for="MedicamentoId" />
+                                <input type="hidden" asp-for="CajaId" />
+                            </div>
+                            <div class="col-sm-4 text-center">
+                                <button type="submit" value="Modificar" class="btn" style="background-color:#008F00;color:white;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+                            </div>
+                            <div class="col-sm-4 text-end">
+                                <a href="@Url.Action("Details", "Medicamentos", new { id = Model.MedicamentoId})" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

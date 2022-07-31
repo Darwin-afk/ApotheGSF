@@ -195,6 +195,7 @@ namespace ApotheGSF.Controllers
             PerfilUsuarioViewModel perfil = new PerfilUsuarioViewModel()
             {
                 Nombre = modelo.Nombre,
+                Apellido = modelo.Apellido,
                 Email = modelo.Email,
                 Telefono = modelo.PhoneNumber,
                 Foto = modelo.Foto
@@ -205,7 +206,7 @@ namespace ApotheGSF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PerfilUsuario([Bind("Id, Nombre, Email, Telefono, Foto")] PerfilUsuarioViewModel modelo, IFormFile logo, string removeLogo)
+        public async Task<IActionResult> PerfilUsuario([Bind("Id, Nombre, Apellido, Email, Telefono, Foto")] PerfilUsuarioViewModel modelo, IFormFile logo, string removeLogo)
         {
             //Valida que si se cambia el correo no exista otro usuario con el mismo asignado.
             var u = await _userManager.FindByEmailAsync(modelo.Email); //No se puede registrar el mismo correo en el sistema dos veces, no importa la Org.
@@ -220,77 +221,76 @@ namespace ApotheGSF.Controllers
             }
 
             ModelState.Remove("Foto");
-            //if (ModelState.IsValid)
-            //{
-            //    var user = await _userManager.FindByIdAsync(modelo.Id.ToString());
-            //    if (user != null)
-            //    {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(modelo.Id.ToString());
+                if (user != null)
+                {
+                    if (removeLogo.Equals("1") || logo != null)
+                    {
+                        if (user.Foto != null)
+                        {
+                            string archivoActual = Path.Combine(webRoot, appSettings.Value.RutaImagenesUsers, user.Foto);
+                            if (System.IO.File.Exists(archivoActual))
+                            {
+                                try
+                                {
+                                    GC.Collect(); ///Si no se hace esto dice algunas veces quel archivo esta siendo utilizado por otro proceso
+                                    GC.WaitForPendingFinalizers();
+                                    System.IO.File.Delete(archivoActual);
 
+                                }
+                                catch (Exception e)
+                                {
+                                    _logger.LogDebug("PerfilUsuario", e);
+                                }
+                            }
+                        }
+                        user.Foto = null;
+                    }
+                    if (logo != null && removeLogo.Equals("0"))
+                    {
+                        string fileExtension = Path.GetExtension(logo.FileName);
+                        string fileName = Guid.NewGuid() + fileExtension;
+                        user.Foto = fileName;
+                        fileName = Path.Combine(webRoot, appSettings.Value.RutaImagenesUsers, fileName);
+                        logo.CopyTo(new FileStream(fileName, FileMode.Create));
+                    }
+                    user.Nombre = modelo.Nombre;
+                    user.Apellido = modelo.Apellido;
+                    user.Email = modelo.Email;
+                    user.PhoneNumber = modelo.Telefono;
+                    user.Modificado = DateTime.Now;
+                    user.ModificadoNombreUsuario = _user.GetUserName();
+                    modelo.Foto = user.Foto;
+                }
+                var result = await _userManager.UpdateAsync(user); //actualiza el usuario
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                else
+                {
+                    ///Si todo esta bien colocamos la foto en el claim
+                    var userClaims = await _userManager.GetClaimsAsync(user); //busca todos los claims del usuario modificado
 
-            //        if (removeLogo.Equals("1") || logo != null)
-            //        {
-            //            if (user.Foto != null)
-            //            {
-            //                string archivoActual = Path.Combine(webRoot, appSettings.Value.RutaImagenesUsers, user.Foto);
-            //                if (System.IO.File.Exists(archivoActual))
-            //                {
-            //                    try
-            //                    {
-            //                        System.GC.Collect(); ///Si no se hace esto dice algunas veces quel archivo esta siendo utilizado por otro proceso
-            //                        System.GC.WaitForPendingFinalizers();
-            //                        System.IO.File.Delete(archivoActual);
+                    ///elimina los claims nombre y posicion, el idOrganizacion no cambia
+                    await _userManager.RemoveClaimsAsync(user, userClaims.Where(x => x.Type.Equals("Foto")));
+                    await _userManager.RemoveClaimsAsync(user, userClaims.Where(x => x.Type.Equals("Nombre")));
 
-            //                    }
-            //                    catch (Exception e)
-            //                    {
-            //                        _logger.LogDebug("PerfilUsuario", e);
-            //                    }
-            //                }
-            //            }
-            //            user.Foto = null;
-            //        }
-            //        if (logo != null && removeLogo.Equals("0"))
-            //        {
-            //            string fileExtension = Path.GetExtension(logo.FileName);
-            //            string fileName = Guid.NewGuid() + fileExtension;
-            //            user.Foto = fileName;
-            //            fileName = Path.Combine(webRoot, appSettings.Value.RutaImagenesUsers, fileName);
-            //            logo.CopyTo(new FileStream(fileName, FileMode.Create));
-            //        }
-            //        user.Nombre = modelo.Nombre;
-            //        user.Email = modelo.Email;
-            //        user.PhoneNumber = modelo.Telefono;
-            //        user.Modificado = DateTime.Now;
-            //        user.ModificadoPorId = User.GetUserID().ToInt();
-            //        modelo.Foto = user.Foto;
-            //    }
-            //    var result = await _userManager.UpdateAsync(user); //actualiza el usuario
-            //    if (!result.Succeeded)
-            //    {
-            //        foreach (var error in result.Errors)
-            //        {
-            //            ModelState.AddModelError(string.Empty, error.Description);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ///Si todo esta bien colocamos la foto en el claim
-            //        var userClaims = await _userManager.GetClaimsAsync(user); //busca todos los claims del usuario modificado
+                    ///agrega los claims nuevamente
+                    await _userManager.AddClaimAsync(user, new Claim("Nombre", user.Nombre));
+                    if (user.Foto != null)
+                        await _userManager.AddClaimAsync(user, new Claim("Foto", user.Foto));
 
-            //        ///elimina los claims nombre y posicion, el idOrganizacion no cambia
-            //        await _userManager.RemoveClaimsAsync(user, userClaims.Where(x => x.Type.Equals("Foto")));
-            //        await _userManager.RemoveClaimsAsync(user, userClaims.Where(x => x.Type.Equals("Nombre")));
+                    await _signInManager.RefreshSignInAsync(user);
+                    return RedirectToAction("PerfilUsuario", "Home");
+                }
 
-            //        ///agrega los claims nuevamente
-            //        await _userManager.AddClaimAsync(user, new Claim("Nombre", user.Nombre));
-            //        if (user.Foto != null)
-            //            await _userManager.AddClaimAsync(user, new Claim("Foto", user.Foto));
-
-            //        await _signInManager.RefreshSignInAsync(user);
-            //        return RedirectToAction("PerfilUsuario", "Home");
-            //    }
-
-            //}
+            }
             return View(modelo);
         }
         #endregion

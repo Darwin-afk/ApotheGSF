@@ -1,5 +1,5 @@
-﻿@*@model WebPruebaEF22022.ViewModels.PerfilUsuarioViewModel
-@using WebPruebaEF22022.Clases;
+﻿@model ApotheGSF.ViewModels.PerfilUsuarioViewModel
+@using ApotheGSF.Clases;
 @using Microsoft.Extensions.Options;
 @inject IOptions<AppSettings> appSettings;
 
@@ -48,6 +48,15 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-md-12">
+							<div class="form-group">
+								<label asp-for="Apellido" class="control-label"></label>
+								<input asp-for="Apellido" class="form-control" />
+								<span asp-validation-for="Apellido" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-12">
 							<label asp-for="Telefono" class="control-label"></label>
 							<input asp-for="Telefono" class="form-control" />
 							<span asp-validation-for="Telefono" class="text-danger"></span>
@@ -81,6 +90,5 @@
 </div>
 @section scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-	<script src="~/js/image-upload-with-preview.js"></script>
+	<script src="~/js/SubirImagen.js"></script>
 }
-*@

@@ -34,6 +34,7 @@ namespace ApotheGSF.Controllers
                                            select new MedicamentosCajasViewModel
                                            {
                                                CajaId = mc.CajaId,
+                                               MedicamentoId = mc.MedicamentoId,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
@@ -174,6 +175,7 @@ namespace ApotheGSF.Controllers
                                            select new MedicamentosCajasViewModel
                                            {
                                                CajaId = mc.CajaId,
+                                               MedicamentoId = mc.MedicamentoId,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
@@ -206,7 +208,7 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.MedicamentoId });
         }
 
         private bool MedicamentosCajasExists(int id)

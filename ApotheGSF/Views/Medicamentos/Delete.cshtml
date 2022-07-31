@@ -88,17 +88,19 @@
         </div>
 
         <div class="card-footer text-end" style="background-color:#E8E8E8;">
-            <div class="row">
-                <div class="col-sm-4">
-                    <input type="hidden" asp-for="Codigo" />
+            <form asp-action="Delete">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="hidden" asp-for="Codigo" />
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>
+                    </div>
+                    <div class="col-sm-4 text-end">
+                        <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                    </div>
                 </div>
-                <div class="col-sm-4 text-center">
-                    <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>
-                </div>
-                <div class="col-sm-4 text-end">
-                    <a asp-action="Index" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

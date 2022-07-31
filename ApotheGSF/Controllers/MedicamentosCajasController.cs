@@ -53,7 +53,7 @@ namespace ApotheGSF.Controllers
         // GET: MedicamentosCajas/Create
         public IActionResult Create()
         {
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
             return View();
         }
 
@@ -88,7 +88,7 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos, "Codigo", "Nombre");
+            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
             return View(viewModel);
         }
 

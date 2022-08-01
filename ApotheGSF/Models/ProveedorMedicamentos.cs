@@ -6,14 +6,14 @@ namespace ApotheGSF.Models
     public class ProveedorMedicamentos
     {
         [ForeignKey("Proveedores")]
-        public int ProveedoresId { get; set; }
+        public int CodigoProveedor { get; set; }
         public virtual Proveedores? Proveedores { get; set; }
 
         [NotMapped]
         public string? NombreProveedores { get; set; }
         
         [ForeignKey("Medicamentos")]
-        public int MedicamentosId { get; set; }
+        public int CodigoMedicamento { get; set; }
         public virtual Medicamentos? Medicamentos { get; set; }
         
         [NotMapped]

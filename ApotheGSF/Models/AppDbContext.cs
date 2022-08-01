@@ -45,7 +45,7 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable(name: "tblRoles");
                 //Cambindo los nombres de las columnas en la tabla
-                entity.Property(p => p.Id).HasColumnName("RolId");
+                entity.Property(p => p.Id).HasColumnName("Codigo");
                 entity.Property(p => p.Name).HasColumnName("Nombre");
                 entity.Property(p => p.NormalizedName).HasColumnName("NombreNormalizado");
                 //-
@@ -61,16 +61,16 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable("tblUsuariosRoles");
                 //Cambindo los nombres de las columnas en la tabla
-                entity.Property(p => p.UserId).HasColumnName("UsuarioId");
-                entity.Property(p => p.RoleId).HasColumnName("RolId");
+                entity.Property(p => p.UserId).HasColumnName("CodigoUsuario");
+                entity.Property(p => p.RoleId).HasColumnName("CodigoRol");
                 //-
             });
             modelBuilder.Entity<IdentityRoleClaim<int>>(entity =>
             {
                 entity.ToTable("tblRolClaims");
                 //Cambindo los nombres de las columnas en la tabla
-                entity.Property(p => p.Id).HasColumnName("RolClaimId");
-                entity.Property(p => p.RoleId).HasColumnName("RolId");
+                entity.Property(p => p.Id).HasColumnName("Codigo");
+                entity.Property(p => p.RoleId).HasColumnName("CodigoRol");
                 entity.Property(p => p.ClaimType).HasColumnName("TipoClaim");
                 entity.Property(p => p.ClaimValue).HasColumnName("ValorClaim");
                 //-
@@ -79,8 +79,8 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable("tblUsuarioClaims");
                 //Cambindo los nombres de las columnas en la tabla
-                entity.Property(p => p.Id).HasColumnName("UsuarioClaimId");
-                entity.Property(p => p.UserId).HasColumnName("UsuarioId");
+                entity.Property(p => p.Id).HasColumnName("Codigo");
+                entity.Property(p => p.UserId).HasColumnName("CodigoUsuario");
                 entity.Property(p => p.ClaimType).HasColumnName("TipoClaim");
                 entity.Property(p => p.ClaimValue).HasColumnName("ValorClaim");
                 //-
@@ -89,14 +89,14 @@ namespace ApotheGSF.Models
             {
                 entity.ToTable("tblUsuarioLogin");
                 //Cambindo los nombres de las columnas en la tabla
-                entity.Property(p => p.UserId).HasColumnName("UsuarioId");
+                entity.Property(p => p.UserId).HasColumnName("CodigoUsuario");
                 //-
             });
             modelBuilder.Entity<IdentityUserToken<int>>(entity =>
             {
                 entity.ToTable("tblUsuarioToken");
                 //Cambindo los nombres de las columnas en la tabla
-                entity.Property(p => p.UserId).HasColumnName("UsuarioId");
+                entity.Property(p => p.UserId).HasColumnName("CodigoUsuario");
                 entity.Property(p => p.Name).HasColumnName("Nombre");
                 entity.Property(p => p.Value).HasColumnName("Valor");
                 //-
@@ -108,7 +108,7 @@ namespace ApotheGSF.Models
             modelBuilder.Entity<ProveedorMedicamentos>(entity =>
             {
                 entity.ToTable("tblProveedoresMedicamentos");
-                entity.HasKey(pm => new { pm.MedicamentosId, pm.ProveedoresId });
+                entity.HasKey(pm => new { pm.CodigoMedicamento, pm.CodigoProveedor });
             });
             modelBuilder.Entity<Medicamentos>(entity =>
             {
@@ -117,7 +117,7 @@ namespace ApotheGSF.Models
             modelBuilder.Entity<FacturaMedicamentosCajas>(entity =>
             {
                 entity.ToTable("tblFacturasMedicamentosCajas");
-                entity.HasKey(fm => new { fm.FacturaId, fm.CajaId });
+                entity.HasKey(fm => new { fm.CodigoFactura, fm.CodigoCaja });
             });
             modelBuilder.Entity<Facturas>(entity =>
             {

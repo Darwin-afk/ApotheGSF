@@ -19,10 +19,6 @@ namespace ApotheGSF.Models
         public string? ModificadoNombreUsuario { get; set; }
         public bool? Inactivo { get; set; }
 
-
-        [NotMapped]
-        public bool IsUpdate { get; set; }
-
         public Facturas()
         {
             FacturasMedicamentosCajas = new HashSet<FacturaMedicamentosCajas>();

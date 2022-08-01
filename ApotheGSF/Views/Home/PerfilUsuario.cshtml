@@ -4,91 +4,88 @@
 @inject IOptions<AppSettings> appSettings;
 
 @{
-	string titulo = "Perfil de Usuario";
-	ViewData["Title"] = titulo;
-	string fotoUrl = appSettings.Value.UserSinFoto;
+    string titulo = "Perfil de Usuario";
+    ViewData["Title"] = titulo;
+    string fotoUrl = appSettings.Value.UserSinFoto;
 
-	if (Model.Foto != null)
-	{
-		fotoUrl = appSettings.Value.UrlFotosUsuario + Model.Foto;
-	}
+    if (Model.Foto != null)
+    {
+        fotoUrl = appSettings.Value.UrlFotosUsuario + Model.Foto;
+    }
 }
 
-<div class="row">
-	<div class="col-md-5">
-		<div class="box box-info">
-			<form asp-action="PerfilUsuario" enctype="multipart/form-data">
-				<div class="box-header with-border">
-					<h3 class="box-title">@titulo</h3>
-				</div>
-				<div class="box-body">
-					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-					<input type="hidden" asp-for="Id" />
-					<center>
-						<div class="row">
-							<div class="form-group col-md-12">
-								<img id="preview" src="@Url.Content(fotoUrl)" width="250" height="230" />
-								<br />
-								<input type="file" id="logo" name="logo" style="display: none;" />
-								<a href="javascript:changeLogo();">Cambiar</a> |
-								<a href="javascript:removeImage('@Url.Content(appSettings.Value.UserSinFoto)');" class="text-danger">Eliminar</a>
-								<input type="hidden" style="display: none" value="0" name="removeLogo" id="removeLogo">
+<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-6">
+    <div class="card">
+        <form asp-action="PerfilUsuario" enctype="multipart/form-data">
+            <div class="card-header text-center" style="background-color:#002299;">
+                <h3 class="box-title" style="color:white;">@titulo</h3>
+                <center>
+                    <div class="row">
+                        <div class="form-group col-md-12" style="color:white;">
+                            <img id="preview" src="@Url.Content(fotoUrl)" width="250" height="230" />
+                            <br />
+                            <input type="file" id="logo" name="logo" style="display: none;" />
+                            <button class="btn btn-primary" href="javascript:changeLogo();">Cambiar</button> |
+                            <button class="btn btn-danger" href="javascript:removeImage('@Url.Content(appSettings.Value.UserSinFoto)');">Eliminar</button>
+                            <input type="hidden" style="display: none" value="0" name="removeLogo" id="removeLogo">
 
-							</div>
-						</div>
-					</center>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<div class="form-group">
-								<label asp-for="Nombre" class="control-label"></label>
-								<input asp-for="Nombre" class="form-control" />
-								<span asp-validation-for="Nombre" class="text-danger"></span>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<div class="form-group">
-								<label asp-for="Apellido" class="control-label"></label>
-								<input asp-for="Apellido" class="form-control" />
-								<span asp-validation-for="Apellido" class="text-danger"></span>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label asp-for="Telefono" class="control-label"></label>
-							<input asp-for="Telefono" class="form-control" />
-							<span asp-validation-for="Telefono" class="text-danger"></span>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label asp-for="Email" class="control-label"></label>
-							<input asp-for="Email" class="form-control" />
-							<span asp-validation-for="Email" class="text-danger"></span>
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="form-group col-md-12">
-							<a asp-controller="Home" asp-route-id="@User.GetUserID()" asp-action="CambiarPassword" class="btn btn-warning">Cambiar Contraseña</a>
-						</div>
-					</div>
-				
-				</div> <!-- box body -->
-				<div class="box-footer clearfix">
-					<div class="row col-md-4">
-						<div class="form-group">
-							<button type="submit" class="btn btn-outline-secondary">Guardar</button>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                </center>
+            </div>
+            <div class="card-body text-center">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Nombre" class="control-label"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Apellido" class="control-label"></label>
+                            <input asp-for="Apellido" class="form-control" />
+                            <span asp-validation-for="Apellido" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Telefono" class="control-label"></label>
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <a asp-controller="Home" asp-route-id="@User.GetUserID()" asp-action="CambiarPassword" style="color:#FF9900;">Cambiar Contraseña</a>
+                    </div>
+                </div>
+
+            </div> <!-- box body -->
+            <div class="card-footer text-center" style="background-color:#002299;">
+                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+            </div>
+        </form>
+    </div>
 </div>
 @section scripts {
-	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-	<script src="~/js/SubirImagen.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/SubirImagen.js"></script>
 }

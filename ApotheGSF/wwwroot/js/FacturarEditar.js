@@ -1,8 +1,8 @@
-﻿function Facturar() {
+﻿function FacturarEditar() {
     $.ajax({
         data: $('#form').serialize(),
         type: "POST",
-        url: '/Facturas/Create',
+        url: '/Facturas/Edit',
         success: function (r) {
             if (r.resultado) {
                 var url = 'ReporteFactura?CodigoFactura=' + r.codigofactura;

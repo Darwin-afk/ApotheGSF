@@ -42,7 +42,7 @@ namespace ApotheGSF.Controllers
             if (desde > default(DateTime))
                 filtro.AppendFormat("  && Creado >= DateTime({0},{1},{2},{3},{4},{5})", desde.Year, desde.Month, desde.Day, desde.Hour, desde.Minute, desde.Second);
 
-            if(hasta > default(DateTime))
+            if (hasta > default(DateTime))
                 filtro.AppendFormat("  && Creado <= DateTime({0},{1},{2},{3},{4},{5})", hasta.Year, hasta.Month, hasta.Day, hasta.Hour, hasta.Minute, hasta.Second);
 
             List<Facturas> listado = new List<Facturas>();
@@ -93,6 +93,13 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            factura.MedicamentosDetalle = ObtenerDetalles(factura);
+
+            return View(factura);
+        }
+
+        private List<MedicamentosDetalle> ObtenerDetalles(FacturaViewModel factura)
+        {
             //obtener listado de facturamedicamentocaja con facturaId == factura.codigo
             List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.CodigoFactura == factura.Codigo).ToList();
             //crear listado de detalle
@@ -134,6 +141,9 @@ namespace ApotheGSF.Controllers
 
                         //excluir ese elemento de facturasCajas
                         facturasCajas.RemoveAt(0);
+
+                        if (facturasCajas.Count == 0)
+                            break;
                     }
                 }
 
@@ -144,9 +154,7 @@ namespace ApotheGSF.Controllers
 
             } while (facturasCajas.Count > 0);
 
-            factura.MedicamentosDetalle = listaDetalle;
-
-            return View(factura);
+            return listaDetalle;
         }
 
         // GET: Facturas/Create
@@ -176,10 +184,8 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
+        public async Task<ActionResult> Create([Bind("SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
-            //return true;
-
             string error = VerificarInventario(ref viewModel);
 
             //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
@@ -308,9 +314,10 @@ namespace ApotheGSF.Controllers
                 catch (Exception e)
                 {
                     ModelState.AddModelError("", e.Message);
-                    return View(viewModel);
+                    return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
-                return RedirectToAction(nameof(Index));
+                int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;
+                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura });
             }
             //obtener lista de medicamentos que no esten inactivos
             var medicamentos = await (from meds in _context.Medicamentos
@@ -328,7 +335,7 @@ namespace ApotheGSF.Controllers
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 
-            return View(viewModel);
+            return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
         }
 
         private string VerificarInventario(ref FacturaViewModel viewModel)
@@ -847,7 +854,7 @@ namespace ApotheGSF.Controllers
 
         private ResultadoAjax AgregarCaja(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId)
         {
-            List<MedicamentosCajas> CajasSinDetallar = medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
+            List<MedicamentosCajas> CajasSinDetallar = medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList();
 
             if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en unidades
             {
@@ -891,7 +898,7 @@ namespace ApotheGSF.Controllers
             int cantidadCajas = 0;
             ResultadoAjax resultado = new ResultadoAjax();
             MedicamentosCajas? cajaDetallada = null;
-            List<MedicamentosCajas> cajas = medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
+            List<MedicamentosCajas> cajas = medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList();
 
             //si se agregaran suficientes unidades para hacer cajas
             while (cantidad >= medicamento.UnidadesCaja)
@@ -1134,8 +1141,25 @@ namespace ApotheGSF.Controllers
             return new ViewAsPdf("ReporteFacturas", facturas);
         }
 
-        public IActionResult ReporteFactura(FacturaViewModel factura)
+        public async Task<IActionResult> ReporteFactura(int CodigoFactura)
         {
+            var factura = await (from f in _context.Facturas
+                               .AsNoTracking()
+                               .AsQueryable()
+                                 select new FacturaViewModel
+                                 {
+                                     Codigo = f.Codigo,
+                                     SubTotal = f.SubTotal,
+                                     Total = f.Total,
+                                 }).Where(x => x.Codigo == CodigoFactura).FirstOrDefaultAsync();
+
+            if (factura == null)
+            {
+                return NotFound();
+            }
+
+            factura.MedicamentosDetalle = ObtenerDetalles(factura);
+
             return new ViewAsPdf("ReporteFactura", factura);
         }
     }

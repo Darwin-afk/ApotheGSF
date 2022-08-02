@@ -4,8 +4,8 @@ namespace ApotheGSF.ViewModels
 {
     public class UsuarioViewModel
     {
-		[Display(Name = "ID")]
-		public int Id { get; set; }
+		[Display(Name = "Codigo")]
+		public int Codigo { get; set; }
 
 		[Required(ErrorMessage = "Digite el nombre del usuario.")]
 		[MaxLength(50)]

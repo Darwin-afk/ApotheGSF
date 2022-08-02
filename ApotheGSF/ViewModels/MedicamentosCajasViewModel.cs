@@ -2,8 +2,8 @@
 {
     public class MedicamentosCajasViewModel
     {
-        public int CajaId { get; set; }
-        public int MedicamentoId { get; set; }
+        public int CodigoCaja { get; set; }
+        public int CodigoMedicamento { get; set; }
         public int CantidadUnidad { get; set; }
         public DateTime FechaAdquirido { get; set; }
         public DateTime FechaVencimiento { get; set; }

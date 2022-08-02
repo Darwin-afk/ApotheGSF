@@ -53,7 +53,7 @@ namespace ApotheGSF.Controllers
                                  join r in _context.Roles on ur.RoleId equals r.Id
                                  select new UsuarioViewModel
                                  {
-                                     Id = u.Id,
+                                     Codigo = u.Id,
                                      Nombre = u.Nombre,
                                      Apellido = u.Apellido,
                                      Telefono = u.PhoneNumber,
@@ -101,7 +101,7 @@ namespace ApotheGSF.Controllers
                                  from x in lj.DefaultIfEmpty()
                                  select new UsuarioViewModel
                                  {
-                                     Id = u.Id,
+                                     Codigo = u.Id,
                                      Nombre = u.Nombre,
                                      Apellido = u.Apellido,
                                      Usuario = u.UserName,
@@ -116,7 +116,7 @@ namespace ApotheGSF.Controllers
                                      ModificadoPor = x == null ? string.Empty : x.Nombre,
                                      CreadPor = x == null ? string.Empty : y.Nombre,
                                      Inactivo = u.Inactivo
-                                 }).Where(x => x.Id == id && x.Inactivo == false).FirstOrDefaultAsync();
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (usuario == null)
             {
@@ -193,7 +193,7 @@ namespace ApotheGSF.Controllers
                                  join r in _context.Roles on ur.RoleId equals r.Id
                                  select new UsuarioViewModel
                                  {
-                                     Id = u.Id,
+                                     Codigo = u.Id,
                                      Nombre = u.Nombre,
                                      Apellido = u.Apellido,
                                      Usuario = u.UserName,
@@ -203,7 +203,7 @@ namespace ApotheGSF.Controllers
                                      FechaNacimiento = u.FechaNacimiento,
                                      Direccion = u.Direccion,
                                      Rol = r.Name
-                                 }).Where(x => x.Id == id).FirstOrDefaultAsync();
+                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
 
             if (usuario == null)
             {
@@ -220,7 +220,7 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id, Nombre, Apellido, Usuario, FechaNacimiento, Cedula, Email, Direccion, Telefono, Rol")] UsuarioViewModel viewModel)
         {
-            if (id != viewModel.Id)
+            if (id != viewModel.Codigo)
             {
                 return NotFound();
             }
@@ -257,7 +257,7 @@ namespace ApotheGSF.Controllers
                     // verificar si se grabó bien, para luego asignar el rol
                     if (result > 0)
                     {
-                        var rolesViejos = await _context.AppUsuariosRoles.Where(x => x.UserId == viewModel.Id).ToListAsync();
+                        var rolesViejos = await _context.AppUsuariosRoles.Where(x => x.UserId == viewModel.Codigo).ToListAsync();
                         _context.RemoveRange(rolesViejos);
                         await _context.SaveChangesAsync();
                         await _userManager.AddToRoleAsync(antiguoUsuario, viewModel.Rol);
@@ -299,7 +299,7 @@ namespace ApotheGSF.Controllers
                                  from x in lj.DefaultIfEmpty()
                                  select new UsuarioViewModel
                                  {
-                                     Id = u.Id,
+                                     Codigo = u.Id,
                                      Nombre = u.Nombre,
                                      Apellido = u.Apellido,
                                      Usuario = u.UserName,
@@ -314,7 +314,7 @@ namespace ApotheGSF.Controllers
                                      ModificadoPor = x == null ? string.Empty : x.Nombre,
                                      CreadPor = x == null ? string.Empty : y.Nombre,
                                      Inactivo = u.Inactivo
-                                 }).Where(x => x.Id == id && x.Inactivo == false).FirstOrDefaultAsync();
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return NotFound();

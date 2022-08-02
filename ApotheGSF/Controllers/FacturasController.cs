@@ -94,7 +94,7 @@ namespace ApotheGSF.Controllers
             }
 
             //obtener listado de facturamedicamentocaja con facturaId == factura.codigo
-            List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.FacturaId == factura.Codigo).ToList();
+            List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.CodigoFactura == factura.Codigo).ToList();
             //crear listado de detalle
             List<MedicamentosDetalle> listaDetalle = new();
             //obtener listado de cajas
@@ -106,15 +106,15 @@ namespace ApotheGSF.Controllers
                 //crear un medicamentoDetalle con el primer elemento de facturasCajas
                 MedicamentosDetalle detalle = new MedicamentosDetalle()
                 {
-                    DetalleId = listaDetalle.Count,
-                    CajasId = new List<int>() { facturasCajas[0].CajaId },
+                    CodigoDetalle = listaDetalle.Count,
+                    CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
                     TipoCantidad = facturasCajas[0].TipoCantidad,
                     Cantidad = facturasCajas[0].CantidadUnidad,
                     Precio = facturasCajas[0].Precio
                 };
 
-                caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
-                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+                caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
 
                 //excluir ese elemento de facturasCajas
                 facturasCajas.RemoveAt(0);
@@ -122,14 +122,14 @@ namespace ApotheGSF.Controllers
                 //obtener el nombreMedicamento del primer elemento de facturasCajas si quedan otras facturasCajas
                 if (facturasCajas.Count > 0)
                 {
-                    caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
-                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+                    caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
 
                     //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
                     while (nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
                     {
                         //add(cajaId, cantidad)
-                        detalle.CajasId.Add(facturasCajas[0].CajaId);
+                        detalle.CodigosCajas.Add(facturasCajas[0].CodigoCaja);
                         detalle.Cantidad += facturasCajas[0].CantidadUnidad;
 
                         //excluir ese elemento de facturasCajas
@@ -162,7 +162,7 @@ namespace ApotheGSF.Controllers
                                           Codigo = meds.Codigo,
                                           Nombre = meds.Nombre,
                                           Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                       }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
@@ -196,10 +196,10 @@ namespace ApotheGSF.Controllers
                         if (detalle.TipoCantidad == 1)//si el detalle es tipo caja
                         {
                             //por cada cajaId
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 //obtener la caja del cajaId
-                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == cajaId).FirstOrDefault();
 
                                 //la cantidad de la caja es cero
                                 caja.CantidadUnidad = 0;
@@ -212,10 +212,10 @@ namespace ApotheGSF.Controllers
                             //se guarda en una variable la cantidad del detalle
                             var cantidadUsada = detalle.Cantidad;
                             //por cada cajaId
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 //obtener la caja del cajaId
-                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == cajaId).FirstOrDefault();
 
                                 //si la cantidad de la caja es mayor a la cantidad usada
                                 if (caja.CantidadUnidad > cantidadUsada)
@@ -258,11 +258,11 @@ namespace ApotheGSF.Controllers
 
                         if (detalle.TipoCantidad == 1)
                         {
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 facturaCaja = new()
                                 {
-                                    CajaId = cajaId,
+                                    CodigoCaja = cajaId,
                                     TipoCantidad = 1,
                                     CantidadUnidad = 1,
                                     Precio = detalle.Precio,
@@ -275,16 +275,16 @@ namespace ApotheGSF.Controllers
                         {
                             int cantidadUsada = detalle.Cantidad;
 
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 facturaCaja = new()
                                 {
-                                    CajaId = cajaId,
+                                    CodigoCaja = cajaId,
                                     TipoCantidad = 2,
                                     Precio = detalle.Precio,
                                 };
 
-                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == cajaId).FirstOrDefault();
 
                                 if (caja.CantidadUnidad > cantidadUsada)
                                 {
@@ -320,7 +320,7 @@ namespace ApotheGSF.Controllers
                                           Codigo = meds.Codigo,
                                           Nombre = meds.Nombre,
                                           Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                       }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
@@ -339,28 +339,28 @@ namespace ApotheGSF.Controllers
                 if (detalle.TipoCantidad == 1)//caja
                 {
                     //por cada cajaId del detalle
-                    for (int i = 0; i < detalle.CajasId.Count; i++)
+                    for (int i = 0; i < detalle.CodigosCajas.Count; i++)
                     {
                         //verificar si esta inactivo
-                        if (_context.MedicamentosCajas.Where(mc => mc.CajaId == detalle.CajasId[i]).FirstOrDefault().Inactivo)
+                        if (_context.MedicamentosCajas.Where(mc => mc.Codigo == detalle.CodigosCajas[i]).FirstOrDefault().Inactivo)
                         {
                             //obtener un listo con todos los detalles del mismo medicamento
                             List<MedicamentosDetalle> otrosMedicamentos = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == detalle.NombreMedicamento).ToList();
                             List<int> cajasOcupadas = new();
                             foreach (var otrosDetalle in otrosMedicamentos)
                             {
-                                cajasOcupadas.AddRange(otrosDetalle.CajasId);
+                                cajasOcupadas.AddRange(otrosDetalle.CodigosCajas);
                             }
                             //obtener un cajaId que no sea igual a algun cajaId del listado
                             int medicamentoId = _context.Medicamentos.Where(m => m.Nombre == detalle.NombreMedicamento).FirstOrDefault().Codigo;
-                            List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.MedicamentoId == medicamentoId && mc.Inactivo == false && mc.Detallada == false).ToList();
+                            List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamentoId && mc.Inactivo == false && mc.Detallada == false).ToList();
 
                             cajas = ExcluirCajas(cajas, cajasOcupadas);
 
                             if (cajas.Count > 0)
                             {
                                 //entonces remplazar el cajaId inactivo por el nuevo cajaId
-                                detalle.CajasId[i] = cajas.FirstOrDefault().CajaId;
+                                detalle.CodigosCajas[i] = cajas.FirstOrDefault().Codigo;
                             }
                             else
                             {
@@ -374,13 +374,13 @@ namespace ApotheGSF.Controllers
                 {
                     //obtiene la lista de cajas del medicamento que no esten inactivas
                     int medicamentoId = _context.Medicamentos.Where(m => m.Nombre == detalle.NombreMedicamento).FirstOrDefault().Codigo;
-                    List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.MedicamentoId == medicamentoId && mc.Inactivo == false).ToList();
+                    List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamentoId && mc.Inactivo == false).ToList();
 
                     //por cada cajaId del detalle
-                    for (int i = 0; i < detalle.CajasId.Count; i++)
+                    for (int i = 0; i < detalle.CodigosCajas.Count; i++)
                     {
                         //verificar si esta inactivo
-                        if (_context.MedicamentosCajas.Where(mc => mc.CajaId == detalle.CajasId[i]).FirstOrDefault().Inactivo)
+                        if (_context.MedicamentosCajas.Where(mc => mc.Codigo == detalle.CodigosCajas[i]).FirstOrDefault().Inactivo)
                         {
                             //int medicamentoId = _context.Medicamentos.Where(m => m.Nombre == detalle.NombreMedicamento).FirstOrDefault().Codigo;
                             //List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.MedicamentoId == medicamentoId && mc.Inactivo == false).ToList();
@@ -391,7 +391,7 @@ namespace ApotheGSF.Controllers
                             if (detalleCajas != null)
                             {
                                 //excluye las cajas del detalle en cajas
-                                cajas = ExcluirCajas(cajas, detalleCajas.CajasId);
+                                cajas = ExcluirCajas(cajas, detalleCajas.CodigosCajas);
                             }
 
                             List<int> nuevaCajas = new();
@@ -400,12 +400,12 @@ namespace ApotheGSF.Controllers
                             //agregar a nuevasCajas cajasId hasta que la cantidadUnidad de las cajas sea mayor o igual a la cantidad del detalle
                             for (int j = 0; j < cajas.Count; j++)
                             {
-                                nuevaCajas.Add(cajas[i].CajaId);
+                                nuevaCajas.Add(cajas[i].Codigo);
                                 cantidadUsar += cajas[i].CantidadUnidad;
 
                                 if (cantidadUsar >= detalle.Cantidad)
                                 {
-                                    detalle.CajasId = nuevaCajas;
+                                    detalle.CodigosCajas = nuevaCajas;
                                     break;
                                 }
                             }
@@ -435,12 +435,12 @@ namespace ApotheGSF.Controllers
                         //agregar a nuevasCajas cajasId hasta que la cantidadUnidad de las cajas sea mayor o igual a la cantidad del detalle
                         for (int j = 0; j < cajas.Count; j++)
                         {
-                            nuevaCajas.Add(cajas[j].CajaId);
+                            nuevaCajas.Add(cajas[j].Codigo);
                             cantidadUsar += cajas[j].CantidadUnidad;
 
                             if (cantidadUsar >= detalle.Cantidad)
                             {
-                                detalle.CajasId = nuevaCajas;
+                                detalle.CodigosCajas = nuevaCajas;
                                 break;
                             }
                         }
@@ -481,7 +481,7 @@ namespace ApotheGSF.Controllers
             }
 
             //obtener listado de facturamedicamentocaja con facturaId == factura.codigo
-            List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.FacturaId == factura.Codigo).ToList();
+            List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.CodigoFactura == factura.Codigo).ToList();
             //crear listado de detalle
             List<MedicamentosDetalle> listaDetalle = new();
             //obtener listado de cajas
@@ -493,15 +493,15 @@ namespace ApotheGSF.Controllers
                 //crear un medicamentoDetalle con el primer elemento de facturasCajas
                 MedicamentosDetalle detalle = new MedicamentosDetalle()
                 {
-                    DetalleId = listaDetalle.Count,
-                    CajasId = new List<int>() { facturasCajas[0].CajaId },
+                    CodigoDetalle = listaDetalle.Count,
+                    CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
                     TipoCantidad = facturasCajas[0].TipoCantidad,
                     Cantidad = facturasCajas[0].CantidadUnidad,
                     Precio = facturasCajas[0].Precio
                 };
 
-                caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
-                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+                caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
 
                 //excluir ese elemento de facturasCajas
                 facturasCajas.RemoveAt(0);
@@ -509,14 +509,14 @@ namespace ApotheGSF.Controllers
                 //obtener el nombreMedicamento del primer elemento de facturasCajas si quedan otras facturasCajas
                 if (facturasCajas.Count > 0)
                 {
-                    caja = cajas.Where(mc => mc.CajaId == facturasCajas[0].CajaId).FirstOrDefault();
-                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault().Nombre;
+                    caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
 
                     //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
                     while (nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
                     {
                         //add(cajaId, cantidad)
-                        detalle.CajasId.Add(facturasCajas[0].CajaId);
+                        detalle.CodigosCajas.Add(facturasCajas[0].CodigoCaja);
                         detalle.Cantidad += facturasCajas[0].CantidadUnidad;
 
                         //excluir ese elemento de facturasCajas
@@ -543,7 +543,7 @@ namespace ApotheGSF.Controllers
                                           Codigo = meds.Codigo,
                                           Nombre = meds.Nombre,
                                           Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                       }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
@@ -578,12 +578,12 @@ namespace ApotheGSF.Controllers
                     foreach (var facturaCaja in facturaAnterior.FacturasMedicamentosCajas)
                     {
                         //obtener la caja del cajaId
-                        MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == facturaCaja.CajaId).FirstOrDefault();
+                        MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == facturaCaja.CodigoCaja).FirstOrDefault();
 
                         if (facturaCaja.TipoCantidad == 1)//caja
                         {
                             //obtener el medicamento de la caja.MedicamentoId
-                            Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.MedicamentoId).FirstOrDefault();
+                            Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
 
                             caja.CantidadUnidad = medicamento.UnidadesCaja;
                         }
@@ -612,10 +612,10 @@ namespace ApotheGSF.Controllers
                         if (detalle.TipoCantidad == 1)//si el detalle es tipo caja
                         {
                             //por cada cajaId
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 //obtener la caja del cajaId
-                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == cajaId).FirstOrDefault();
 
                                 //la cantidad de la caja es cero
                                 caja.CantidadUnidad = 0;
@@ -628,10 +628,10 @@ namespace ApotheGSF.Controllers
                             //se guarda en una variable la cantidad del detalle
                             var cantidadUsada = detalle.Cantidad;
                             //por cada cajaId
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 //obtener la caja del cajaId
-                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == cajaId).FirstOrDefault();
 
                                 //si la cantidad de la caja es mayor a la cantidad usada
                                 if (caja.CantidadUnidad > cantidadUsada)
@@ -674,11 +674,11 @@ namespace ApotheGSF.Controllers
 
                         if (detalle.TipoCantidad == 1)
                         {
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 facturaCaja = new()
                                 {
-                                    CajaId = cajaId,
+                                    CodigoCaja = cajaId,
                                     TipoCantidad = 1,
                                     CantidadUnidad = 1,
                                     Precio = detalle.Precio,
@@ -691,16 +691,16 @@ namespace ApotheGSF.Controllers
                         {
                             int cantidadUsada = detalle.Cantidad;
 
-                            foreach (var cajaId in detalle.CajasId)
+                            foreach (var cajaId in detalle.CodigosCajas)
                             {
                                 facturaCaja = new()
                                 {
-                                    CajaId = cajaId,
+                                    CodigoCaja = cajaId,
                                     TipoCantidad = 2,
                                     Precio = detalle.Precio,
                                 };
 
-                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.CajaId == cajaId).FirstOrDefault();
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == cajaId).FirstOrDefault();
 
                                 if (caja.CantidadUnidad > cantidadUsada)
                                 {
@@ -737,7 +737,7 @@ namespace ApotheGSF.Controllers
                                           Codigo = meds.Codigo,
                                           Nombre = meds.Nombre,
                                           Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count
+                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                       }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
@@ -815,11 +815,11 @@ namespace ApotheGSF.Controllers
                 //cajasUsar = a las cajas usadas por el medicamento con el mismo tipoMedicamento
                 var detalleUsar = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == TipoCantidad).FirstOrDefault();
                 if (detalleUsar != null)
-                    cajasUsar = detalleUsar.CajasId.ToList();
+                    cajasUsar = detalleUsar.CodigosCajas.ToList();
                 //cajasUsadas = a las cajas usadas por el medicamento con diferente tipoMedicamento
                 var detalleUsadas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad != TipoCantidad).FirstOrDefault();
                 if (detalleUsadas != null)
-                    cajasUsadas = detalleUsadas.CajasId.ToList();
+                    cajasUsadas = detalleUsadas.CodigosCajas.ToList();
 
                 if (TipoCantidad == 1)//cajas
                 {
@@ -857,7 +857,7 @@ namespace ApotheGSF.Controllers
                 CajasSinDetallar = ExcluirCajas(CajasSinDetallar, cajasUsar);
 
                 //obtener el detalle Id de la caja
-                detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().DetalleId;
+                detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
 
                 existente = true;
             }
@@ -875,7 +875,7 @@ namespace ApotheGSF.Controllers
 
             for (int i = 0; i < cantidad; i++)
             {
-                cajasUsar.Add(CajasSinDetallar[i].CajaId);
+                cajasUsar.Add(CajasSinDetallar[i].Codigo);
             }
 
             viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
@@ -905,7 +905,7 @@ namespace ApotheGSF.Controllers
                 //obtener el detalle Id de la caja
                 if (cajasUsadas != null)
                 {
-                    detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().DetalleId;
+                    detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
                 }
 
                 //se invierte cajasUsar y cajasUsadas porque se cambiar el tipo de agregar
@@ -918,7 +918,7 @@ namespace ApotheGSF.Controllers
                 //poner como cajas usadas las del viewModel
                 var detalleNuevo = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault();
                 if (detalleNuevo != null)
-                    cajasUsadas = detalleNuevo.CajasId;
+                    cajasUsadas = detalleNuevo.CodigosCajas;
             }
 
             //si se agregaron cajas y ya no quedan unidades que agregar
@@ -943,7 +943,7 @@ namespace ApotheGSF.Controllers
                     //obtener el detalle Id de la caja
                     if (cajasUsadas != null)
                     {
-                        detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().DetalleId;
+                        detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
                     }
 
                     //se agregar otra caja
@@ -951,18 +951,18 @@ namespace ApotheGSF.Controllers
                     viewModel = AgregarCaja(viewModel, medicamento, 1, 1, cajasUsadas, cajasUsar, existente, detalleId).viewModel;
 
                     //se eliminar el detalle anterior
-                    viewModel.MedicamentosDetalle.RemoveAt(detalleAnterior.DetalleId);
+                    viewModel.MedicamentosDetalle.RemoveAt(detalleAnterior.CodigoDetalle);
 
                     //Para que los detallesId que estaban despues del elemento eleminado no pierdan continuidad
-                    for (int i = detalleAnterior.DetalleId; i < viewModel.MedicamentosDetalle.Count; i++)
+                    for (int i = detalleAnterior.CodigoDetalle; i < viewModel.MedicamentosDetalle.Count; i++)
                     {
-                        viewModel.MedicamentosDetalle[i].DetalleId = i;
+                        viewModel.MedicamentosDetalle[i].CodigoDetalle = i;
                     }
                 }
                 //para que se modifique el mismo detalle
-                detalleId = detalleAnterior.DetalleId;
+                detalleId = detalleAnterior.CodigoDetalle;
                 //obtener ultima caja del detalle anterior
-                MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.CajaId == detalleAnterior.CajasId.Last()).FirstOrDefault();
+                MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.Codigo == detalleAnterior.CodigosCajas.Last()).FirstOrDefault();
                 //cantidadUsar = cantidad caja - cantidad del detalle anterior
                 cantidadUsar = ultimaCaja.CantidadUnidad - detalleAnterior.Cantidad;
             }
@@ -974,7 +974,7 @@ namespace ApotheGSF.Controllers
 
                 if (cajaDetallada != null)
                 {
-                    cajasUsar.Add(cajaDetallada.CajaId);
+                    cajasUsar.Add(cajaDetallada.Codigo);
                     cantidadUsar += cajaDetallada.CantidadUnidad;
 
                     cajas.Remove(cajaDetallada);
@@ -1001,7 +1001,7 @@ namespace ApotheGSF.Controllers
             //si la cantidad que se pide es mayor a la que se usara
             for (int i = 0; i < cajas.Count; i++)
             {
-                cajasUsar.Add(cajas[i].CajaId);
+                cajasUsar.Add(cajas[i].Codigo);
                 cantidadUsar += cajas[i].CantidadUnidad;
 
                 if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
@@ -1018,7 +1018,7 @@ namespace ApotheGSF.Controllers
         {
             if (existente == true)
             {
-                viewModel.MedicamentosDetalle[detalleId].CajasId = cajasUsar;
+                viewModel.MedicamentosDetalle[detalleId].CodigosCajas = cajasUsar;
                 viewModel.MedicamentosDetalle[detalleId].Cantidad += cantidad;
                 viewModel.MedicamentosDetalle[detalleId].Total = viewModel.MedicamentosDetalle[detalleId].Precio * viewModel.MedicamentosDetalle[detalleId].Cantidad;
             }
@@ -1026,8 +1026,8 @@ namespace ApotheGSF.Controllers
             {
                 MedicamentosDetalle detalle = new()
                 {
-                    DetalleId = viewModel.MedicamentosDetalle.Count(),
-                    CajasId = cajasUsar,
+                    CodigoDetalle = viewModel.MedicamentosDetalle.Count(),
+                    CodigosCajas = cajasUsar,
                     NombreMedicamento = medicamento.Nombre,
                     TipoCantidad = tipoCantidad,
                     Cantidad = cantidad,
@@ -1049,7 +1049,7 @@ namespace ApotheGSF.Controllers
         {
             for (int i = 0; i < cajas.Count; i++)
             {
-                if (cajasExcluir.Contains(cajas[i].CajaId))
+                if (cajasExcluir.Contains(cajas[i].Codigo))
                 {
                     cajas.Remove(cajas[i]);
                     i--;
@@ -1096,7 +1096,7 @@ namespace ApotheGSF.Controllers
             //Para que los detallesId que estaban despues del elemento eleminado no pierdan continuidad
             for (int i = RemoverId; i < viewModel.MedicamentosDetalle.Count; i++)
             {
-                viewModel.MedicamentosDetalle[i].DetalleId = i;
+                viewModel.MedicamentosDetalle[i].CodigoDetalle = i;
             }
 
             return Json(GenerarPartialView(false, "", viewModel));

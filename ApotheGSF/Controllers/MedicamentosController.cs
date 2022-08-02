@@ -59,7 +59,7 @@ namespace ApotheGSF.Controllers
                                      Indicaciones = meds.Indicaciones,
                                      Dosis = meds.Dosis,
                                      Inactivo = (bool)meds.Inactivo,
-                                     Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo && m.Inactivo == false).ToList().Count,
+                                     Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo && m.Inactivo == false).ToList().Count,
 
                                      NombreProveedor = string.Join(", ",
                                      (from p in _context.Proveedores
@@ -71,8 +71,8 @@ namespace ApotheGSF.Controllers
                                           MedicamentosId = meds.Codigo
                                       } equals new
                                       {
-                                          ProveedoresId = provMed.ProveedoresId,
-                                          MedicamentosId = provMed.MedicamentosId
+                                          ProveedoresId = provMed.CodigoProveedor,
+                                          MedicamentosId = provMed.CodigoMedicamento
                                       }
                                       select new Proveedores
                                       {
@@ -141,8 +141,8 @@ namespace ApotheGSF.Controllers
                                               MedicamentosId = meds.Codigo
                                           } equals new
                                           {
-                                              ProveedoresId = provMed.ProveedoresId,
-                                              MedicamentosId = provMed.MedicamentosId
+                                              ProveedoresId = provMed.CodigoProveedor,
+                                              MedicamentosId = provMed.CodigoMedicamento
                                           }
                                           select new Proveedores
                                           {
@@ -157,7 +157,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.MedicamentoId == medicamento.Codigo && m.Inactivo == false).ToList();
+            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.Inactivo == false).ToList();
             return View(medicamento);
         }
 
@@ -200,11 +200,11 @@ namespace ApotheGSF.Controllers
 
                 _context.Medicamentos.Add(newMedicamentos);
 
-                foreach (var item in viewModel.ProveedoresId)
+                foreach (var item in viewModel.CodigosProveedores)
                 {
                     ProveedorMedicamentos proveedorMedicamentos = new()
                     {
-                        ProveedoresId = item
+                        CodigoProveedor = item
 
                     };
 
@@ -248,14 +248,14 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            medicamentos.ProveedoresId = await (from provMeds in _context.ProveedoresMedicamentos
-                                               .Where(x => x.MedicamentosId == medicamentos.Codigo)
+            medicamentos.CodigosProveedores = await (from provMeds in _context.ProveedoresMedicamentos
+                                               .Where(x => x.CodigoMedicamento == medicamentos.Codigo)
                                                .AsNoTracking()
                                                 join proveedores in _context.Proveedores on provMeds
-                                               .ProveedoresId equals proveedores.Codigo
+                                               .CodigoProveedor equals proveedores.Codigo
                                                 select proveedores.Codigo).ToListAsync();
 
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", medicamentos.ProveedoresId);
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", medicamentos.CodigosProveedores);
 
             return View(medicamentos);
         }
@@ -297,19 +297,19 @@ namespace ApotheGSF.Controllers
 
                     foreach (var proveedor in editmedicamento.ProveedoresMedicamentos.ToList())
                     {
-                        if (!viewModel.ProveedoresId.Contains(proveedor.ProveedoresId))
+                        if (!viewModel.CodigosProveedores.Contains(proveedor.CodigoProveedor))
                         {
                             editmedicamento.ProveedoresMedicamentos.Remove(proveedor);
                         }
                     }
 
-                    foreach (var newProveedorId in viewModel.ProveedoresId)
+                    foreach (var newProveedorId in viewModel.CodigosProveedores)
                     {
-                        if (!editmedicamento.ProveedoresMedicamentos.Any(x => x.ProveedoresId == newProveedorId))
+                        if (!editmedicamento.ProveedoresMedicamentos.Any(x => x.CodigoProveedor == newProveedorId))
                         {
                             var nuevoProv = new ProveedorMedicamentos
                             {
-                                ProveedoresId = newProveedorId
+                                CodigoProveedor = newProveedorId
 
                             };
                             editmedicamento.ProveedoresMedicamentos.Add(nuevoProv);
@@ -332,7 +332,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", viewModel.ProveedoresId);
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);
         }
 
@@ -362,7 +362,7 @@ namespace ApotheGSF.Controllers
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
                                          Dosis = meds.Dosis,
-                                         Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count,
+                                         Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
 
                                          NombreProveedor = string.Join(", ",
                                          (from p in _context.Proveedores
@@ -374,8 +374,8 @@ namespace ApotheGSF.Controllers
                                               MedicamentosId = meds.Codigo
                                           } equals new
                                           {
-                                              ProveedoresId = provMed.ProveedoresId,
-                                              MedicamentosId = provMed.MedicamentosId
+                                              ProveedoresId = provMed.CodigoProveedor,
+                                              MedicamentosId = provMed.CodigoMedicamento
                                           }
                                           select new Proveedores
                                           {
@@ -449,7 +449,7 @@ namespace ApotheGSF.Controllers
                                                                   Indicaciones = meds.Indicaciones,
                                                                   Dosis = meds.Dosis,
                                                                   Inactivo = (bool)meds.Inactivo,
-                                                                  Cajas = _context.MedicamentosCajas.Where(m => m.MedicamentoId == meds.Codigo).ToList().Count,
+                                                                  Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
 
                                                                   NombreProveedor = string.Join(", ",
                                                                   (from p in _context.Proveedores
@@ -461,8 +461,8 @@ namespace ApotheGSF.Controllers
                                                                        MedicamentosId = meds.Codigo
                                                                    } equals new
                                                                    {
-                                                                       ProveedoresId = provMed.ProveedoresId,
-                                                                       MedicamentosId = provMed.MedicamentosId
+                                                                       ProveedoresId = provMed.CodigoProveedor,
+                                                                       MedicamentosId = provMed.CodigoMedicamento
                                                                    }
                                                                    select new Proveedores
                                                                    {

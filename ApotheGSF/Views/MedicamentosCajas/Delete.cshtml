@@ -50,13 +50,13 @@
             <form asp-action="Delete">
                 <div class="row">
                     <div class="col-sm-4">
-                        <input type="hidden" asp-for="CajaId" />
+                        <input type="hidden" asp-for="CodigoCaja" />
                     </div>
                     <div class="col-sm-4 text-center">
                         <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>
                     </div>
                     <div class="col-sm-4 text-end">
-                        <a href="@Url.Action("Details", "Medicamentos", new { id = Model.MedicamentoId})" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                        <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
                     </div>
                 </div>
             </form>

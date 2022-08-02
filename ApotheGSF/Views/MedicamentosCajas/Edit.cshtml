@@ -63,14 +63,14 @@
                     <div class="card-footer" style="background-color:#994400;">
                         <div class="row">
                             <div class="col-sm-4">
-                                <input type="hidden" asp-for="MedicamentoId" />
-                                <input type="hidden" asp-for="CajaId" />
+                                <input type="hidden" asp-for="CodigoMedicamento" />
+                                <input type="hidden" asp-for="Codigo" />
                             </div>
                             <div class="col-sm-4 text-center">
                                 <button type="submit" value="Modificar" class="btn" style="background-color:#008F00;color:white;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
                             </div>
                             <div class="col-sm-4 text-end">
-                                <a href="@Url.Action("Details", "Medicamentos", new { id = Model.MedicamentoId})" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                                <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
                             </div>
                         </div>
                     </div>

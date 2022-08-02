@@ -13,10 +13,10 @@
         <div class="card-body">
             <dl class="row">
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Id)
+                    @Html.DisplayNameFor(model => model.Codigo)
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Id)
+                    @Html.DisplayFor(model => model.Codigo)
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Nombre)
@@ -79,7 +79,7 @@
             <form asp-action="Delete">
                 <div class="row">
                     <div class="col-sm-4">
-                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Codigo" />
                     </div>
                     <div class="col-sm-4 text-center">
                         <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>

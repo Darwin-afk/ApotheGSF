@@ -4,7 +4,7 @@ namespace ApotheGSF.ViewModels
 {
     public class PerfilUsuarioViewModel
     {
-		public int Id { get; set; }
+		public int Codigo { get; set; }
 
 		[Required(ErrorMessage = "Digite el nombre del usuario.")]
 		[MaxLength(50)]

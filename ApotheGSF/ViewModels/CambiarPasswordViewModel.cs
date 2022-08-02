@@ -5,8 +5,8 @@ namespace ApotheGSF.ViewModels
     public class CambiarPasswordViewModel
     {
 		[Required]
-		[Display(Name = "ID")]
-		public int UsuarioId { get; set; }
+		[Display(Name = "Codigo")]
+		public int CodigoUsuario { get; set; }
 		public string Nombre { get; set; }
 		public string Apellido { get; set; }
 

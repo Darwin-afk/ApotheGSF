@@ -130,7 +130,7 @@ namespace ApotheGSF.Controllers
             CambiarPasswordViewModel model = new CambiarPasswordViewModel
             {
                 Nombre = user.Nombre,
-                UsuarioId = Convert.ToInt32(_user.GetUserID())
+                CodigoUsuario = Convert.ToInt32(_user.GetUserID())
             };
 
             return View(model);
@@ -210,7 +210,7 @@ namespace ApotheGSF.Controllers
         {
             //Valida que si se cambia el correo no exista otro usuario con el mismo asignado.
             var u = await _userManager.FindByEmailAsync(modelo.Email); //No se puede registrar el mismo correo en el sistema dos veces, no importa la Org.
-            if (u != null && u.Id != modelo.Id)
+            if (u != null && u.Id != modelo.Codigo)
             {
                 ModelState.AddModelError("", string.Format("El correo {0} ya está registrado.", modelo.Email));
             }
@@ -223,7 +223,7 @@ namespace ApotheGSF.Controllers
             ModelState.Remove("Foto");
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByIdAsync(modelo.Id.ToString());
+                var user = await _userManager.FindByIdAsync(modelo.Codigo.ToString());
                 if (user != null)
                 {
                     if (removeLogo.Equals("1") || logo != null)

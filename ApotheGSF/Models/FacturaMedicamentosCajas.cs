@@ -13,7 +13,7 @@ namespace ApotheGSF.Models
         public virtual MedicamentosCajas? MedicamentosCajas { get; set; }
         public int TipoCantidad { get; set; }//1: caja, 2: unidad
         public int CantidadUnidad { get; set; }
-        public float Precio { get; set; }
+        public int Precio { get; set; }
 
 
     }

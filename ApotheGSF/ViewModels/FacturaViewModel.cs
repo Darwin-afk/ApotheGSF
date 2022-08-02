@@ -11,9 +11,9 @@ namespace ApotheGSF.ViewModels
         public float Total { get; set; }
         public List<MedicamentosDetalle> MedicamentosDetalle { get; set; }
         public DateTime? Creado { get; set; }
-        public int? CreadoId { get; set; }
+        public string? CreadoNombreUsuario { get; set; }
         public DateTime? Modificado { get; set; }
-        public int? ModificadoId { get; set; }
+        public string? ModificadoNombreUsuario { get; set; }
         public bool? Inactivo { get; set; }
 
         public FacturaViewModel()

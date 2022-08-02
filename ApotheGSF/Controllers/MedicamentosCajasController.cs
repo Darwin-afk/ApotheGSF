@@ -30,17 +30,17 @@ namespace ApotheGSF.Controllers
             var medicamentosCajas = await (from mc in _context.MedicamentosCajas
                                            .AsNoTracking()
                                            .AsQueryable()
-                                           join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
+                                           join m in _context.Medicamentos on mc.CodigoMedicamento equals m.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
-                                               CajaId = mc.CajaId,
-                                               MedicamentoId = mc.MedicamentoId,
+                                               CodigoCaja = mc.Codigo,
+                                               CodigoMedicamento = mc.CodigoMedicamento,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
                                                FechaVencimiento = mc.FechaVencimiento,
                                                Detallada = mc.Detallada
-                                           }).Where(x => x.CajaId == id).FirstOrDefaultAsync();
+                                           }).Where(x => x.CodigoCaja == id).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)
             {
@@ -66,17 +66,17 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
-                var unidades = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
+                var unidades = await _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento)
                                                                             .Select(m => m.UnidadesCaja)
                                                                             .FirstOrDefaultAsync();
 
                 for (int i = 0; i < viewModel.Cajas; i++)
                 {
                     MedicamentosCajas medicamentoCaja = new();
-                    medicamentoCaja.CantidadUnidad = await _context.Medicamentos.Where(m => m.Codigo == viewModel.MedicamentoId)
+                    medicamentoCaja.CantidadUnidad = await _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento)
                                                                                 .Select(m => m.UnidadesCaja)
                                                                                 .FirstOrDefaultAsync();
-                    medicamentoCaja.MedicamentoId = viewModel.MedicamentoId;
+                    medicamentoCaja.CodigoMedicamento = viewModel.CodigoMedicamento;
                     medicamentoCaja.FechaAdquirido = viewModel.FechaAdquirido;
                     medicamentoCaja.FechaVencimiento = viewModel.FechaVencimiento;
                     medicamentoCaja.Detallada = false;
@@ -106,7 +106,7 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-            ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault().Nombre;
+            ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
 
             return View(medicamentosCajas);
         }
@@ -118,13 +118,13 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CajaId,MedicamentoId,CantidadUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajas medicamentosCajas)
         {
-            if (id != medicamentosCajas.CajaId)
+            if (id != medicamentosCajas.Codigo)
             {
                 return NotFound();
             }
 
             //obtener el medicamento de la caja
-            Medicamentos medicamento = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault();
+            Medicamentos medicamento = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault();
             //si cantidadUnidad es mayor  unidadesCaja del medicamento se regresa el error
             if (medicamentosCajas.CantidadUnidad > medicamento.UnidadesCaja)
             {
@@ -140,12 +140,12 @@ namespace ApotheGSF.Controllers
                     _context.Update(medicamentosCajas);
                     _context.Entry(medicamentosCajas).Property(m => m.Detallada).IsModified = false;
                     _context.Entry(medicamentosCajas).Property(m => m.Inactivo).IsModified = false;
-                    _context.Entry(medicamentosCajas).Property(m => m.MedicamentoId).IsModified = false;
+                    _context.Entry(medicamentosCajas).Property(m => m.CodigoMedicamento).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MedicamentosCajasExists(medicamentosCajas.CajaId))
+                    if (!MedicamentosCajasExists(medicamentosCajas.Codigo))
                     {
                         return NotFound();
                     }
@@ -154,9 +154,9 @@ namespace ApotheGSF.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.MedicamentoId });
+                return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
             }
-            ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.MedicamentoId).FirstOrDefault().Nombre;
+            ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
             return View(medicamentosCajas);
         }
 
@@ -171,17 +171,17 @@ namespace ApotheGSF.Controllers
             var medicamentosCajas = await (from mc in _context.MedicamentosCajas
                                            .AsNoTracking()
                                            .AsQueryable()
-                                           join m in _context.Medicamentos on mc.MedicamentoId equals m.Codigo
+                                           join m in _context.Medicamentos on mc.CodigoMedicamento equals m.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
-                                               CajaId = mc.CajaId,
-                                               MedicamentoId = mc.MedicamentoId,
+                                               CodigoCaja = mc.Codigo,
+                                               CodigoMedicamento = mc.CodigoMedicamento,
                                                NombreMedicamento = m.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
                                                FechaVencimiento = mc.FechaVencimiento,
                                                Detallada = mc.Detallada
-                                           }).Where(x => x.CajaId == id).FirstOrDefaultAsync();
+                                           }).Where(x => x.CodigoCaja == id).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)
             {
@@ -208,12 +208,12 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.MedicamentoId });
+            return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
         }
 
         private bool MedicamentosCajasExists(int id)
         {
-            return (_context.MedicamentosCajas?.Any(e => e.CajaId == id)).GetValueOrDefault();
+            return (_context.MedicamentosCajas?.Any(e => e.Codigo == id)).GetValueOrDefault();
         }
     }
 }

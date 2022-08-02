@@ -24,7 +24,7 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Dosis { get; set; }
 
-        public List<int>? ProveedoresId { get; set; }
+        public List<int>? CodigosProveedores { get; set; }
         public string? NombreProveedor { get; set; }
         public int Cajas { get; set; }
 

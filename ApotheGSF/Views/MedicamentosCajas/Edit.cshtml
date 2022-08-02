@@ -67,10 +67,10 @@
                                 <input type="hidden" asp-for="Codigo" />
                             </div>
                             <div class="col-sm-4 text-center">
-                                <button type="submit" value="Modificar" class="btn" style="background-color:#008F00;color:white;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+                                <button type="submit" value="Modificar" class="btn" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Actualizar</button>
                             </div>
                             <div class="col-sm-4 text-end">
-                                <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn btn-danger"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                                <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
                             </div>
                         </div>
                     </div>

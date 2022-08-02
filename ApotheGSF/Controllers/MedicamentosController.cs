@@ -164,7 +164,7 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre");
+            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre");
             return View();
         }
 
@@ -173,7 +173,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,UnidadesCaja,Costo,PrecioUnidad,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,UnidadesCaja,Costo,PrecioUnidad,Indicaciones,Dosis,CodigosProveedores")] MedicamentosViewModel viewModel)
         {
             ModelState.Remove("NombreProveedor");
 

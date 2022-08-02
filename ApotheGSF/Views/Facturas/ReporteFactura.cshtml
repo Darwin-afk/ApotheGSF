@@ -1,0 +1,86 @@
+﻿@model ApotheGSF.ViewModels.FacturaViewModel
+
+@{
+    int i = 1;
+}
+
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Codigo)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Codigo)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.SubTotal)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.SubTotal)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Total)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Total)
+    </dd>
+</dl>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Nombre Medicamento
+            </th>
+            <th>
+                Tipo Cantidad
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Precio
+            </th>
+            <th>
+                Total
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MedicamentosDetalle)
+        {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @item.NombreMedicamento
+                </td>
+                <td>
+                    @if (item.TipoCantidad == 1)
+                    {
+                        @:Cajas
+                    }
+                    else
+                    {
+                        @:Unidades
+                    }
+                </td>
+                <td>
+                    @item.Cantidad
+                </td>
+                <td>
+                    @item.Precio
+                </td>
+                <td>
+                    @item.Total
+                </td>
+            </tr>
+            i = i + 1;
+        }
+    </tbody>
+</table>
+

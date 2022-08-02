@@ -62,7 +62,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MedicamentoId,Cajas,FechaAdquirido,FechaVencimiento")] MedicamentosCajasViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("CodigoMedicamento,Cajas,FechaAdquirido,FechaVencimiento")] MedicamentosCajasViewModel viewModel)
         {
             if (ModelState.IsValid)
             {

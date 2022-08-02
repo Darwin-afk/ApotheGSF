@@ -178,6 +178,8 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
+            //return true;
+
             string error = VerificarInventario(ref viewModel);
 
             //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
@@ -1130,6 +1132,11 @@ namespace ApotheGSF.Controllers
             List<Facturas> facturas = await _context.Facturas.Where(filtro.ToString()).ToListAsync();
 
             return new ViewAsPdf("ReporteFacturas", facturas);
+        }
+
+        public IActionResult ReporteFactura(FacturaViewModel factura)
+        {
+            return new ViewAsPdf("ReporteFactura", factura);
         }
     }
 }

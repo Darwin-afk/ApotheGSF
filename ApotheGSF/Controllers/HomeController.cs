@@ -107,7 +107,7 @@ namespace ApotheGSF.Controllers
                 if(medicamento.MedicamentosCajas.Count < 20)
                 {
                     //se agrega una notificacion de reabastecimiento
-                    Notificaciones.Mensajes.Add($"{medicamento.Nombre} le queda poca mercancia, desea solicitar mas");
+                    Notificaciones.Mensajes.Add($"{medicamento.Nombre} le queda poca mercancia, desea <a href=\"http://www.example.com\">solicitar mas</a>");
                 }
             }
 

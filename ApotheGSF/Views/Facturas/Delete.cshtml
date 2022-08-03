@@ -45,9 +45,6 @@
                     </tr>
                 </thead>
                 <tbody>
-@*
-                    RLIPRAX Information: Reemplazar Model.MedicamentosDetalle por un ViewBag, para poder mostrarlos.
-
                     @foreach (var item in Model.MedicamentosDetalle)
                     {
                         <tr>
@@ -78,7 +75,7 @@
                             </td>
                         </tr>
                         i = i + 1;
-                    }*@
+                    }
                 </tbody>
             </table>
             <hr />
@@ -99,7 +96,7 @@
         </div>
 
         <div class="card-footer" style="background-color:#E8E8E8">
-            <form asp-action="Details">
+            <form asp-action="Delete">
                 <div class="row">
                     <div class="col-sm-4">
                         <input type="hidden" asp-for="Codigo" />

@@ -94,6 +94,24 @@
                                 <li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Index"><i class="fa-solid fa-list-check" style="color:#990000;"></i>&nbsp;Facturas</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item dropdown drop1">
+                            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge badge-danger navbar-badge">@Notificaciones.Mensajes.Count</span>
+                            </a>
+                            <div class="dropdown-menu menu1 dropmenuScroll" aria-labelledby="navbarDropdownMenuLink">
+                                @foreach (var mensaje in Notificaciones.Mensajes)
+                                {
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <p>@mensaje</p>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                }
+                                <a href="#" class="dropdown-item dropdown-footer">Ver Todas</a>
+                            </div>
+                        </li>
                         @*
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

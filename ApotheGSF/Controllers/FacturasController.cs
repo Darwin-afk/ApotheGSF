@@ -758,19 +758,29 @@ namespace ApotheGSF.Controllers
         // GET: Facturas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            /*
+
             if (id == null || _context.Facturas == null)
             {
                 return NotFound();
             }
 
-            var factura = await _context.Facturas
-                .FirstOrDefaultAsync(m => m.Codigo == id);
+            var factura = await (from f in _context.Facturas
+                               .AsNoTracking()
+                               .AsQueryable()
+                                 select new FacturaViewModel
+                                 {
+                                     Codigo = f.Codigo,
+                                     SubTotal = f.SubTotal,
+                                     Total = f.Total,
+                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+
             if (factura == null)
             {
                 return NotFound();
             }
-            */
+
+            factura.MedicamentosDetalle = ObtenerDetalles(factura);
+
             return View();
         }
 

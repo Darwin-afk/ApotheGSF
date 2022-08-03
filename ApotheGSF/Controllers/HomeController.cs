@@ -36,7 +36,27 @@ namespace ApotheGSF.Controllers
 
         public IActionResult Index()
         {
+            VerificarInventario();
+
             return View();
+        }
+
+        private bool VerificarInventario()
+        {
+            Notificaciones.Mensajes = new List<string>();
+            
+            //obtener cada medicamento con su cajas incluidas
+            //por cada medicamento
+                //verificar la diferencia de su fecha de vencimiento con la fecha actual
+                //si es igual a cero se inactiva
+                //si es menor que x cantidad de dias
+                    //se agregar a notificaciones
+            //obtener de nuevo cada medicamento con su cajas incluidas por si hubo cajas que se desactivaron
+            //por cada medicamento
+                //si su cantidad de cajas es menor x limite
+                    //se agrega una notificacion de reabastecimiento
+
+            return true;
         }
 
         public IActionResult Privacy()

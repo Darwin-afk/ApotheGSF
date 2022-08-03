@@ -125,10 +125,10 @@
                         <!--Fin datos-->
                     </div>
                     <div class="card-footer text-center" style="background-color:#00CC66 ;">
-                        <input type="hidden" asp-for="Codigo"></input>
+                        <input type="hidden" asp-for="Codigo"/>
                         <!--Botones-->
-                        <button class="btn" type="submit" style="background-color:#008F00;color:white;"><i class="fas fa-save"></i>&nbsp;Moficar</button>
-                        <a class="btn btn-danger" asp-controller="Home" asp-action="Index" type="button"><i class="fas fa-times"></i>&nbsp;Cerrar</a>
+                        <button class="btn" type="submit" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Actualizar</button>
+                        <a class="btn" asp-controller="Home" style="background-color:white;color:red;" asp-action="Index" type="button"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
                         <!--Fin Botones-->
                     </div>
                 </div>

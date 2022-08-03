@@ -17,16 +17,17 @@
 <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-6">
     <div class="card">
         <form asp-action="PerfilUsuario" enctype="multipart/form-data">
-            <div class="card-header text-center" style="background-color:#002299;">
+            <div class="card-header text-center" style="background-color:#009090;">
                 <h3 class="box-title" style="color:white;">@titulo</h3>
                 <center>
                     <div class="row">
                         <div class="form-group col-md-12" style="color:white;">
                             <img id="preview" src="@Url.Content(fotoUrl)" width="250" height="230" />
                             <br />
+                            <br/>
                             <input type="file" id="logo" name="logo" style="display: none;" />
-                            <button class="btn btn-primary" href="javascript:changeLogo();">Cambiar</button> |
-                            <button class="btn btn-danger" href="javascript:removeImage('@Url.Content(appSettings.Value.UserSinFoto)');">Eliminar</button>
+                            <button class="btn" style="background-color:white;color:blue;" href="javascript:changeLogo();">Cambiar</button> |
+                            <button class="btn" style="background-color:white;color:red;" href="javascript:removeImage('@Url.Content(appSettings.Value.UserSinFoto)');">Eliminar</button>
                             <input type="hidden" style="display: none" value="0" name="removeLogo" id="removeLogo">
 
                         </div>
@@ -77,8 +78,8 @@
                 </div>
 
             </div> <!-- box body -->
-            <div class="card-footer text-center" style="background-color:#002299;">
-                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+            <div class="card-footer text-center" style="background-color:#009090;">
+                <button type="submit" class="btn" style="background-color:white;color:#007000;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
             </div>
         </form>
     </div>

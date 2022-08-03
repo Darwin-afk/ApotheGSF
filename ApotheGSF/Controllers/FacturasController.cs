@@ -781,7 +781,7 @@ namespace ApotheGSF.Controllers
 
             factura.MedicamentosDetalle = ObtenerDetalles(factura);
 
-            return View();
+            return View(factura);
         }
 
         // POST: Facturas/Delete/5

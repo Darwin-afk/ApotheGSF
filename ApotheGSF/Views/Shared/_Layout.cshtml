@@ -95,11 +95,11 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown drop1">
-                            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link" href="#" data-toggle="dropdown">
                                 <i class="fas fa-bell"></i>
                                 <span class="badge badge-danger navbar-badge">@Notificaciones.Mensajes.Count</span>
                             </a>
-                            <div class="dropdown-menu menu1 dropmenuScroll" aria-labelledby="navbarDropdownMenuLink">
+                            <ul class="dropdown-menu menu1 dropmenuScroll">
                                 @foreach (var mensaje in Notificaciones.Mensajes)
                                 {
                                     <div class="media">
@@ -110,7 +110,7 @@
                                     <div class="dropdown-divider"></div>
                                 }
                                 <a href="#" class="dropdown-item dropdown-footer">Ver Todas</a>
-                            </div>
+                            </ul>
                         </li>
                         @*
                         <li class="nav-item dropdown">
@@ -150,7 +150,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>        
+        </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -175,6 +175,27 @@
         $(document).ready(function() {
             $('.select2').select2();
         });
+    </script>
+
+    <script>
+        //al presionar el boton se mostrar y si se presiona de nuevo se quitara
+        function Abrir() {
+            document.getElementById("dropDownNotificaciones").classList.toggle("show");
+        }
+
+        // cierra el dropdown si se presiona en otro lado
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

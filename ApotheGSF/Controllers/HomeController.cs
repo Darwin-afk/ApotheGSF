@@ -4,6 +4,7 @@ using ApotheGSF.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -18,13 +19,15 @@ namespace ApotheGSF.Controllers
         private readonly ClaimsPrincipal _user;
         private readonly string webRoot;
         private readonly IOptions<AppSettings> appSettings;
+        private readonly AppDbContext _context;
 
         public HomeController(ILogger<HomeController> logger,
                               SignInManager<AppUsuario> signInManager,
                               UserManager<AppUsuario> userManager,
                               IHttpContextAccessor accessor,
                               IWebHostEnvironment env,
-                              IOptions<AppSettings> _appSettings)
+                              IOptions<AppSettings> _appSettings,
+                              AppDbContext context)
         {
             _logger = logger;
             _signInManager = signInManager;
@@ -32,10 +35,15 @@ namespace ApotheGSF.Controllers
             _user = accessor.HttpContext.User;
             webRoot = env.WebRootPath;
             appSettings = _appSettings;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            //Notificaciones.Mensajes = new List<string>();
+
+            //Notificaciones.Mensajes.Add("hola");
+            //Notificaciones.Mensajes.Add("mundo");
             VerificarInventario();
 
             return View();
@@ -44,17 +52,64 @@ namespace ApotheGSF.Controllers
         private bool VerificarInventario()
         {
             Notificaciones.Mensajes = new List<string>();
-            
+
             //obtener cada medicamento con su cajas incluidas
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc=>mc.Inactivo == false)).ToList();
+
+            if (medicamentos == null)
+                return true;
+
             //por cada medicamento
-                //verificar la diferencia de su fecha de vencimiento con la fecha actual
-                //si es igual a cero se inactiva
-                //si es menor que x cantidad de dias
-                    //se agregar a notificaciones
+            foreach(var medicamento in medicamentos)
+            {
+                int diasRestantes;
+                int cajasEliminadas = 0;
+
+                if (medicamento.MedicamentosCajas.Count == 0)
+                    continue;
+
+                //por cada caja
+                foreach(var caja in medicamento.MedicamentosCajas)
+                {
+                    //verificar la diferencia de su fecha de vencimiento con la fecha actual
+                    diasRestantes = (caja.FechaVencimiento - DateTime.Now).Days;
+                    
+                    if(diasRestantes == 0)
+                    {
+                        //si es igual a cero se inactiva
+                        _context.Update(caja);
+                        caja.Inactivo = true;
+                        _context.SaveChanges();
+
+                        cajasEliminadas++;
+                    }
+
+                    //si es menor que x cantidad de dias
+                    if(diasRestantes <= 7)
+                    {
+                        //se agregar a notificaciones
+                        Notificaciones.Mensajes.Add($"La caja #{caja.Codigo} de {medicamento.Nombre} le quedan {diasRestantes} dias para su fecha de vencimiento.");
+                    }
+                }
+
+                //agregar mensaje de cajas eliminadas
+                if(cajasEliminadas > 0)
+                    Notificaciones.Mensajes.Add($"{cajasEliminadas} se eliminaron de {medicamento.Nombre} por estar vencidas.");
+
+            }
+
             //obtener de nuevo cada medicamento con su cajas incluidas por si hubo cajas que se desactivaron
+            medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false)).ToList();
             //por cada medicamento
+            foreach (var medicamento in medicamentos)
+            {
                 //si su cantidad de cajas es menor x limite
+                if(medicamento.MedicamentosCajas.Count < 20)
+                {
                     //se agrega una notificacion de reabastecimiento
+                    Notificaciones.Mensajes.Add($"{medicamento.Nombre} le queda poca mercancia, desea solicitar mas");
+                }
+            }
 
             return true;
         }

@@ -14,6 +14,9 @@ using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using Rotativa;
 using Rotativa.AspNetCore;
+using System.Net.Mail;
+using System.Net;
+using System.Net.Mime;
 
 namespace ApotheGSF.Controllers
 {
@@ -21,6 +24,32 @@ namespace ApotheGSF.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
+
+        /*CONFIGURACIÓN SMTP:
+    ---------------------------------------------------------
+    * OUTLOOK -->
+    servidor SMTP: smtp-mail.outlook.com
+    puerto: 587
+    ---------------------------------------------------------
+    * GMAIL -->
+    servidor SMTP: smtp.gmail.com
+    puerto: 465 (SSL); 587 (TLS)
+    ---------------------------------------------------------
+    * YAHOO! -->
+    servidor SMTP: smtp.mail.yahoo.com
+    puerto: 25 ó 265
+       */
+
+        private string[] microsoftDomains = new string[] { "@outlook", "@live", "@hotmail" };
+        private int[] microsoftPorts = new int[] { 587 };
+
+        private string[] googleDomains = new string[] { "@gmail" };
+        private int[] googlePorts = new int[] { 587, 487 };
+
+        private string[] yahooDomains = new string[] { "@yahoo" };
+        private int[] yahooPorts = new int[] { 25, 265 };
+
+        private string correEmisor = new string("ApotheGSF@outlook.com");
 
         public MedicamentosController(AppDbContext context,
                              IHttpContextAccessor accessor
@@ -91,7 +120,7 @@ namespace ApotheGSF.Controllers
             };
             model.Action = "Index";
 
-            if(string.IsNullOrWhiteSpace(filter))
+            if (string.IsNullOrWhiteSpace(filter))
             {
                 ViewBag.Filtro = "";
             }
@@ -251,9 +280,9 @@ namespace ApotheGSF.Controllers
             medicamentos.CodigosProveedores = await (from provMeds in _context.ProveedoresMedicamentos
                                                .Where(x => x.CodigoMedicamento == medicamentos.Codigo)
                                                .AsNoTracking()
-                                                join proveedores in _context.Proveedores on provMeds
-                                               .CodigoProveedor equals proveedores.Codigo
-                                                select proveedores.Codigo).ToListAsync();
+                                                     join proveedores in _context.Proveedores on provMeds
+                                                    .CodigoProveedor equals proveedores.Codigo
+                                                     select proveedores.Codigo).ToListAsync();
 
             ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", medicamentos.CodigosProveedores);
 
@@ -265,7 +294,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,UnidadesCaja,Indicaciones,Dosis,ProveedoresId")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,UnidadesCaja,Indicaciones,Dosis,CodigosProveedores")] MedicamentosViewModel viewModel)
         {
             if (id != viewModel.Codigo)
             {
@@ -473,6 +502,86 @@ namespace ApotheGSF.Controllers
                                                               }).Where(filtro.ToString()).ToListAsync();
 
             return new ViewAsPdf("ReporteInventario", medicamentos);
+        }
+
+        public IActionResult EnviarCorreo(int codigoMedicamento)
+        {
+            Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == codigoMedicamento).FirstOrDefault();
+
+            CorreoViewModel correo = new CorreoViewModel()
+            {
+                NombreMedicamento = medicamento.Nombre
+            };
+
+            //selectList con los proveedores del medicamento
+            List<int> codigosProveedores = _context.ProveedoresMedicamentos.Where(pm => pm.CodigoMedicamento == medicamento.Codigo).Select(pm => pm.CodigoProveedor).ToList();
+
+            ViewBag.ProveedoresId = new SelectList(_context.Proveedores.Where(p => codigosProveedores.Contains(p.Codigo)).ToList(), "Codigo", "Nombre");
+
+            return View(correo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EnviarCorreo(CorreoViewModel correo)
+        {
+            var smtpClient = ConfigurarSmtpClient();
+            var mensaje = GenerarCorreo(correo);
+
+            smtpClient.Send(mensaje);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private SmtpClient ConfigurarSmtpClient()
+        {
+            (string host, int port) = ObtenerHost($"{correEmisor}");
+            var smtpClient = new SmtpClient(host, port);
+
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential($"{correEmisor}", "Red321_0");
+            smtpClient.EnableSsl = true;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            return smtpClient;
+        }
+
+        private (string host, int port) ObtenerHost(string correo)
+        {
+            if (correo.Contains(microsoftDomains, ignoreCase: true))
+            {
+                return ("smtp-mail.outlook.com", microsoftPorts[0]);
+
+            }
+            else if (correo.Contains(googleDomains, ignoreCase: true))
+            {
+                return ("smtp.gmail.com", googlePorts[0]);
+
+            }
+            else if (correo.Contains(yahooDomains, ignoreCase: true))
+            {
+                return ("smtp.mail.yahoo.com", yahooPorts[0]);
+            }
+
+            throw new InvalidOperationException("No hay un host configurado para este correo");
+        }
+
+        private MailMessage GenerarCorreo(CorreoViewModel correo)
+        {
+            Proveedores proveedor = _context.Proveedores.Where(p => p.Codigo == correo.CodigoProveedor).FirstOrDefault();
+
+            var mail = new MailMessage();
+            mail.From = new MailAddress($"{correEmisor}", "Botica Popular", Encoding.UTF8);
+            mail.To.Add(new MailAddress($"{proveedor.Email}"));
+
+            mail.Subject = "Reabastecer Inventario";
+            mail.SubjectEncoding = Encoding.UTF8;
+
+            mail.Body = $"Se solicitan {correo.Cajas} cajas de {correo.NombreMedicamento}.";
+            mail.IsBodyHtml = true;
+            mail.BodyEncoding = Encoding.UTF8;
+
+            return mail;
         }
     }
 }

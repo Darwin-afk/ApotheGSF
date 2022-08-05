@@ -1,0 +1,38 @@
+﻿@model ApotheGSF.ViewModels.CorreoViewModel
+
+@{
+    ViewData["Title"] = "EnviarCorreo";
+}
+
+<form asp-action="EnviarCorreo">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div>
+        <div class="col-sm-6">
+            <label class="form-group">Medicamento:</label>
+            <input type="text" class="form-control" asp-for="NombreMedicamento" readonly/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <label class="form-group">Medicamento:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-capsules"></i></span>
+                </div>
+                <select asp-for="CodigoProveedor" class="form-control" asp-items="ViewBag.ProveedoresId"></select>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label class="control-label">Unidades:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-box"></i></span>
+                </div>
+                <input asp-for="Cajas" class="form-control" />
+            </div>
+            <span asp-validation-for="Cajas" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+</form>

@@ -106,5 +106,22 @@ namespace ApotheGSF.Clases
 				return false;
 			}
 		}
+
+		public static bool Contains(this string text, string[] keywods, bool ignoreCase = false)
+		{
+			bool found = false;
+			text = ignoreCase ? text.ToLower() : text;
+
+			foreach (var keyword in keywods)
+			{
+				var keywordTemp = ignoreCase ? keyword.ToLower() : keyword;
+				if (text.Contains(keywordTemp.Trim()))
+				{
+					found = true;
+					break;
+				}
+			}
+			return found;
+		}
 	}
 }

@@ -54,7 +54,7 @@ namespace ApotheGSF.Controllers
             Notificaciones.Mensajes = new List<string>();
 
             //obtener cada medicamento con su cajas incluidas
-            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc=>mc.Inactivo == false)).ToList();
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc=>mc.Inactivo == false && mc.CantidadUnidad > 0)).ToList();
 
             if (medicamentos == null)
                 return true;
@@ -99,7 +99,7 @@ namespace ApotheGSF.Controllers
             }
 
             //obtener de nuevo cada medicamento con su cajas incluidas por si hubo cajas que se desactivaron
-            medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false)).ToList();
+            medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0)).ToList();
             //por cada medicamento
             foreach (var medicamento in medicamentos)
             {
@@ -107,7 +107,7 @@ namespace ApotheGSF.Controllers
                 if(medicamento.MedicamentosCajas.Count < 20)
                 {
                     //se agrega una notificacion de reabastecimiento
-                    Notificaciones.Mensajes.Add($"{medicamento.Nombre} le queda poca mercancia, desea <a href=\"http://www.example.com\">solicitar mas</a>");
+                    Notificaciones.Mensajes.Add($"{medicamento.Nombre} le queda poca mercancia, desea <a href=\"/Medicamentos/EnviarCorreo?codigoMedicamento={medicamento.Codigo}\">solicitar mas</a>");
                 }
             }
 

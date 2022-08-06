@@ -64,8 +64,6 @@ namespace ApotheGSF.Controllers
                                      Inactivo = u.Inactivo
 
                                  }).Where(filtro.ToString()).ToListAsync();
-
-                listado = listado.Where(x => x.Inactivo == false).ToList();
             }
             sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");

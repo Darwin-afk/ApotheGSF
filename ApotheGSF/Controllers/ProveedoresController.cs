@@ -45,8 +45,6 @@ namespace ApotheGSF.Controllers
             if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
             {
                 listado = await _context.Proveedores.Where(filtro.ToString()).ToListAsync();
-
-                listado = listado.Where(x => x.Inactivo == false).ToList();
             }
 
             sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;

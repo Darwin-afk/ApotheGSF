@@ -369,5 +369,10 @@ namespace ApotheGSF.Controllers
             return View(modelo);
         }
         #endregion
+
+        public IActionResult VerNotificaciones()
+        {
+            return View();
+        }
     }
 }

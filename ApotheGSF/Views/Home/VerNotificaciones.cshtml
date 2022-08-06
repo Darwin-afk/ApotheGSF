@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewData["Title"] = "VerNotificaciones";
+}
+
+@foreach(var mensaje in Notificaciones.Mensajes)
+{
+    <p>@Html.Raw(mensaje)</p>
+}
+

@@ -4,6 +4,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    int i = 1;
 }
 
 <div class="form-group row">
@@ -36,6 +37,9 @@
             <thead>
                 <tr>
                     <th>
+                        #
+                    </th>
+                    <th>
                         @Html.SortableHeaderFor(model => model.Creado)
                     </th>
                     <th>
@@ -52,6 +56,9 @@
                 {
                     <tr>
                         <td>
+                            @i
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.Creado)
                         </td>
                         <td>
@@ -66,6 +73,7 @@
                             <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
+                    i = i + 1;
                 }
             </tbody>
         </table>

@@ -954,6 +954,8 @@ namespace ApotheGSF.Controllers
                 //obtener el detalle anterior del mismo medicamento con el mismo TipoCantidad
                 MedicamentosDetalle detalleAnterior = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == tipoCantidad).FirstOrDefault();
 
+                //verificar que haya una caja no detallada
+
                 //si la suma de la cantidad del detalle anterior mas la cantidad agregar es => a las unidades por medicamento
                 if (detalleAnterior.Cantidad + cantidad >= medicamento.UnidadesCaja)
                 {

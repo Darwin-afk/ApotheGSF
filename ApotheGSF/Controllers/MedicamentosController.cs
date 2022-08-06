@@ -430,15 +430,21 @@ namespace ApotheGSF.Controllers
             {
                 return Problem("Entity set 'AppDbContext.Medicamentos'  is null.");
             }
-            var medicamento = await _context.Medicamentos.FindAsync(id);
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == id).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false)).FirstOrDefaultAsync();
             if (medicamento != null)
             {
                 _context.Medicamentos.Update(medicamento);
-                medicamento.Modificado = DateTime.Now;
+                medicamento.Modificado = DateTime.Now;  
                 medicamento.ModificadoNombreUsuario = _user.GetUserName();
                 medicamento.Inactivo = true;
                 _context.Entry(medicamento).Property(c => c.Creado).IsModified = false;
                 _context.Entry(medicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
+
+                foreach(var caja in medicamento.MedicamentosCajas)
+                {
+                    _context.MedicamentosCajas.Update(caja);
+                    caja.Inactivo = true;
+                }
             }
 
             await _context.SaveChangesAsync();

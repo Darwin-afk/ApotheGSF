@@ -191,7 +191,7 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
-            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre");
+            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre");
             return View();
         }
 
@@ -241,7 +241,7 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre");
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre");
             return View(viewModel);
         }
 
@@ -282,7 +282,7 @@ namespace ApotheGSF.Controllers
                                                     .CodigoProveedor equals proveedores.Codigo
                                                      select proveedores.Codigo).ToListAsync();
 
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", medicamentos.CodigosProveedores);
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", medicamentos.CodigosProveedores);
 
             return View(medicamentos);
         }
@@ -359,7 +359,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores, "Codigo", "Nombre", viewModel.CodigosProveedores);
+            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);
         }
 
@@ -520,7 +520,7 @@ namespace ApotheGSF.Controllers
             //selectList con los proveedores del medicamento
             List<int> codigosProveedores = _context.ProveedoresMedicamentos.Where(pm => pm.CodigoMedicamento == medicamento.Codigo).Select(pm => pm.CodigoProveedor).ToList();
 
-            ViewBag.ProveedoresId = new SelectList(_context.Proveedores.Where(p => codigosProveedores.Contains(p.Codigo)).ToList(), "Codigo", "Nombre");
+            ViewBag.ProveedoresId = new SelectList(_context.Proveedores.Where(p => codigosProveedores.Contains(p.Codigo) && p.Inactivo == false).ToList(), "Codigo", "Nombre");
 
             return View(correo);
         }

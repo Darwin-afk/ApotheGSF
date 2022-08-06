@@ -40,10 +40,6 @@ namespace ApotheGSF.Controllers
 
         public IActionResult Index()
         {
-            //Notificaciones.Mensajes = new List<string>();
-
-            //Notificaciones.Mensajes.Add("hola");
-            //Notificaciones.Mensajes.Add("mundo");
             VerificarInventario();
 
             return View();
@@ -54,7 +50,7 @@ namespace ApotheGSF.Controllers
             Notificaciones.Mensajes = new List<string>();
 
             //obtener cada medicamento con su cajas incluidas
-            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc=>mc.Inactivo == false && mc.CantidadUnidad > 0)).ToList();
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc=>mc.CantidadUnidad > 0)).ToList();
 
             if (medicamentos == null)
                 return true;
@@ -63,7 +59,7 @@ namespace ApotheGSF.Controllers
             foreach(var medicamento in medicamentos)
             {
                 int diasRestantes;
-                int cajasEliminadas = 0;
+                int cajasVencidas = 0;
 
                 if (medicamento.MedicamentosCajas.Count == 0)
                     continue;
@@ -73,28 +69,26 @@ namespace ApotheGSF.Controllers
                 {
                     //verificar la diferencia de su fecha de vencimiento con la fecha actual
                     diasRestantes = (caja.FechaVencimiento - DateTime.Now).Days;
-                    
-                    if(diasRestantes == 0)
-                    {
-                        //si es igual a cero se inactiva
-                        _context.Update(caja);
-                        caja.Inactivo = true;
-                        _context.SaveChanges();
-
-                        cajasEliminadas++;
-                    }
 
                     //si es menor que x cantidad de dias
-                    if(diasRestantes <= 7)
+                    if(diasRestantes <= 30 && diasRestantes > 0)
                     {
+                        //si la caja esta activa se desactiva
+                        if(caja.Inactivo == false)
+                        {
+                            _context.Update(caja);
+                            caja.Inactivo = true;
+                            _context.SaveChanges();
+                        }
+
+                        cajasVencidas++;
                         //se agregar a notificaciones
-                        Notificaciones.Mensajes.Add($"La caja #{caja.Codigo} de {medicamento.Nombre} le quedan {diasRestantes} dias para su fecha de vencimiento.");
                     }
                 }
 
                 //agregar mensaje de cajas eliminadas
-                if(cajasEliminadas > 0)
-                    Notificaciones.Mensajes.Add($"{cajasEliminadas} se eliminaron de {medicamento.Nombre} por estar vencidas.");
+                if(cajasVencidas > 0)
+                    Notificaciones.Mensajes.Add($"{cajasVencidas} cajas de {medicamento.Nombre} estan por vencerse");
 
             }
 

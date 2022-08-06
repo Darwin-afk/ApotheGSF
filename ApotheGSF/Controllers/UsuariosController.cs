@@ -37,7 +37,7 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
         {
-            StringBuilder filtro = new StringBuilder(" Inactivo == false ");
+            StringBuilder filtro = new StringBuilder($" Inactivo == false && Codigo != {User.GetUserID().ToInt()}");
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());

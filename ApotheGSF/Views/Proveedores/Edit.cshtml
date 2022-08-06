@@ -95,7 +95,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
                                     </div>
-                                <input type="text" asp-for="TerminosdePago" class="form-control" placeholder="Terminos">
+                                <select asp-for="TerminosdePago" class="form-control" >
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Credito">Credito</option>
+                                </select>
                                 </div>
                             </div>
                         </div>  

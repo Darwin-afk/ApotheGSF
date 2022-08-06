@@ -25,9 +25,20 @@
             background-color: #3B444A;
         }
 
+        div.drop3:hover {
+            font-size: 16.5px;
+            background-color: #3B444A;
+        }
+
         li.drop1:hover ul.menu1.dropdown-menu {
             display: block;
         }
+
+        li.drop3 ul.menu3.dropdown-menu {
+            display: block;
+        }
+
+
 
     </style>
 
@@ -69,17 +80,17 @@
                                 <li class="nav-item dropend drop2">
                                     <a class="nav-link dropdown-toggle text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;
-                                        Producto
+                                        Productos
                                     </a>
                                     <ul class="dropdown-menu menu2" aria-labelledby="navbarDropdownMenuLink">
                                         <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Create"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Medicamento</a></li>
-                                        <li><a class="dropdown-item text-dark" asp-controller="MedicamentosCajas" asp-action="Create"><i class="fas fa-store" style="color:#994400;"></i>&nbsp;Mercancia&nbsp;</a></li>
+                                        <li><a class="dropdown-item text-dark" asp-controller="MedicamentosCajas" asp-action="Create"><i class="fas fa-store" style="color:#994400;"></i>&nbsp;Lote de Medicamento&nbsp;</a></li>
                                     </ul>
                                 </li>
 
 
 
-                                <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedor</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown drop1">
@@ -89,27 +100,9 @@
                             </a>
                             <ul class="dropdown-menu menu1" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Index"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Usuario</a></li>
-                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Medicamento</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Inventario</a></li>
                                 <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Index"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
                                 <li><a class="dropdown-item text-dark" asp-controller="Facturas" asp-action="Index"><i class="fa-solid fa-list-check" style="color:#990000;"></i>&nbsp;Facturas</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown drop1">
-                            <a class="nav-link" href="#" data-toggle="dropdown">
-                                <i class="fas fa-bell"></i>
-                                <span class="badge badge-danger navbar-badge">@Notificaciones.Mensajes.Count</span>
-                            </a>
-                            <ul class="dropdown-menu menu1 dropmenuScroll">
-                                <a href="#" class="dropdown-item dropdown-header">Ver Todas</a>
-                                @foreach (var mensaje in Notificaciones.Mensajes)
-                                {
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <p>@Html.Raw(mensaje)</p>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                }
                             </ul>
                         </li>
                         @*
@@ -125,30 +118,72 @@
                         *@
 
                     </ul>
-                    <ul class="navbar-nav ml-auto dropstart">
-                        <li class="nav-item dropdown drop3">
-                            @if (User.Identity != null && User.Identity.IsAuthenticated)
-                            {
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-user"></i>&nbsp;
-                                    @User.GetUserName()
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="PerfilUsuario" asp-route-id="@User.GetUserID()"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Perfil</a></li>
-                                    <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="CambiarPassword"><i class="fa-solid fa-lock" style="color:#CF810C;"></i>&nbsp;Cambiar Contraseña</a></li>
-                                    <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#990000;"></i>&nbsp;Log Out</a></li>
-                                </ul>
-                            }
-                            else
-                            {
-                                <a class="nav-link" asp-controller="Home" asp-action="Login">
-                                    Login
-                                </a>
-                            }
+                    <div class="dropdown dropstart text-end">
+                        <div class="nav-item dropdown drop3 dropstart">
+                            <a class="nav-link dropdown-toggle" role="button" style="color:white;" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge badge-danger navbar-badge">@Notificaciones.Mensajes.Count</span>
+                            </a>
+                            <ul class="dropdown-menu dropmenuScroll" style="width:400px;height:auto;">
 
-                        </li>
-                    </ul>
+                                @foreach (var mensaje in Notificaciones.Mensajes)
+                                {
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <p>@Html.Raw(mensaje)</p>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                }
+                                <div class="media-footer align-text-bottom">
+                                    <a href="#" class="dropdown-item dropdown-header">Ver Todas</a>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+                <ul class="navbar-nav ml-auto">
+                    @*<li class="nav-item dropdown drop1 dropstart">
+                    <a class="nav-link" href="#" data-toggle="dropdown">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge badge-danger navbar-badge">@Notificaciones.Mensajes.Count</span>
+                    </a>
+                    <ul class="dropdown-menu menu1 dropmenuScroll" style="width:500px;right:0;position:absolute;">
+                    <a href="#" class="dropdown-item dropdown-header">Ver Todas</a>
+                    @foreach (var mensaje in Notificaciones.Mensajes)
+                    {
+                    <div class="media">
+                    <div class="media-body">
+                    <p>@Html.Raw(mensaje)</p>
+                    </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    }
+                    </ul>
+                    </li>*@
+                    <li class="nav-item dropdown drop3 dropstart">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user"></i>&nbsp;
+                                @User.GetUserName()
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="PerfilUsuario" asp-route-id="@User.GetUserID()"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Perfil</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="CambiarPassword"><i class="fa-solid fa-lock" style="color:#CF810C;"></i>&nbsp;Cambiar Contraseña</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#990000;"></i>&nbsp;Log Out</a></li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <a class="nav-link" asp-controller="Home" asp-action="Login">
+                                Login
+                            </a>
+                        }
+
+                    </li>
+                </ul>
+            </div>
             </div>
         </nav>
     </header>

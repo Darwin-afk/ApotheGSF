@@ -184,7 +184,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.Inactivo == false).ToList();
+            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
             return View(medicamento);
         }
 

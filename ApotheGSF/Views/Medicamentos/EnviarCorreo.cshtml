@@ -3,36 +3,40 @@
 @{
     ViewData["Title"] = "EnviarCorreo";
 }
+<div class="form-group row">
 
-<form asp-action="EnviarCorreo">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div>
-        <div class="col-sm-6">
-            <label class="form-group">Medicamento:</label>
-            <input type="text" class="form-control" asp-for="NombreMedicamento" readonly/>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-6">
-            <label class="form-group">Medicamento:</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-capsules"></i></span>
+    <form asp-action="EnviarCorreo">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-6">
+            <div class="card">
+                <div class="card-header text-center" style="background-color:#008F8F;">
+                    <h3 class="display-8" style="color:white;"><i class="fas fa-at"></i>&nbsp;Enviar Correo&nbsp<i class="fas fa-at"></i></h3>
                 </div>
-                <select asp-for="CodigoProveedor" class="form-control" asp-items="ViewBag.ProveedoresId"></select>
+                <div class="card-body">
+                    <label class="form-group">Medicamento:</label>
+                    <input type="text" class="form-control" asp-for="NombreMedicamento" readonly />
+
+                    <label class="form-group">Proveedor:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-flask"></i></span>
+                        </div>
+                        <select asp-for="CodigoProveedor" class="form-control" asp-items="ViewBag.ProveedoresId"></select>
+                    </div>
+
+                    <label class="control-label">Unidades:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-box"></i></span>
+                        </div>
+                        <input asp-for="Cajas" class="form-control" />
+                    </div>
+                    <span asp-validation-for="Cajas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="card-footer text-center" style="background-color:#008F8F;">
+                <button type="submit" class="btn" style="background-color:white;color:#008F8F;"><i class="fas fa-envelope"></i>&nbsp;Enviar</button>
             </div>
         </div>
-        <div class="col-sm-6">
-            <label class="control-label">Unidades:</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-box"></i></span>
-                </div>
-                <input asp-for="Cajas" class="form-control" />
-            </div>
-            <span asp-validation-for="Cajas" class="text-danger"></span>
-        </div>
-    </div>
-
-    <button type="submit" class="btn" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
-</form>
+    </form>
+</div>

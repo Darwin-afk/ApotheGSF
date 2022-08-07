@@ -1,21 +1,13 @@
 ﻿@model IEnumerable<ApotheGSF.ViewModels.MedicamentosViewModel>
 
 @{
-    Layout = null;
+    Layout = "_LayoutPDF";
 }
-<div class="text-center">
-    <h1>Botica Popular</h1>
-    <h2>Santa Rosa de Lima</h2>
 
-    <p>Tel..: 8X9-XXX-XXXX</p>
-    <p>Avenida XXXXXX C/XX No.XX<p>
-</div>
-
-
-        <hr />
-        <hr />
+<div class="container p-1 rounded col-md-12" style="background-color:black;">
+    <div class="card">
         <table class="table">
-            <thead>
+            <thead style="background-color:#EFEFEF;">
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Nombre)
@@ -57,5 +49,5 @@
                 }
             </tbody>
         </table>
-        <hr />
-        <hr />
+    </div>
+</div>

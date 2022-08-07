@@ -1,38 +1,58 @@
 ﻿@model IEnumerable<ApotheGSF.Models.Facturas>
 
 @{
-    Layout = null;
+    Layout = "_LayoutPDF";
+    float contador = 0;
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Creado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubTotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Creado)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubTotal)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Total)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container p-1 rounded col-md-12" style="background-color:black;">
+    <div class="card">
+        <table class="table">
+            <thead style="background-color:#EFEFEF;">
+                <tr class="text-center">
+                    <th>
+                        @Html.DisplayNameFor(model => model.Creado)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubTotal)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Total)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Creado)
+                        </td>
+                        <td class="text-end">
+                            @Html.DisplayFor(modelItem => item.SubTotal)
+                        </td>
+                        <td class="text-end">
+                            @Html.DisplayFor(modelItem => item.Total)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
+
+    </div>
+</div>
+<br />
+<br />
+<div class="text-end">
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Total): &nbsp;
+            @foreach (var item2 in Model)
+            {
+                contador = (contador + item2.Total);
+            }
+            <label>@contador</label>
+        </dt>
+    </dl>
+</div>

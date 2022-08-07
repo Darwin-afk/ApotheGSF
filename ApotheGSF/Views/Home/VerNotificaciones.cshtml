@@ -1,10 +1,21 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "VerNotificaciones";
 }
 
-@foreach(var mensaje in Notificaciones.Mensajes)
-{
-    <p>@Html.Raw(mensaje)</p>
-}
+<div class="container p-2 rb-5 bg-white rounded col-md-6">
+    <div class="card">
+        <div class="card-header text-center" style="background-color:#DFDFDF;">
+            <h3 style="color:black;"><i class="fas fa-bell"></i>&nbsp;Notificaciones&nbsp;<i class="fas fa-bell"></i></h3>
+        </div>
+        <div class="card-body">
+            @foreach (var mensaje in Notificaciones.Mensajes)
+            {
+                <p>@Html.Raw(mensaje)</p>
+                <hr />
+            }
+        </div>
+    </div>
+</div>
+
+
 

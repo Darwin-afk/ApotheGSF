@@ -89,7 +89,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
-                                    <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $">
+                                    <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $" onchange="AsignarPrecio()">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -98,7 +98,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
-                                    <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $">
+                                    <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $" readonly>
                                 </div>
                             </div>
                         </div>
@@ -147,4 +147,6 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script src="~/js/AsignarPrecio.js"></script>
 	}

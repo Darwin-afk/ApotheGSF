@@ -30,5 +30,11 @@ namespace ApotheGSF.ViewModels
 
         public bool Inactivo { get; set; }
 
+        public MedicamentosViewModel()
+        {
+            Costo = 0;
+            PrecioUnidad = 0;
+        }
+
     }
 }

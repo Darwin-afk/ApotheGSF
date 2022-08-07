@@ -785,7 +785,7 @@ namespace ApotheGSF.Controllers
         // POST: Facturas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, FacturaViewModel viewModel)
         {
             if (_context.Facturas == null)
             {
@@ -796,11 +796,64 @@ namespace ApotheGSF.Controllers
             {
                 factura.Inactivo = true;
                 _context.Update(factura);
-            }
 
+                //por cada detalle en medicamentosDetalle
+                foreach (var detalle in viewModel.MedicamentosDetalle)
+                {
+                    //si la caja no fue abierta
+                    if (detalle.Abierto == false)
+                    {
+                        if (detalle.TipoCantidad == 1)//si es caja
+                        {
+                            if (detalle.CantidadAbierto <= detalle.Cantidad)
+                            {
+                                //foreach (var codigoCaja in detalle.CodigosCajas)
+                                for (int i = 0; i < detalle.CantidadAbierto; i++)
+                                {
+                                    MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == detalle.CodigosCajas[i]).FirstOrDefault();
+
+                                    Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
+
+                                    _context.Update(caja);
+                                    caja.CantidadUnidad = medicamento.UnidadesCaja;
+                                }
+                            }
+                            else
+                            {
+                                //mensaje de error
+                            }
+                        }
+                        else//si es unidades
+                        {
+                            int cantidadDevolver = detalle.Cantidad;
+
+                            foreach (var codigoCaja in detalle.CodigosCajas)
+                            {
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == codigoCaja).FirstOrDefault();
+
+                                Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
+
+                                _context.Update(caja);
+
+                                if (caja.CantidadUnidad + cantidadDevolver <= medicamento.UnidadesCaja)
+                                {
+                                    caja.CantidadUnidad += cantidadDevolver;
+                                }
+                                else
+                                {
+                                    caja.CantidadUnidad += medicamento.UnidadesCaja - cantidadDevolver;
+                                    cantidadDevolver -= medicamento.UnidadesCaja - cantidadDevolver;
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool FacturaExists(int id)
         {

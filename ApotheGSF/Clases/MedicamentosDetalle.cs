@@ -9,5 +9,7 @@
         public int Cantidad { get; set; }
         public int Precio { get; set; }
         public float Total { get; set; }
+        public bool Abierto { get; set; }
+        public int CantidadAbierto { get; set; }
     }
 }

@@ -303,12 +303,8 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,UnidadesCaja,Indicaciones,Dosis,CodigosProveedores")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,UnidadesCaja,Indicaciones,Dosis,CodigosProveedores")] MedicamentosViewModel viewModel)
         {
-            if (id != viewModel.Codigo)
-            {
-                return NotFound();
-            }
 
             ModelState.Remove("NombreProveedor");
 
@@ -317,7 +313,7 @@ namespace ApotheGSF.Controllers
                 try
                 {
                     var editmedicamento = await _context.Medicamentos.Include(x => x.ProveedoresMedicamentos).
-                                       FirstOrDefaultAsync(y => y.Codigo == id);
+                                       FirstOrDefaultAsync(y => y.Codigo == viewModel.Codigo);
 
                     editmedicamento.Nombre = viewModel.Nombre;
                     editmedicamento.Categoria = viewModel.Categoria;

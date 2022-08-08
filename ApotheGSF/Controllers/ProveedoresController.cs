@@ -57,12 +57,6 @@ namespace ApotheGSF.Controllers
             return model != null ?
                 View(model) :
                 Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");
-            ;
-
-            //List<Proveedores> proveedor = await _context.Proveedores.Where(x => x.Inactivo == false).ToListAsync();
-            //  return _context.Proveedores != null ? 
-            //              View(await _context.Proveedores.Where(x=> x.Inactivo == false).ToListAsync()) :
-            //              Problem("Entity set 'AppDbContext.Proveedores'  is null.");
         }
 
         // GET: Proveedores/Details/5
@@ -134,13 +128,8 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago")] Proveedores proveedor)
+        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,RNC,Telefono1,Telefono2,Fax,Direccion,Email,TerminosdePago")] Proveedores proveedor)
         {
-            if (id != proveedor.Codigo)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try

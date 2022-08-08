@@ -216,13 +216,8 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo, Nombre, Apellido, Usuario, FechaNacimiento, Cedula, Email, Direccion, Telefono, Rol")] UsuarioViewModel viewModel)
+        public async Task<IActionResult> Edit([Bind("Codigo, Nombre, Apellido, Usuario, FechaNacimiento, Cedula, Email, Direccion, Telefono, Rol")] UsuarioViewModel viewModel)
         {
-            if (id != viewModel.Codigo)
-            {
-                return NotFound();
-            }
-
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmarPassword");
 
@@ -230,7 +225,7 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
-                    var antiguoUsuario = await _context.AppUsuarios.FirstOrDefaultAsync(x => x.Id == id);
+                    var antiguoUsuario = await _context.AppUsuarios.FirstOrDefaultAsync(x => x.Id == viewModel.Codigo);
                     antiguoUsuario.Nombre = viewModel.Nombre;
                     antiguoUsuario.Apellido = viewModel.Apellido;
                     antiguoUsuario.PhoneNumber = viewModel.Telefono;

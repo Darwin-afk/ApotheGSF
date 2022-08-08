@@ -24,6 +24,7 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
         private ICompositeViewEngine _viewEngine;
+        private static List<MedicamentosDetalle>? detallesEdit;
 
         public FacturasController(AppDbContext context,
                                   IHttpContextAccessor accessor,
@@ -173,6 +174,8 @@ namespace ApotheGSF.Controllers
                                       }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
+            detallesEdit = new();
 
             return View(new FacturaViewModel());
         }
@@ -382,6 +385,7 @@ namespace ApotheGSF.Controllers
                     //obtiene la lista de cajas del medicamento que no esten inactivas
                     int medicamentoId = _context.Medicamentos.Where(m => m.Nombre == detalle.NombreMedicamento).FirstOrDefault().Codigo;
                     List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamentoId && mc.Inactivo == false).ToList();
+                    MedicamentosDetalle detalleCajas;
 
                     //por cada cajaId del detalle
                     for (int i = 0; i < detalle.CodigosCajas.Count; i++)
@@ -393,7 +397,7 @@ namespace ApotheGSF.Controllers
                             //List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(mc => mc.MedicamentoId == medicamentoId && mc.Inactivo == false).ToList();
 
                             //obtiene el detalle en cajas del medicamento
-                            var detalleCajas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == detalle.NombreMedicamento && md.TipoCantidad == 1).FirstOrDefault();
+                            detalleCajas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == detalle.NombreMedicamento && md.TipoCantidad == 1).FirstOrDefault();
                             //si el detalle no es null
                             if (detalleCajas != null)
                             {
@@ -425,6 +429,16 @@ namespace ApotheGSF.Controllers
 
                         }
                     }
+
+                    //obtiene el detalle en cajas del medicamento
+                    detalleCajas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == detalle.NombreMedicamento && md.TipoCantidad == 1).FirstOrDefault();
+                    //si el detalle no es null
+                    if (detalleCajas != null)
+                    {
+                        //excluye las cajas del detalle en cajas
+                        cajas = ExcluirCajas(cajas, detalleCajas.CodigosCajas);
+                    }
+
                     //verificar si la cantidad de las cajas usadas es mayor o igual a la cantidad del detalle
                     int cantidadUsada = 0;
                     foreach (var caja in cajas)
@@ -494,51 +508,74 @@ namespace ApotheGSF.Controllers
             //obtener listado de cajas
             List<MedicamentosCajas> cajas = _context.MedicamentosCajas.ToList();
             MedicamentosCajas caja;
+            string nombreMedicamento;
 
-            do
+            //agregar el primer facturasCajas a listaDetalle
+            MedicamentosDetalle detalle = new MedicamentosDetalle()
             {
-                //crear un medicamentoDetalle con el primer elemento de facturasCajas
-                MedicamentosDetalle detalle = new MedicamentosDetalle()
-                {
-                    CodigoDetalle = listaDetalle.Count,
-                    CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
-                    TipoCantidad = facturasCajas[0].TipoCantidad,
-                    Cantidad = facturasCajas[0].CantidadUnidad,
-                    Precio = facturasCajas[0].Precio
-                };
+                CodigoDetalle = listaDetalle.Count,
+                CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
+                TipoCantidad = facturasCajas[0].TipoCantidad,
+                Cantidad = facturasCajas[0].CantidadUnidad,
+                Precio = facturasCajas[0].Precio
+            };
 
+            caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+            detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
+            detalle.Total = detalle.Cantidad * detalle.Precio;
+            //quitar ese elemento de facturasCajas
+            facturasCajas.RemoveAt(0);
+
+            listaDetalle.Add(detalle);
+
+            while (facturasCajas.Count > 0)
+            {
+                //si algun elemento de listaDetalle tiene el mismo nombre medicamento y tipo cantidad que el primer facturasCajas
                 caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
-                detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
+                nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
 
-                //excluir ese elemento de facturasCajas
-                facturasCajas.RemoveAt(0);
-
-                //obtener el nombreMedicamento del primer elemento de facturasCajas si quedan otras facturasCajas
-                if (facturasCajas.Count > 0)
+                if(listaDetalle.Any(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad))
                 {
-                    caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
-                    string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
+                    //se agrega el codigoCaja y la cantidad al listaDetalle
+                    MedicamentosDetalle agregarDetalle = listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First();
 
-                    //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
-                    while (nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
-                    {
-                        //add(cajaId, cantidad)
-                        detalle.CodigosCajas.Add(facturasCajas[0].CodigoCaja);
-                        detalle.Cantidad += facturasCajas[0].CantidadUnidad;
+                    agregarDetalle.CodigosCajas.Add(facturasCajas[0].CodigoCaja);
+                    agregarDetalle.Cantidad += facturasCajas[0].CantidadUnidad;
+                    agregarDetalle.Total = agregarDetalle.Cantidad * agregarDetalle.Precio;
 
-                        //excluir ese elemento de facturasCajas
-                        facturasCajas.RemoveAt(0);
-                    }
+                    listaDetalle[agregarDetalle.CodigoDetalle] = agregarDetalle;
+
+                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().CodigosCajas.Add(facturasCajas[0].CodigoCaja);
+                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().Cantidad += facturasCajas[0].CantidadUnidad;
+                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().Total = 
+
+                    facturasCajas.RemoveAt(0);
                 }
+                else
+                {
+                    //sino, se agrega un nuevo listaDetalle
+                    detalle = new MedicamentosDetalle()
+                    {
+                        CodigoDetalle = listaDetalle.Count,
+                        CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
+                        TipoCantidad = facturasCajas[0].TipoCantidad,
+                        Cantidad = facturasCajas[0].CantidadUnidad,
+                        Precio = facturasCajas[0].Precio
+                    };
+                    detalle.NombreMedicamento = nombreMedicamento;
 
-                //al final del mientras calcular el total del detalle
-                detalle.Total = detalle.Cantidad * detalle.Precio;
+                    //excluir ese elemento de facturasCajas
+                    facturasCajas.RemoveAt(0);
 
-                listaDetalle.Add(detalle);
+                    detalle.Total = detalle.Cantidad * detalle.Precio;
 
-            } while (facturasCajas.Count > 0);
+                    listaDetalle.Add(detalle);
+                }
+            }
 
             factura.MedicamentosDetalle = listaDetalle;
+
+            detallesEdit = listaDetalle;
 
             //obtener lista de medicamentos que no esten inactivos
             var medicamentos = await (from meds in _context.Medicamentos
@@ -564,22 +601,17 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
+        public async Task<IActionResult> Edit([Bind("Codigo,SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
-            if (id != viewModel.Codigo)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     //buscar la factura anterior
-                    Facturas facturaAnterior = _context.Facturas.Where(f => f.Codigo == viewModel.Codigo).Include(f => f.FacturasMedicamentosCajas).FirstOrDefault();
+                    Facturas facturaAnterior = _context.Facturas.Where(f => f.Codigo == viewModel.Codigo && f.Inactivo == false).Include(f => f.FacturasMedicamentosCajas).FirstOrDefault();
                     //desactivar la factura anterior
-                    facturaAnterior.Inactivo = true;
                     _context.Update(facturaAnterior);
+                    facturaAnterior.Inactivo = true;
 
                     //devolver la cantidad de cajas usadas
                     foreach (var facturaCaja in facturaAnterior.FacturasMedicamentosCajas)
@@ -601,6 +633,7 @@ namespace ApotheGSF.Controllers
 
                         //update a la caja
                         _context.Update(caja);
+                        _context.Remove(facturaCaja);
                     }
 
                     await _context.SaveChangesAsync();
@@ -729,9 +762,10 @@ namespace ApotheGSF.Controllers
                 catch (Exception e)
                 {
                     ModelState.AddModelError("", e.Message);
-                    return View(viewModel);
+                    return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
-                return RedirectToAction(nameof(Index));
+                int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;
+                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura });
             }
 
             //obtener lista de medicamentos que no esten inactivos
@@ -750,7 +784,7 @@ namespace ApotheGSF.Controllers
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 
-            return View(viewModel);
+            return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
         }
 
         // GET: Facturas/Delete/5
@@ -915,16 +949,37 @@ namespace ApotheGSF.Controllers
 
         private ResultadoAjax AgregarCaja(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId, bool UnidadToCaja = false)
         {
-            List<MedicamentosCajas> CajasSinDetallar = medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList();
+            //nueva lista de cajasSinDetallar
+            List<MedicamentosCajas> cajasSinDetallar = new();
+            //si detallesEdit tiene elementos
+            if(detallesEdit.Count > 0)
+            {
+                foreach(var detalle in detallesEdit)
+                {
+                    if(detalle.NombreMedicamento == medicamento.Nombre && detalle.TipoCantidad == 1)
+                    {
+                        foreach(var codigoCaja in detalle.CodigosCajas)
+                        {
+                            //se agregan las cajas necesarias
+                            cajasSinDetallar.Add(new MedicamentosCajas()
+                            {
+                                Codigo = codigoCaja
+                            });
+                        }
+                    }
+                }
+            }
+
+            cajasSinDetallar.AddRange(medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList());
 
             if (cajasUsadas != null && UnidadToCaja == false)//excluir las cajas ya usadas por el mismo medicamento en unidades, al menos que sea llevar las unidades a caja
             {
-                CajasSinDetallar = ExcluirCajas(CajasSinDetallar, cajasUsadas);
+                cajasSinDetallar = ExcluirCajas(cajasSinDetallar, cajasUsadas);
             }
 
             if (cajasUsar != null)//si se agregara mas a el detalle existente excluir las ya usadas
             {
-                CajasSinDetallar = ExcluirCajas(CajasSinDetallar, cajasUsar);
+                cajasSinDetallar = ExcluirCajas(cajasSinDetallar, cajasUsar);
 
                 //obtener el detalle Id de la caja
                 detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
@@ -932,7 +987,7 @@ namespace ApotheGSF.Controllers
                 existente = true;
             }
 
-            if (cantidad > CajasSinDetallar.Count)//si se quiere agregar mas cajas de las existentes
+            if (cantidad > cajasSinDetallar.Count)//si se quiere agregar mas cajas de las existentes
             {
                 return GenerarPartialView(true, "Cantidad Superior a la existente", viewModel);
             }
@@ -945,7 +1000,7 @@ namespace ApotheGSF.Controllers
 
             for (int i = 0; i < cantidad; i++)
             {
-                cajasUsar.Add(CajasSinDetallar[i].Codigo);
+                cajasUsar.Add(cajasSinDetallar[i].Codigo);
             }
 
             viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
@@ -957,9 +1012,49 @@ namespace ApotheGSF.Controllers
         {
             int cantidadUsar = 0;
             int cantidadCajas = 0;
+            int cantidadAgregar = 0;
             ResultadoAjax resultado = new ResultadoAjax();
             MedicamentosCajas? cajaDetallada = null;
-            List<MedicamentosCajas> cajas = medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList();
+
+            List<MedicamentosCajas> cajas = new();
+            //si detallesEdit tiene elementos
+            if (detallesEdit.Count > 0)
+            {
+                foreach (var detalle in detallesEdit)
+                {
+                    if (detalle.NombreMedicamento == medicamento.Nombre && detalle.TipoCantidad == 2)
+                    {
+                        foreach (var codigoCaja in detalle.CodigosCajas)
+                        {
+                            if(detalle.Cantidad > medicamento.UnidadesCaja)
+                            {
+                                cantidadAgregar = medicamento.UnidadesCaja;
+                                detalle.Cantidad -= medicamento.UnidadesCaja;
+                            }
+                            else
+                                cantidadAgregar = detalle.Cantidad;
+
+                            //se agregan las cajas necesarias
+                            cajas.Add(new MedicamentosCajas()
+                            {
+                                Codigo = codigoCaja,
+                                CantidadUnidad = cantidadAgregar,
+                                Detallada = true
+                            });
+                        }
+                    }
+                }
+            }
+
+            foreach(var medicamentoCaja in medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList())
+            {
+                if(cajas.Any(c => c.Codigo == medicamentoCaja.Codigo))
+                {
+                    cajas.Where(c => c.Codigo == medicamentoCaja.Codigo).First().CantidadUnidad += medicamentoCaja.CantidadUnidad;
+                }
+                else
+                    cajas.Add(medicamentoCaja);
+            }
 
             //si se agregaran suficientes unidades para hacer cajas
             while (cantidad >= medicamento.UnidadesCaja)
@@ -1057,7 +1152,7 @@ namespace ApotheGSF.Controllers
                 return GenerarPartialView(false, "", viewModel);
             }
 
-            if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en unidades
+            if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en cajas
             {
                 cajas = ExcluirCajas(cajas, cajasUsadas);
             }
@@ -1117,12 +1212,15 @@ namespace ApotheGSF.Controllers
 
         private List<MedicamentosCajas> ExcluirCajas(List<MedicamentosCajas> cajas, List<int> cajasExcluir)
         {
-            for (int i = 0; i < cajas.Count; i++)
+            if(cajas != null && cajasExcluir != null)
             {
-                if (cajasExcluir.Contains(cajas[i].Codigo))
+                for (int i = 0; i < cajas.Count; i++)
                 {
-                    cajas.Remove(cajas[i]);
-                    i--;
+                    if (cajasExcluir.Contains(cajas[i].Codigo))
+                    {
+                        cajas.Remove(cajas[i]);
+                        i--;
+                    }
                 }
             }
 

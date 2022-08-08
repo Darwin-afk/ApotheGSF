@@ -19,9 +19,9 @@ namespace ApotheGSF.Models
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public int UnidadesCaja { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        public int Costo { get; set; }
+        public float Costo { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        public int PrecioUnidad { get; set; }
+        public float PrecioUnidad { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Indicaciones { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]

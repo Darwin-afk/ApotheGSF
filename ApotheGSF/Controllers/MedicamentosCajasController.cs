@@ -120,13 +120,8 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CajaId,MedicamentoId,CantidadUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajas medicamentosCajas)
+        public async Task<IActionResult> Edit([Bind("Codigo,CodigoMedicamento,CantidadUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajas medicamentosCajas)
         {
-            if (id != medicamentosCajas.Codigo)
-            {
-                return NotFound();
-            }
-
             //obtener el medicamento de la caja
             Medicamentos medicamento = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault();
             //si cantidadUnidad es mayor  unidadesCaja del medicamento se regresa el error

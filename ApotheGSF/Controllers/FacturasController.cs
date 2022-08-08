@@ -913,11 +913,11 @@ namespace ApotheGSF.Controllers
             }
         }
 
-        private ResultadoAjax AgregarCaja(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId)
+        private ResultadoAjax AgregarCaja(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId, bool UnidadToCaja = false)
         {
             List<MedicamentosCajas> CajasSinDetallar = medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList();
 
-            if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en unidades
+            if (cajasUsadas != null && UnidadToCaja == false)//excluir las cajas ya usadas por el mismo medicamento en unidades, al menos que sea llevar las unidades a caja
             {
                 CajasSinDetallar = ExcluirCajas(CajasSinDetallar, cajasUsadas);
             }
@@ -1005,8 +1005,6 @@ namespace ApotheGSF.Controllers
                 //obtener el detalle anterior del mismo medicamento con el mismo TipoCantidad
                 MedicamentosDetalle detalleAnterior = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == tipoCantidad).FirstOrDefault();
 
-                //verificar que haya una caja no detallada
-
                 //si la suma de la cantidad del detalle anterior mas la cantidad agregar es => a las unidades por medicamento
                 if (detalleAnterior.Cantidad + cantidad >= medicamento.UnidadesCaja)
                 {
@@ -1020,7 +1018,7 @@ namespace ApotheGSF.Controllers
 
                     //se agregar otra caja
                     cantidad -= medicamento.UnidadesCaja - detalleAnterior.Cantidad;
-                    viewModel = AgregarCaja(viewModel, medicamento, 1, 1, cajasUsadas, cajasUsar, existente, detalleId).viewModel;
+                    viewModel = AgregarCaja(viewModel, medicamento, 1, 1, cajasUsadas, cajasUsar, existente, detalleId, true).viewModel;
 
                     //se eliminar el detalle anterior
                     viewModel.MedicamentosDetalle.RemoveAt(detalleAnterior.CodigoDetalle);

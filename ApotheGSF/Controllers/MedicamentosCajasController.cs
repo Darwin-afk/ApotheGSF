@@ -66,9 +66,13 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
-                var unidades = await _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento)
-                                                                            .Select(m => m.UnidadesCaja)
-                                                                            .FirstOrDefaultAsync();
+                Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento).FirstOrDefault();
+
+                if(medicamento.EnvioPendiente == true)
+                {
+                    _context.Update(medicamento);
+                    medicamento.EnvioPendiente = false;
+                }
 
                 for (int i = 0; i < viewModel.Cajas; i++)
                 {

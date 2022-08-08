@@ -42,8 +42,8 @@ namespace ApotheGSF.Models
         public DateTime? Modificado { get; set; }
         public string? ModificadoNombreUsuario { get; set; }
         public bool? Inactivo { get; set; }
+        public bool? EnvioPendiente { get; set; }
 
-      
 
     }
 }

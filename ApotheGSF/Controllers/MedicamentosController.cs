@@ -221,8 +221,8 @@ namespace ApotheGSF.Controllers
                     CreadoNombreUsuario = _user.GetUserName(),
                     Modificado = DateTime.Now,
                     ModificadoNombreUsuario = _user.GetUserName(),
-                    Inactivo = false
-
+                    Inactivo = false,
+                    EnvioPendiente = false
                 };
 
                 _context.Medicamentos.Add(newMedicamentos);
@@ -534,6 +534,12 @@ namespace ApotheGSF.Controllers
 
             smtpClient.Send(mensaje);
 
+            //hacer que no aparezca en notificaciones ya que se pidio reabastecimiento
+            Medicamentos medicamento = _context.Medicamentos.Where(m => m.Nombre == correo.NombreMedicamento && m.Inactivo == false).FirstOrDefault();
+            _context.Update(medicamento);
+            medicamento.EnvioPendiente = true;
+            _context.SaveChanges();
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -587,5 +593,7 @@ namespace ApotheGSF.Controllers
 
             return mail;
         }
+
+
     }
 }

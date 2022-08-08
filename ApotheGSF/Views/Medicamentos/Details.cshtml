@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    int i = 1;
 }
 <h3 class="text-center"><i class="fas fa-list"></i>&nbsp;Detalle Medicamento&nbsp<i class="fas fa-list"></i></h3>
 
@@ -107,7 +106,7 @@
                             {
                                 <tr>
                                     <td>
-                                        @i
+                                        @item.NumeroCaja
                                     </td>
                                     <td>
                                         @item.CantidadUnidad
@@ -131,17 +130,16 @@
                                         <a href="@Url.Action("Delete", "MedicamentosCajas", new { id = item.Codigo})" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
-                                i = i + 1;
                             }
                         </tbody>
-                        @*
-                        <div class="text-center">
-                        <nav aria-label="navigation">
-                        <vc:pager paging-list="@ViewBag" />
-                        </nav>
-                        </div>*@
                     </table>
+                    <div class="text-center">
+                        <nav aria-label="navigation">
+                            <vc:pager paging-list="ViewBag.Inventario" />
+                        </nav>
+                    </div>
                 </div>
+
             </div>
         </div>
         <div class="card-footer" style="background-color:#E8E8E8">
@@ -151,7 +149,6 @@
                         <input type="hidden" asp-for="Codigo" />
                     </div>
                     <div class="col-sm-4">
-
                     </div>
                     <div class="col-sm-4 text-end">
                         <a asp-action="Index" type="button" class="btn" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>

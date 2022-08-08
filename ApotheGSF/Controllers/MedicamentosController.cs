@@ -133,7 +133,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Medicamentos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int pageindex = 1)
         {
 
             if (id == null || _context.Medicamentos == null)
@@ -184,7 +184,18 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
+            List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
+
+            for (int i = 0; i < cajas.Count; i++)
+                cajas[i].NumeroCaja = i + 1;
+
+            var inventario = PagingList.Create(cajas, 5, pageindex, "Codigo", "");
+
+            inventario.Action = "Details";
+
+            ViewBag.Inventario = inventario;
+
+            //ViewBag.Inventario = (List<MedicamentosCajas>)_context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
             return View(medicamento);
         }
 

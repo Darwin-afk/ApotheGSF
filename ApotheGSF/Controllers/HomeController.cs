@@ -263,6 +263,7 @@ namespace ApotheGSF.Controllers
             //si encuentra al usuario lo manda a su vista con sus campos
             PerfilUsuarioViewModel perfil = new PerfilUsuarioViewModel()
             {
+                Codigo = modelo.Id,
                 Nombre = modelo.Nombre,
                 Apellido = modelo.Apellido,
                 Email = modelo.Email,
@@ -275,7 +276,7 @@ namespace ApotheGSF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PerfilUsuario([Bind("Id, Nombre, Apellido, Email, Telefono, Foto")] PerfilUsuarioViewModel modelo, IFormFile logo, string removeLogo)
+        public async Task<IActionResult> PerfilUsuario([Bind("Codigo, Nombre, Apellido, Email, Telefono, Foto")] PerfilUsuarioViewModel modelo, IFormFile logo, string removeLogo)
         {
             //Valida que si se cambia el correo no exista otro usuario con el mismo asignado.
             var u = await _userManager.FindByEmailAsync(modelo.Email); //No se puede registrar el mismo correo en el sistema dos veces, no importa la Org.

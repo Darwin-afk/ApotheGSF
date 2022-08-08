@@ -5,7 +5,7 @@
         url: '/Facturas/Edit',
         success: function (r) {
             if (r.resultado) {
-                var url = 'ReporteFactura?CodigoFactura=' + r.codigofactura;
+                var url = '../ReporteFactura?CodigoFactura=' + r.codigofactura;
                 window.open(url, "_blank");
                 window.location.href = "/Home/Index";
             }

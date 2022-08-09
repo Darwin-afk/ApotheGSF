@@ -66,6 +66,12 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Costo)
                 </dd>
+                <dt class="col-sm-6">
+                    Precio Caja
+                </dt>
+                <dd class="col-sm-6">
+                    <text>@(Model.PrecioUnidad * Model.UnidadesCaja)</text>
+                </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.PrecioUnidad)
                 </dt>

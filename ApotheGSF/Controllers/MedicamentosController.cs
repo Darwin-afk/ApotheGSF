@@ -206,7 +206,15 @@ namespace ApotheGSF.Controllers
         // GET: Medicamentos/Create
         public IActionResult Create()
         {
-            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre");
+            List<Proveedores> proveedores = _context.Proveedores.Where(p => p.Inactivo == false).ToList();
+
+            if(proveedores == null)
+            {
+                _notyf.Information("Es necesario tener algun proveedor");
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.CodigoProveedores = new MultiSelectList(proveedores, "Codigo", "Nombre");
             return View(new MedicamentosViewModel());
         }
 

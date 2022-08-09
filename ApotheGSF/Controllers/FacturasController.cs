@@ -176,12 +176,25 @@ namespace ApotheGSF.Controllers
                                           Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                       }).Where(x => x.Inactivo == false).ToListAsync();
-            //usar los medicamentos que tengan alguna caja en inventario
-            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 
-            detallesEdit = new();
+            if (medicamentos == null)
+            {
+                _notyf.Information("Es necesario tener algun medicamento");
+                return RedirectToAction("Index", "Home");
+            }
 
-            return View(new FacturaViewModel());
+            if(medicamentos.Any(m => m.Cajas > 0))
+            {
+                //usar los medicamentos que tengan alguna caja en inventario
+                ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
+                detallesEdit = new();
+
+                return View(new FacturaViewModel());
+            }
+
+            _notyf.Information("Es necesario tener inventario");
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Facturas/Create

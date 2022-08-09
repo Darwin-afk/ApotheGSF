@@ -4,10 +4,7 @@
         type: "POST",
         url: '/Facturas/AgregarMedicamento',
         success: function (resultado) {
-            if (resultado.error) {
-                alert(resultado.mensaje);
-            }
-            else {
+            if (resultado.error == false) {
                 $('#ListaDetalle').html(resultado.partial);
 
                 document.getElementById('SubTotal').value = resultado.subtotal;

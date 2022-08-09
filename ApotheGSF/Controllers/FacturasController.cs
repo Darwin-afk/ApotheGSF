@@ -910,12 +910,14 @@ namespace ApotheGSF.Controllers
 
             if (medicamento == null)//si despues de entrar el medicamento pasa a estar inactivo
             {
-                return Json(GenerarPartialView(true, "Medicamento Invalido", viewModel));
+                _notyf.Warning("Medicamento Invalido");
+                return Json(GenerarPartialView(true, viewModel));
             }
 
             if (Cantidad <= 0)//cantidad invalida
             {
-                return Json(GenerarPartialView(true, "Cantidad Invalida", viewModel));
+                _notyf.Warning("Cantidad Invalida");
+                return Json(GenerarPartialView(true, viewModel));
             }
 
             if (viewModel.MedicamentosDetalle.Any(md => md.NombreMedicamento == medicamento.Nombre))//medicamento existente
@@ -993,7 +995,8 @@ namespace ApotheGSF.Controllers
 
             if (cantidad > cajasSinDetallar.Count)//si se quiere agregar mas cajas de las existentes
             {
-                return GenerarPartialView(true, "Cantidad Superior a la existente", viewModel);
+                _notyf.Warning("Cantidad Superior a la existente");
+                return GenerarPartialView(true, viewModel);
             }
 
             //si no sean agregado cantidades en cajas del medicamento
@@ -1009,7 +1012,7 @@ namespace ApotheGSF.Controllers
 
             viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
 
-            return GenerarPartialView(false, "", viewModel);
+            return GenerarPartialView(false, viewModel);
         }
 
         private ResultadoAjax AgregarUnidades(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId)
@@ -1081,7 +1084,7 @@ namespace ApotheGSF.Controllers
                 resultado = AgregarCaja(viewModel, medicamento, 1, cantidadCajas, cajasUsadas, cajasUsar, existente, detalleId);
                 if (resultado.error)
                 {
-                    return GenerarPartialView(resultado.error, resultado.mensaje, resultado.viewModel);
+                    return GenerarPartialView(resultado.error, resultado.viewModel);
                 }
 
                 //poner como cajas usadas las del viewModel
@@ -1093,7 +1096,7 @@ namespace ApotheGSF.Controllers
             //si se agregaron cajas y ya no quedan unidades que agregar
             if (cantidad == 0)
             {
-                return GenerarPartialView(resultado.error, resultado.mensaje, resultado.viewModel);
+                return GenerarPartialView(resultado.error, resultado.viewModel);
             }
 
             //si cajasUsar no es null
@@ -1153,7 +1156,7 @@ namespace ApotheGSF.Controllers
             //si se agregaron cajas y ya no quedan unidades que agregar
             if (cantidad == 0)
             {
-                return GenerarPartialView(false, "", viewModel);
+                return GenerarPartialView(false, viewModel);
             }
 
             if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en cajas
@@ -1164,7 +1167,7 @@ namespace ApotheGSF.Controllers
             if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
             {
                 viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
-                return GenerarPartialView(false, "", viewModel);
+                return GenerarPartialView(false, viewModel);
             }
 
             //si la cantidad que se pide es mayor a la que se usara
@@ -1176,11 +1179,12 @@ namespace ApotheGSF.Controllers
                 if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
                 {
                     viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
-                    return GenerarPartialView(false, "", viewModel);
+                    return GenerarPartialView(false, viewModel);
                 }
             }
 
-            return GenerarPartialView(true, "Cantidad Superior a la existente", viewModel);
+            _notyf.Warning("Cantidad Superior a la existente");
+            return GenerarPartialView(true, viewModel);
         }
 
         private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int> cajasUsar, bool existente, int detalleId)
@@ -1231,7 +1235,7 @@ namespace ApotheGSF.Controllers
             return cajas;
         }
 
-        private ResultadoAjax GenerarPartialView(bool error, string mensaje, FacturaViewModel viewModel)
+        private ResultadoAjax GenerarPartialView(bool error, FacturaViewModel viewModel)
         {
             ModelState.Clear();// para quitar el input anterior
             PartialViewResult partialViewResult = PartialView("MedicamentosDetalles", viewModel);
@@ -1240,7 +1244,6 @@ namespace ApotheGSF.Controllers
             return new ResultadoAjax()
             {
                 error = error,
-                mensaje = mensaje,
                 partial = viewContent,
                 viewModel = viewModel,
                 subtotal = CalcularSubTotal(viewModel)
@@ -1271,7 +1274,7 @@ namespace ApotheGSF.Controllers
                 viewModel.MedicamentosDetalle[i].CodigoDetalle = i;
             }
 
-            return Json(GenerarPartialView(false, "", viewModel));
+            return Json(GenerarPartialView(false, viewModel));
         }
 
         private float CalcularSubTotal(FacturaViewModel viewModel)

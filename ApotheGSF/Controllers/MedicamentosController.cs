@@ -233,7 +233,7 @@ namespace ApotheGSF.Controllers
                         if(medicamento.Nombre.ToUpper() == viewModel.Nombre.ToUpper())
                         {
                             //si lo tiene regresa error
-                            _notyf.Error("este medicamento ya existe");
+                            _notyf.Error("Este medicamento ya existe");
                             ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
                             return View(viewModel);
                         }
@@ -337,7 +337,7 @@ namespace ApotheGSF.Controllers
                 try
                 {
                     //obtener lista de medicamentos
-                    List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).ToList();
+                    List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false && m.Codigo != viewModel.Codigo).ToList();
                     //si la lista no es null
                     if (medicamentos != null)
                     {
@@ -348,7 +348,7 @@ namespace ApotheGSF.Controllers
                             if (medicamento.Nombre.ToUpper() == viewModel.Nombre.ToUpper())
                             {
                                 //si lo tiene regresa error
-                                _notyf.Error("este medicamento ya existe");
+                                _notyf.Error("Este medicamento ya existe");
                                 ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
                                 return View(viewModel);
                             }

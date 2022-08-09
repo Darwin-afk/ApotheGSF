@@ -57,7 +57,15 @@ namespace ApotheGSF.Controllers
         // GET: MedicamentosCajas/Create
         public IActionResult Create()
         {
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(p => p.Inactivo == false).ToList();
+
+            if (medicamentos == null)
+            {
+                _notyf.Information("Es necesario tener algun medicamento");
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["MedicamentosId"] = new SelectList(medicamentos, "Codigo", "Nombre");
             return View();
         }
 

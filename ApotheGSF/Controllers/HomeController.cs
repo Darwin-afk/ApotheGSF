@@ -149,13 +149,13 @@ namespace ApotheGSF.Controllers
                 }
                 catch
                 {
-                    ModelState.AddModelError("", "Usuario/Contraseña Inválidos");
+                    _notyf.Error("Usuario/Contraseña Inválidos");
                     return View(model);
                 }
 
                 if (usuarioInactivo)
                 {
-                    ModelState.AddModelError("", "Usuario/Contraseña Inválidos");
+                    _notyf.Error("Usuario/Contraseña Inválidos");
                     return View(model);
                 }
 
@@ -178,7 +178,7 @@ namespace ApotheGSF.Controllers
                     }
                 }
             }
-            ModelState.AddModelError("", "Usuario/Contraseña Inválidos");
+            _notyf.Error("Usuario/Contraseña Inválidos");
             return View(model);
         }
 
@@ -222,13 +222,13 @@ namespace ApotheGSF.Controllers
             var checkPassResult = await _userManager.CheckPasswordAsync(user, modelo.PasswordActual);
             if (!checkPassResult)
             {
-                ModelState.AddModelError("", "Contraseña actual incorrecta.");
+                _notyf.Error("Contraseña actual incorrecta");
             }
 
             //verifica si el campo confirmar contraseña es igual a la nueva contraseña
             if (!modelo.Password.Equals(modelo.ConfirmarPassword))
             {
-                ModelState.AddModelError("", "Las contraseñas con coinciden.");
+                _notyf.Error("Las contraseñas con coinciden");
             }
 
             ModelState.Remove("Nombre");//no se toma en cuenta el nombre al validar
@@ -242,7 +242,7 @@ namespace ApotheGSF.Controllers
                 if (result.Succeeded)
                     return RedirectToAction("Index", "Home");
                 else
-                    ModelState.AddModelError("", result.Errors.FirstOrDefault().ToString());
+                    _notyf.Error(result.Errors.FirstOrDefault().ToString());
             }
 
             return View(modelo);
@@ -288,12 +288,12 @@ namespace ApotheGSF.Controllers
             var u = await _userManager.FindByEmailAsync(modelo.Email); //No se puede registrar el mismo correo en el sistema dos veces, no importa la Org.
             if (u != null && u.Id != modelo.Codigo)
             {
-                ModelState.AddModelError("", string.Format("El correo {0} ya está registrado.", modelo.Email));
+                _notyf.Error(string.Format("El correo {0} ya está registrado", modelo.Email));
             }
 
             if (!modelo.Email.IsValidEmail())
             {
-                ModelState.AddModelError("", string.Format("El Email {0} no es correcto.", modelo.Email));
+                _notyf.Error(string.Format("El Email {0} no es correcto", modelo.Email));
             }
 
             ModelState.Remove("Foto");
@@ -345,7 +345,7 @@ namespace ApotheGSF.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        _notyf.Error(error.Description);
                     }
                 }
                 else

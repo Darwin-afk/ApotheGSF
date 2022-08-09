@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using ApotheGSF.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize]
     public class MedicamentosCajasController : Controller
     {
         private readonly AppDbContext _context;
@@ -55,6 +57,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: MedicamentosCajas/Create
+        [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
             List<Medicamentos> medicamentos = _context.Medicamentos.Where(p => p.Inactivo == false).ToList();
@@ -124,6 +127,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: MedicamentosCajas/Edit/5
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.MedicamentosCajas == null)
@@ -202,6 +206,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: MedicamentosCajas/Delete/5
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.MedicamentosCajas == null)

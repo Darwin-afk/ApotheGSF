@@ -17,7 +17,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace ApotheGSF.Controllers
 {
-    
+    [Authorize(Roles = "Administrador, Comprador")]
     public class ProveedoresController : Controller
     {
        

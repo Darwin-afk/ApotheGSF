@@ -17,9 +17,11 @@ using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using Rotativa.AspNetCore;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize(Roles = "Administrador, Vendedor")]
     public class FacturasController : Controller
     {
         private readonly AppDbContext _context;

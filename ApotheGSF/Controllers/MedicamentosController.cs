@@ -18,9 +18,11 @@ using System.Net.Mail;
 using System.Net;
 using System.Net.Mime;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize]
     public class MedicamentosController : Controller
     {
         private readonly AppDbContext _context;
@@ -204,6 +206,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Medicamentos/Create
+        [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
             List<Proveedores> proveedores = _context.Proveedores.Where(p => p.Inactivo == false).ToList();
@@ -289,6 +292,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Medicamentos/Edit/5
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> Edit(int? id)
         {
 
@@ -423,6 +427,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Medicamentos/Delete/5
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> Delete(int? id)
         {
 
@@ -515,6 +520,7 @@ namespace ApotheGSF.Controllers
             return (_context.Medicamentos?.Any(e => e.Codigo == id)).GetValueOrDefault();
         }
 
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> ReporteInventario(string filter)
         {
             StringBuilder filtro = new StringBuilder(" Inactivo == false ");

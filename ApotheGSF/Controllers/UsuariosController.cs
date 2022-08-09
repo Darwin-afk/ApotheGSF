@@ -14,9 +14,11 @@ using System.Text;
 using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class UsuariosController : Controller
     {
         private readonly AppDbContext _context;

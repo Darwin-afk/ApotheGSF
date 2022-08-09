@@ -131,7 +131,7 @@ namespace ApotheGSF.Controllers
             //si cantidadUnidad es mayor  unidadesCaja del medicamento se regresa el error
             if (medicamentosCajas.CantidadUnidad > medicamento.UnidadesCaja)
             {
-                ModelState.AddModelError("", "Cantidad Superior a la Valida");
+                _notyf.Error("Cantidad Superior a la Valida");
             }
 
             if (ModelState.IsValid && medicamentosCajas.CantidadUnidad <= medicamento.UnidadesCaja)

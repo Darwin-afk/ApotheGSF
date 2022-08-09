@@ -173,7 +173,7 @@ namespace ApotheGSF.Controllers
                 {
                     foreach (IdentityError error in result.Errors)
                     {
-                        ModelState.AddModelError(error.Code, error.Description);
+                        _notyf.Error($"{error.Code} - {error.Description}");
                     }
                 }
             }

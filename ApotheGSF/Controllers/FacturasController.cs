@@ -204,6 +204,12 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind("SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
+            if(viewModel.MedicamentosDetalle.Count == 0)
+            {
+                _notyf.Error("Se necesita agregar algun medicamento");
+                return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
+            }
+
             string error = VerificarInventario(ref viewModel);
 
             //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
@@ -564,10 +570,6 @@ namespace ApotheGSF.Controllers
 
                     listaDetalle[agregarDetalle.CodigoDetalle] = agregarDetalle;
 
-                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().CodigosCajas.Add(facturasCajas[0].CodigoCaja);
-                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().Cantidad += facturasCajas[0].CantidadUnidad;
-                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().Total = 
-
                     facturasCajas.RemoveAt(0);
                 }
                 else
@@ -626,6 +628,12 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
+                    if (viewModel.MedicamentosDetalle.Count == 0)
+                    {
+                        _notyf.Error("Se necesita agregar algun medicamento");
+                        return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
+                    }
+
                     //buscar la factura anterior
                     Facturas facturaAnterior = _context.Facturas.Where(f => f.Codigo == viewModel.Codigo && f.Inactivo == false).Include(f => f.FacturasMedicamentosCajas).FirstOrDefault();
                     //desactivar la factura anterior

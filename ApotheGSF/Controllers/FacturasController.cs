@@ -196,7 +196,8 @@ namespace ApotheGSF.Controllers
             //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
             if (!error.Equals(""))//si no esta vacio
             {
-                ModelState.AddModelError("", error);
+                _notyf.Error(error);
+                return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
             }
 
             if (ModelState.IsValid)
@@ -318,7 +319,7 @@ namespace ApotheGSF.Controllers
                 }
                 catch (Exception e)
                 {
-                    ModelState.AddModelError("", e.Message);
+                    _notyf.Error(e.Message);
                     return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
                 int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;
@@ -340,6 +341,7 @@ namespace ApotheGSF.Controllers
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 
+            _notyf.Error("Invalido");
             return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
         }
 
@@ -379,7 +381,7 @@ namespace ApotheGSF.Controllers
                             else
                             {
                                 //si no hay algun otro cajaId para remplazarlo se mostrar un error en el view
-                                return "No hay existencia suficiente para el medicamento({detalle.DetalleId + 1}).";
+                                return $"No hay existencia suficiente para el medicamento({detalle.CodigoDetalle + 1}).";
                             }
                         }
                     }
@@ -428,7 +430,7 @@ namespace ApotheGSF.Controllers
                             //si se alcanzo el final de la lista sin tener la cantidad suficiente de unidades
                             if (cantidadUsar < detalle.Cantidad)
                             {
-                                return "No hay existencia suficiente para el medicamento({detalle.DetalleId + 1}).";
+                                return $"No hay existencia suficiente para el medicamento({detalle.CodigoDetalle + 1}).";
                             }
 
                         }
@@ -473,7 +475,7 @@ namespace ApotheGSF.Controllers
                         //si se alcanzo el final de la lista sin tener la cantidad suficiente de unidades
                         if (cantidadUsar < detalle.Cantidad)
                         {
-                            return "No hay existencia suficiente para el medicamento({detalle.DetalleId + 1}).";
+                            return $"No hay existencia suficiente para el medicamento({detalle.CodigoDetalle + 1}).";
                         }
                     }
                 }
@@ -647,7 +649,8 @@ namespace ApotheGSF.Controllers
                     //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
                     if (!error.Equals(""))//si no esta vacio
                     {
-                        ModelState.AddModelError("", error);
+                        _notyf.Error(error);
+                        return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                     }
 
                     //actualizar los medicamentos cajas por cada detalle
@@ -765,7 +768,7 @@ namespace ApotheGSF.Controllers
                 }
                 catch (Exception e)
                 {
-                    ModelState.AddModelError("", e.Message);
+                    _notyf.Error(e.Message);
                     return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
                 int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;

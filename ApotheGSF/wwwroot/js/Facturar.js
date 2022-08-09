@@ -9,9 +9,6 @@
                 window.open(url, "_blank");
                 window.location.href = "/Home/Index";
             }
-            else {
-                alert("invalido")
-            }
         }
     });
 };

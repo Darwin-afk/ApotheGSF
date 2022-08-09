@@ -24,6 +24,7 @@
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
                                     <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
+                                    <span asp-validation-for="Nombre" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -34,6 +35,7 @@
                                     </div>
                                     <div>
                                         <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
+                                        <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -47,6 +49,7 @@
                                         <span class="input-group-text"><i class="fas fa-tags"></i></span>
                                     </div>
                                     <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
+                                    <span asp-validation-for="Categoria" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -56,6 +59,7 @@
                                         <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
                                     </div>
                                     <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
+                                    <span asp-validation-for="Sustancia" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -68,6 +72,7 @@
                                         <span class="input-group-text"><i class="fas fa-pills"></i></span>
                                     </div>
                                     <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
+                                    <span asp-validation-for="Concentracion" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -77,6 +82,7 @@
                                         <span class="input-group-text"><i class="fas fa-tablets"></i></span>
                                     </div>
                                     <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0" onchange="AsignarPrecio()">
+                                    <span asp-validation-for="UnidadesCaja" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -90,6 +96,7 @@
                                         <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
                                     <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $" onchange="AsignarPrecio()">
+                                    <span asp-validation-for="Costo" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -112,6 +119,7 @@
                                         <span class="input-group-text"><i class="fas fa-list"></i></span>
                                     </div>
                                     <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
+                                    <span asp-validation-for="Indicaciones" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -121,6 +129,7 @@
                                         <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
                                     </div>
                                     <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
+                                    <span asp-validation-for="Dosis" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

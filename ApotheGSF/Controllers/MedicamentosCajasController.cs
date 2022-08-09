@@ -78,6 +78,21 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
+                //validar las fechas
+                if(viewModel.FechaAdquirido > DateTime.Now)
+                {
+                    _notyf.Warning("Fecha adquirido invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(viewModel);
+                }
+
+                if(viewModel.FechaVencimiento < DateTime.Now.AddMonths(1))
+                {
+                    _notyf.Warning("Fecha vencimiento invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(viewModel);
+                }
+
                 Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento).FirstOrDefault();
 
                 if(medicamento.EnvioPendiente == true)
@@ -140,11 +155,26 @@ namespace ApotheGSF.Controllers
             if (medicamentosCajas.CantidadUnidad > medicamento.UnidadesCaja)
             {
                 _notyf.Error("Cantidad Superior a la Valida");
+                ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                return View(medicamentosCajas);
             }
 
-            if (ModelState.IsValid && medicamentosCajas.CantidadUnidad <= medicamento.UnidadesCaja)
+            if (ModelState.IsValid)
             {
+                //validar las fechas
+                if (medicamentosCajas.FechaAdquirido > DateTime.Now)
+                {
+                    _notyf.Warning("Fecha adquirido invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(medicamentosCajas);
+                }
 
+                if (medicamentosCajas.FechaVencimiento < DateTime.Now.AddMonths(1))
+                {
+                    _notyf.Warning("Fecha vencimiento invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(medicamentosCajas);
+                }
 
                 try
                 {

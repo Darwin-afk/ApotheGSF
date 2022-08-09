@@ -221,6 +221,26 @@ namespace ApotheGSF.Controllers
 
             if (ModelState.IsValid)
             {
+                //obtener lista de medicamentos
+                List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).ToList();
+                //si la lista no es null
+                if(medicamentos != null)
+                {
+                    //por cada elemento de la lista
+                    foreach(var medicamento in medicamentos)
+                    {
+                        //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
+                        if(medicamento.Nombre.ToUpper() == viewModel.Nombre.ToUpper())
+                        {
+                            //si lo tiene regresa error
+                            _notyf.Error("este medicamento ya existe");
+                            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
+                            return View(viewModel);
+                        }
+
+                    }
+                }
+
                 Medicamentos newMedicamentos = new()
                 {
                     Nombre = viewModel.Nombre,
@@ -256,7 +276,7 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre");
+            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);
         }
 
@@ -297,7 +317,7 @@ namespace ApotheGSF.Controllers
                                                     .CodigoProveedor equals proveedores.Codigo
                                                      select proveedores.Codigo).ToListAsync();
 
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", medicamentos.CodigosProveedores);
+            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", medicamentos.CodigosProveedores);
 
             return View(medicamentos);
         }
@@ -316,6 +336,26 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
+                    //obtener lista de medicamentos
+                    List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).ToList();
+                    //si la lista no es null
+                    if (medicamentos != null)
+                    {
+                        //por cada elemento de la lista
+                        foreach (var medicamento in medicamentos)
+                        {
+                            //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
+                            if (medicamento.Nombre.ToUpper() == viewModel.Nombre.ToUpper())
+                            {
+                                //si lo tiene regresa error
+                                _notyf.Error("este medicamento ya existe");
+                                ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
+                                return View(viewModel);
+                            }
+
+                        }
+                    }
+
                     var editmedicamento = await _context.Medicamentos.Include(x => x.ProveedoresMedicamentos).
                                        FirstOrDefaultAsync(y => y.Codigo == viewModel.Codigo);
 
@@ -370,7 +410,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.ProveedoresId = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
+            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);
         }
 

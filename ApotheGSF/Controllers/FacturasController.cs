@@ -16,6 +16,7 @@ using System.Text;
 using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using Rotativa.AspNetCore;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace ApotheGSF.Controllers
 {
@@ -25,14 +26,17 @@ namespace ApotheGSF.Controllers
         private readonly ClaimsPrincipal _user;
         private ICompositeViewEngine _viewEngine;
         private static List<MedicamentosDetalle>? detallesEdit;
+        private readonly INotyfService _notyf;
 
         public FacturasController(AppDbContext context,
                                   IHttpContextAccessor accessor,
-                                  ICompositeViewEngine viewEngine)
+                                  ICompositeViewEngine viewEngine,
+                                  INotyfService notyf)
         {
             _context = context;
             _user = accessor.HttpContext.User;
             _viewEngine = viewEngine;
+            _notyf = notyf;
         }
 
         // GET: Facturas

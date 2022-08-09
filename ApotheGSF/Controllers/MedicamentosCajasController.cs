@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using ApotheGSF.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace ApotheGSF.Controllers
 {
     public class MedicamentosCajasController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly INotyfService _notyf;
 
-        public MedicamentosCajasController(AppDbContext context)
+        public MedicamentosCajasController(AppDbContext context, 
+                                           INotyfService notyf)
         {
             _context = context;
+            _notyf = notyf;
         }
 
         // GET: MedicamentosCajas/Details/5

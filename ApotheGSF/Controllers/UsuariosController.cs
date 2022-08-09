@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace ApotheGSF.Controllers
 {
@@ -22,16 +23,19 @@ namespace ApotheGSF.Controllers
         private readonly UserManager<AppUsuario> _userManager;
         private readonly RoleManager<AppRol> _roleManager;
         private readonly ClaimsPrincipal _user;
+        private readonly INotyfService _notyf;
 
         public UsuariosController(AppDbContext context,
                                   UserManager<AppUsuario> userManager,
                                   RoleManager<AppRol> roleManager,
-                                  IHttpContextAccessor accessor)
+                                  IHttpContextAccessor accessor,
+                                  INotyfService notyf)
         {
             _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
             _user = accessor.HttpContext.User;
+            _notyf = notyf;
         }
 
         // GET: Usuarios

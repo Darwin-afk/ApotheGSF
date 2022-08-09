@@ -1,6 +1,7 @@
 ﻿using ApotheGSF.Clases;
 using ApotheGSF.Models;
 using ApotheGSF.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace ApotheGSF.Controllers
         private readonly string webRoot;
         private readonly IOptions<AppSettings> appSettings;
         private readonly AppDbContext _context;
+        private readonly INotyfService _notyf;
 
         public HomeController(ILogger<HomeController> logger,
                               SignInManager<AppUsuario> signInManager,
@@ -27,7 +29,8 @@ namespace ApotheGSF.Controllers
                               IHttpContextAccessor accessor,
                               IWebHostEnvironment env,
                               IOptions<AppSettings> _appSettings,
-                              AppDbContext context)
+                              AppDbContext context,
+                              INotyfService notyf)
         {
             _logger = logger;
             _signInManager = signInManager;
@@ -36,11 +39,14 @@ namespace ApotheGSF.Controllers
             webRoot = env.WebRootPath;
             appSettings = _appSettings;
             _context = context;
+            _notyf = notyf;
         }
 
         public IActionResult Index()
         {
             VerificarInventario();
+
+            _notyf.Information($"{Notificaciones.Mensajes.Count} mensajes nuevos");
 
             return View();
         }

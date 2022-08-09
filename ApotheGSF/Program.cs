@@ -5,6 +5,8 @@ using ApotheGSF.Models;
 using ApotheGSF.Clases;
 using ReflectionIT.Mvc.Paging;
 using Rotativa.AspNetCore;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +58,13 @@ builder.Services.AddPaging(options => {
     options.PageParameterName = "pageindex";
 });
 
+builder.Services.AddNotyf(config =>
+{
+    config.DurationInSeconds = 10;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.BottomRight;
+});
+
 
 var app = builder.Build();
 
@@ -75,6 +84,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCookiePolicy();
+
+app.UseNotyf();
 
 app.MapControllerRoute(
     name: "default",

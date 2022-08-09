@@ -13,6 +13,7 @@ using ApotheGSF.Clases;
 using System.Text;
 using System.Linq.Dynamic.Core;
 using ReflectionIT.Mvc.Paging;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace ApotheGSF.Controllers
 {
@@ -22,14 +23,17 @@ namespace ApotheGSF.Controllers
        
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
+        private readonly INotyfService _notyf;
 
 
         public ProveedoresController(AppDbContext context,
-                             IHttpContextAccessor accessor
+                             IHttpContextAccessor accessor,
+                             INotyfService notyf
             )
         {
             _context = context;
             _user = accessor.HttpContext.User;
+            _notyf = notyf;
         }
 
         // GET: Proveedores

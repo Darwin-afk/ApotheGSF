@@ -17,6 +17,7 @@ using Rotativa.AspNetCore;
 using System.Net.Mail;
 using System.Net;
 using System.Net.Mime;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace ApotheGSF.Controllers
 {
@@ -24,6 +25,7 @@ namespace ApotheGSF.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
+        private readonly INotyfService _notyf;
 
         /*CONFIGURACIÓN SMTP:
     ---------------------------------------------------------
@@ -52,11 +54,13 @@ namespace ApotheGSF.Controllers
         private string correEmisor = new string("ApotheGSF@outlook.com");
 
         public MedicamentosController(AppDbContext context,
-                             IHttpContextAccessor accessor
+                             IHttpContextAccessor accessor,
+                             INotyfService notyf
             )
         {
             _context = context;
             _user = accessor.HttpContext.User;
+            _notyf = notyf;
         }
 
         // GET: Medicamentos

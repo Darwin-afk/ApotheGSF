@@ -1352,7 +1352,10 @@ namespace ApotheGSF.Controllers
 
             factura.MedicamentosDetalle = ObtenerDetalles(factura);
 
-            return new ViewAsPdf("ReporteFactura", factura);
+            return new ViewAsPdf("ReporteFactura", factura)
+            {
+                PageSize = Rotativa.AspNetCore.Options.Size.A5
+            };
         }
     }
 }

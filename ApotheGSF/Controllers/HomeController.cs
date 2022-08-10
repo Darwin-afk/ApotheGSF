@@ -48,7 +48,7 @@ namespace ApotheGSF.Controllers
 
             if(Mensaje != "")
             {
-                _notyf.Custom(Mensaje, 5, "#0022CC", "fas fa-check");
+                _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
             }
 
             _notyf.Custom($"{Notificaciones.Mensajes.Count} mensajes nuevos",5, "#A2D0F1", "fas fa-question");

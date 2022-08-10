@@ -4,77 +4,70 @@
     ViewData["Title"] = "Edit";
 }
 
-<div class="form-group row">
-    <div class="form-group col-sm-10">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
-                <div class="card">
-                    <div class="card-header text-center" style="background-color:#994400;">
-                        <h3 class="display-8" style="color:white;"><i class="fas fa-store"></i>&nbsp;Modificar Lote de Medicamento</h3>
-                    </div>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-7">
+        <div class="card">
+            <div class="card-header text-center" style="background-color:#994400;">
+                <h3 class="display-8" style="color:white;"><i class="fas fa-store"></i>&nbsp;Modificar Lote de Medicamento</h3>
+            </div>
 
-                    <div class="card-body">
-                        <label class="form-group">Medicamento:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-capsules"></i></span>
-                            </div>
-                            <input type="text" readonly class="form-control" value="@ViewBag.MedicamentosId" />
-                        </div>
-                        <label class="control-label">Unidades:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-box"></i></span>
-                            </div>
-                            <input asp-for="CantidadUnidad" class="form-control" />
-                        </div>
-                        <div>
-                            <span asp-validation-for="CantidadUnidad" class="text-danger"></span>
-                        </div>
-                        <label class="control-label">Fecha de Adquisición:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                            </div>
-                            <input type="date" asp-for="FechaAdquirido" class="form-control" />
-                        </div>
-                        <div>
-                            <span asp-validation-for="FechaAdquirido" class="text-danger"></span>
-                        </div>
-                        <label class="control-label">Fecha de Vencimiento:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                            </div>
-                            <input type="date" asp-for="FechaVencimiento" class="form-control" />
-                        </div>
-                        <div>
-                            <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
-                        </div>
+            <div class="card-body">
+                <label class="form-group">Medicamento:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-capsules"></i></span>
                     </div>
-                    <div class="card-footer" style="background-color:#994400;">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <input type="hidden" asp-for="CodigoMedicamento" />
-                                <input type="hidden" asp-for="Codigo" />
-                            </div>
-                            <div class="col-sm-4 text-center">
-                                <button type="submit" value="Modificar" class="btn" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Actualizar</button>
-                            </div>
-                            <div class="col-sm-4 text-end">
-                                <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
-                            </div>
-                        </div>
+                    <input type="text" readonly class="form-control" value="@ViewBag.MedicamentosId" />
+                </div>
+                <label class="control-label">Unidades:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-box"></i></span>
+                    </div>
+                    <input asp-for="CantidadUnidad" class="form-control" />
+                </div>
+                <div>
+                    <span asp-validation-for="CantidadUnidad" class="text-danger"></span>
+                </div>
+                <label class="control-label">Fecha de Adquisición:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                    </div>
+                    <input type="date" asp-for="FechaAdquirido" class="form-control" />
+                </div>
+                <div>
+                    <span asp-validation-for="FechaAdquirido" class="text-danger"></span>
+                </div>
+                <label class="control-label">Fecha de Vencimiento:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                    </div>
+                    <input type="date" asp-for="FechaVencimiento" class="form-control" />
+                </div>
+                <div>
+                    <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="card-footer" style="background-color:#994400;">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="hidden" asp-for="CodigoMedicamento" />
+                        <input type="hidden" asp-for="Codigo" />
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <button type="submit" value="Modificar" class="btn" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Actualizar</button>
+                    </div>
+                    <div class="col-sm-4 text-end">
+                        <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-    <div class="col-sm-2">
-    </div>
-</div>
-
+</form>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

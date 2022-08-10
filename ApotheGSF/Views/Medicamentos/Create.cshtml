@@ -33,8 +33,8 @@
                             </div>
                             <div>
                                 <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
-                                <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                             </div>
+                            <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-tablets"></i></span>
                             </div>
-                            <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0" onchange="AsignarPrecio()">
+                            <input class="form-control" asp-for="UnidadesCaja" type="number" placeholder="0" onchange="AsignarPrecio()">
                             <span asp-validation-for="UnidadesCaja" class="text-danger"></span>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $" onchange="AsignarPrecio()">
+                            <input class="form-control" asp-for="Costo" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
                             <span asp-validation-for="Costo" class="text-danger"></span>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $" readonly>
+                            <input class="form-control" asp-for="PrecioUnidad" type="number" placeholder="0.00 $" readonly>
                         </div>
                     </div>
                 </div>

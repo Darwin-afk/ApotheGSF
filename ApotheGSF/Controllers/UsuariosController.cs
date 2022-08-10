@@ -14,9 +14,11 @@ using System.Text;
 using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class UsuariosController : Controller
     {
         private readonly AppDbContext _context;
@@ -143,6 +145,25 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
+                //obtener lista de usuarios
+                List<AppUsuario> usuarios = _context.AppUsuarios.Where(m => m.Inactivo == false).ToList();
+                //si la lista no es null
+                if (usuarios != null)
+                {
+                    //por cada elemento de la lista
+                    foreach (var usuario in usuarios)
+                    {
+                        //se verifica si tiene el mismo nombre que el usuario que se quiere crear
+                        if (usuario.UserName.ToUpper() == viewModel.Usuario.ToUpper())
+                        {
+                            //si lo tiene regresa error
+                            _notyf.Error("Este usuario ya existe");
+                            return View(viewModel);
+                        }
+
+                    }
+                }
+
                 AppUsuario nuevoUsuario = new()
                 {
                     Nombre = viewModel.Nombre,

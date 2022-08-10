@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using ApotheGSF.Models;
 using ApotheGSF.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize]
     public class MedicamentosCajasController : Controller
     {
         private readonly AppDbContext _context;
@@ -55,9 +57,18 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: MedicamentosCajas/Create
+        [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
-            ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(p => p.Inactivo == false).ToList();
+
+            if (medicamentos == null)
+            {
+                _notyf.Information("Es necesario tener algun medicamento");
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["MedicamentosId"] = new SelectList(medicamentos, "Codigo", "Nombre");
             return View();
         }
 
@@ -70,6 +81,21 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
+                //validar las fechas
+                if(viewModel.FechaAdquirido > DateTime.Now)
+                {
+                    _notyf.Warning("Fecha adquirido invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(viewModel);
+                }
+
+                if(viewModel.FechaVencimiento < DateTime.Now.AddMonths(1))
+                {
+                    _notyf.Warning("Fecha vencimiento invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(viewModel);
+                }
+
                 Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento).FirstOrDefault();
 
                 if(medicamento.EnvioPendiente == true)
@@ -101,6 +127,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: MedicamentosCajas/Edit/5
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.MedicamentosCajas == null)
@@ -132,11 +159,26 @@ namespace ApotheGSF.Controllers
             if (medicamentosCajas.CantidadUnidad > medicamento.UnidadesCaja)
             {
                 _notyf.Error("Cantidad Superior a la Valida");
+                ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                return View(medicamentosCajas);
             }
 
-            if (ModelState.IsValid && medicamentosCajas.CantidadUnidad <= medicamento.UnidadesCaja)
+            if (ModelState.IsValid)
             {
+                //validar las fechas
+                if (medicamentosCajas.FechaAdquirido > DateTime.Now)
+                {
+                    _notyf.Warning("Fecha adquirido invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(medicamentosCajas);
+                }
 
+                if (medicamentosCajas.FechaVencimiento < DateTime.Now.AddMonths(1))
+                {
+                    _notyf.Warning("Fecha vencimiento invalida");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    return View(medicamentosCajas);
+                }
 
                 try
                 {
@@ -164,6 +206,7 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: MedicamentosCajas/Delete/5
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.MedicamentosCajas == null)

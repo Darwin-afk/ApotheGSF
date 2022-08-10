@@ -29,7 +29,9 @@
                             </div>
                             <input asp-for="CantidadUnidad" class="form-control" />
                         </div>
-                        <span asp-validation-for="CantidadUnidad" class="text-danger"></span>
+                        <div>
+                            <span asp-validation-for="CantidadUnidad" class="text-danger"></span>
+                        </div>
                         <label class="control-label">Fecha de Adquisición:</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -37,7 +39,9 @@
                             </div>
                             <input type="date" asp-for="FechaAdquirido" class="form-control" />
                         </div>
-                        <span asp-validation-for="FechaAdquirido" class="text-danger"></span>
+                        <div>
+                            <span asp-validation-for="FechaAdquirido" class="text-danger"></span>
+                        </div>
                         <label class="control-label">Fecha de Vencimiento:</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -45,7 +49,9 @@
                             </div>
                             <input type="date" asp-for="FechaVencimiento" class="form-control" />
                         </div>
-                        <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+                        <div>
+                            <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="card-footer" style="background-color:#994400;">
                         <div class="row">

@@ -23,7 +23,7 @@ namespace ApotheGSF.ViewModels
         public string Indicaciones { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public string Dosis { get; set; }
-
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         public List<int>? CodigosProveedores { get; set; }
         public string? NombreProveedor { get; set; }
         public int Cajas { get; set; }

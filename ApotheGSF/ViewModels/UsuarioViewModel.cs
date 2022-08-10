@@ -35,6 +35,7 @@ namespace ApotheGSF.ViewModels
 		[Required(ErrorMessage = "Debe elegir un rol.")]
 		public string Rol { get; set; }
 
+        [Required(ErrorMessage = "Digite la fecha de nacimiento")]		
 		[Display(Name = "Fecha de nacimiento")]
 		public DateTime FechaNacimiento { get; set; }
 
@@ -47,8 +48,10 @@ namespace ApotheGSF.ViewModels
 		public string Email { get; set; }
 
 		[Phone]
+		[Required(ErrorMessage = "Digite el teléfono")]
 		public string Telefono { get; set; }
-        public string Direccion { get; set; }
+		[Required(ErrorMessage = "Digite la dirección")]
+		public string Direccion { get; set; }
 
         [Display(Name = "Creado Por")]
 		public string? CreadPor { get; set; }

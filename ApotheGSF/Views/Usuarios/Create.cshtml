@@ -23,6 +23,7 @@
                                     </div>
                                     <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
                                 </div>
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
                             </div>
                             <div class="col-sm-6">
                                 <label for="Apellido" class="col-form-label">Appellido:</label>
@@ -31,6 +32,7 @@
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
                                     <input type="text" asp-for="Apellido" class="form-control" placeholder="Apellido">
+                                    <span asp-validation-for="Apellido" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -44,6 +46,7 @@
                                     </div>
                                     <input type="tel" asp-for="Telefono" class="form-control" placeholder="___-____-____">
                                 </div>
+                                <span asp-validation-for="Telefono" class="text-danger"></span>
                             </div>
                             <div class="col-sm-6">
                                 <label for="Cedula" class="col-form-label">Cédula:</label>
@@ -53,6 +56,7 @@
                                     </div>
                                     <input type="text" asp-for="Cedula" class="form-control" placeholder="___-_______-_">
                                 </div>
+                                <span asp-validation-for="Cedula" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -64,6 +68,7 @@
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
                                     <input type="date" asp-for="FechaNacimiento" class="form-control datetimepicker-input">
+                                    <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -74,6 +79,7 @@
                                     </div>
                                     <input type="text" asp-for="Direccion" class="form-control" placeholder="Dirección">
                                 </div>
+                                <span asp-validation-for="Direccion" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -85,6 +91,7 @@
                                         <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                                     </div>
                                     <input class="form-control" asp-for="Email" type="email" placeholder="Example@Something.com">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -95,6 +102,7 @@
                                     </div>
                                     <input class="form-control" asp-for="Usuario" type="text" placeholder="Nombre Usuario">
                                 </div>
+                                <span asp-validation-for="Usuario" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -105,7 +113,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                                     </div>
-                                    <input class="form-control" asp-for="Password" type="text" placeholder="Contraseña">
+                                    <input class="form-control" asp-for="Password" type="password" placeholder="Contraseña">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -114,7 +123,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                                     </div>
-                                    <input class="form-control" asp-for="ConfirmarPassword" type="text" placeholder="...">
+                                    <input class="form-control" asp-for="ConfirmarPassword" type="password" placeholder="...">
+                                    <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -133,6 +143,7 @@
                                         <option value="Vendedor">Vendedor</option>
                                     </select>
                                 </div>
+                                <span asp-validation-for="Rol" class="text-danger"></span>
                             </div>
                         </div>
 

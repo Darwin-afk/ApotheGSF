@@ -251,6 +251,7 @@ namespace ApotheGSF.Controllers
         #endregion
 
         #region PerfilUsuario
+        [Authorize]
         public async Task<IActionResult> PerfilUsuario(int? id)
         {
             if (id == null)
@@ -280,6 +281,7 @@ namespace ApotheGSF.Controllers
             return View(perfil);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PerfilUsuario([Bind("Codigo, Nombre, Apellido, Email, Telefono, Foto")] PerfilUsuarioViewModel modelo, IFormFile logo, string removeLogo)
@@ -371,6 +373,7 @@ namespace ApotheGSF.Controllers
         }
         #endregion
 
+        [Authorize]
         public IActionResult VerNotificaciones()
         {
             return View();

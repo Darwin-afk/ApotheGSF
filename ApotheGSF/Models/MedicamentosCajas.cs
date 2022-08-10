@@ -10,8 +10,11 @@ namespace ApotheGSF.Models
         [ForeignKey("Medicamentos")]
         public int CodigoMedicamento { get; set; }
         public virtual Medicamentos? Medicamentos { get; set; }
+        [Required(ErrorMessage = "Digite una cantidad")]
         public int CantidadUnidad { get; set; }
+        [Required(ErrorMessage = "Digite la fecha de adquisición")]
         public DateTime FechaAdquirido { get; set; }
+        [Required(ErrorMessage = "Digite la fecha de vencimiento")]
         public DateTime FechaVencimiento { get; set; }
         public bool Detallada { get; set; }
         public bool Inactivo { get; set; }

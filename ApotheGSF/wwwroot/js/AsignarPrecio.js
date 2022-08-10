@@ -6,7 +6,7 @@
         document.getElementById('PrecioUnidad').value = ((costo * 1.10) / unidades).toFixed(2);
     }
     else {
-        document.getElementById('PrecioUnidad').value = 0
+        document.getElementById('PrecioUnidad').value = 0.00
     }
 
 };

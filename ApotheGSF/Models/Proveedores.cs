@@ -41,7 +41,7 @@ namespace ApotheGSF.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [Required(ErrorMessage = "Debe elegir un termino de pago")]
         [Display(Name = "Terminos de Pago")]
         public string TerminosdePago { get; set; }
 

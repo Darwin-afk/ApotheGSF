@@ -17,9 +17,11 @@ using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using Rotativa.AspNetCore;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApotheGSF.Controllers
 {
+    [Authorize(Roles = "Administrador, Vendedor")]
     public class FacturasController : Controller
     {
         private readonly AppDbContext _context;
@@ -176,12 +178,25 @@ namespace ApotheGSF.Controllers
                                           Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                       }).Where(x => x.Inactivo == false).ToListAsync();
-            //usar los medicamentos que tengan alguna caja en inventario
-            ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 
-            detallesEdit = new();
+            if (medicamentos == null)
+            {
+                _notyf.Information("Es necesario tener algun medicamento");
+                return RedirectToAction("Index", "Home");
+            }
 
-            return View(new FacturaViewModel());
+            if(medicamentos.Any(m => m.Cajas > 0))
+            {
+                //usar los medicamentos que tengan alguna caja en inventario
+                ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+
+                detallesEdit = new();
+
+                return View(new FacturaViewModel());
+            }
+
+            _notyf.Information("Es necesario tener inventario");
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Facturas/Create
@@ -191,6 +206,12 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind("SubTotal,Total,MedicamentosDetalle")] FacturaViewModel viewModel)
         {
+            if(viewModel.MedicamentosDetalle.Count == 0)
+            {
+                _notyf.Error("Se necesita agregar algun medicamento");
+                return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
+            }
+
             string error = VerificarInventario(ref viewModel);
 
             //si hubo alguno error al verificar la disponibilidad en el inventario se regresa al view
@@ -551,10 +572,6 @@ namespace ApotheGSF.Controllers
 
                     listaDetalle[agregarDetalle.CodigoDetalle] = agregarDetalle;
 
-                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().CodigosCajas.Add(facturasCajas[0].CodigoCaja);
-                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().Cantidad += facturasCajas[0].CantidadUnidad;
-                    //listaDetalle.Where(ld => ld.NombreMedicamento == nombreMedicamento && ld.TipoCantidad == facturasCajas[0].TipoCantidad).First().Total = 
-
                     facturasCajas.RemoveAt(0);
                 }
                 else
@@ -613,6 +630,12 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
+                    if (viewModel.MedicamentosDetalle.Count == 0)
+                    {
+                        _notyf.Error("Se necesita agregar algun medicamento");
+                        return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
+                    }
+
                     //buscar la factura anterior
                     Facturas facturaAnterior = _context.Facturas.Where(f => f.Codigo == viewModel.Codigo && f.Inactivo == false).Include(f => f.FacturasMedicamentosCajas).FirstOrDefault();
                     //desactivar la factura anterior

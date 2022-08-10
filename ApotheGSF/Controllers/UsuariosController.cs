@@ -215,7 +215,7 @@ namespace ApotheGSF.Controllers
             }
 
             //validar fecha de nacimiento
-            if (!viewModel.FechaNacimiento.ValidaFechaNacimiento())
+            if (!viewModel.FechaNacimiento.ValidarFechaNacimiento())
             {
                 return "Fecha de nacimiento invalida";
             }

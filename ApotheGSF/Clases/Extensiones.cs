@@ -107,7 +107,7 @@ namespace ApotheGSF.Clases
 			}
 		}
 
-		public static bool ValidaFechaNacimiento(this DateTime fechaNacimiento)
+		public static bool ValidarFechaNacimiento(this DateTime fechaNacimiento)
         {
 			int yearMin = fechaNacimiento.Year - DateTime.Now.AddYears(-18).Year;
 			int yearMax = fechaNacimiento.Year - DateTime.Now.AddYears(-70).Year;

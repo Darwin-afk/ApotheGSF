@@ -40,6 +40,7 @@ namespace ApotheGSF.ViewModels
 		public DateTime FechaNacimiento { get; set; }
 
 		[Display(Name = "Cédula")]
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-]?([0-9]{7})[-]?([0-9]{1})$", ErrorMessage = "Cédula inválida")]
 		public string Cedula { get; set; }
 
         [Required(ErrorMessage = "Digite el correo electrónico del usuario.")]
@@ -49,6 +50,7 @@ namespace ApotheGSF.ViewModels
 
 		[Phone]
 		[Required(ErrorMessage = "Digite el teléfono")]
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
 		public string Telefono { get; set; }
 		[Required(ErrorMessage = "Digite la dirección")]
 		public string Direccion { get; set; }

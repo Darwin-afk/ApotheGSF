@@ -344,7 +344,7 @@ namespace ApotheGSF.Controllers
                     return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
                 int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;
-                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha guardado exitosamente!!" });
+                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha facturado exitosamente!!" });
             }
             //obtener lista de medicamentos que no esten inactivos
             var medicamentos = await (from meds in _context.Medicamentos
@@ -795,7 +795,7 @@ namespace ApotheGSF.Controllers
                     return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
                 int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;
-                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha guardado exitosamente!!" });
+                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha editado la factura exitosamente!!" });
             }
 
             //obtener lista de medicamentos que no esten inactivos
@@ -1354,7 +1354,7 @@ namespace ApotheGSF.Controllers
 
             return new ViewAsPdf("ReporteFactura", factura)
             {
-                PageSize = Rotativa.AspNetCore.Options.Size.A5
+                PageSize = Rotativa.AspNetCore.Options.Size.A6
             };
         }
     }

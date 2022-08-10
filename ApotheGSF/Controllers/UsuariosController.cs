@@ -209,6 +209,13 @@ namespace ApotheGSF.Controllers
                 }
             }
 
+            //validar fecha de nacimiento
+            if (!viewModel.FechaNacimiento.ValidaFechaNacimiento())
+            {
+                return "Fecha de nacimiento invalida";
+            }
+            
+            //validar email
             if (!viewModel.Email.IsValidEmail())
             {
                 return "Email invalido";

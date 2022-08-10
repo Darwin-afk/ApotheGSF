@@ -107,6 +107,18 @@ namespace ApotheGSF.Clases
 			}
 		}
 
+		public static bool ValidaFechaNacimiento(this DateTime fechaNacimiento)
+        {
+			int yearMin = fechaNacimiento.Year - DateTime.Now.AddYears(-18).Year;
+			int yearMax = fechaNacimiento.Year - DateTime.Now.AddYears(-70).Year;
+			if (yearMin > 0 || yearMax < 0)
+            {
+				return false;
+            }
+
+			return true;
+		}
+
 		public static bool Contains(this string text, string[] keywods, bool ignoreCase = false)
 		{
 			bool found = false;

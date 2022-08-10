@@ -136,7 +136,8 @@ namespace ApotheGSF.Controllers
                 }
             }
 
-            if(!proveedor.Email.IsValidEmail())
+            //validar email
+            if (!proveedor.Email.IsValidEmail())
             {
                 return "Email invalido";
             }

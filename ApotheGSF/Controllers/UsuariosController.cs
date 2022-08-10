@@ -206,6 +206,11 @@ namespace ApotheGSF.Controllers
                         return "Este usuario ya existe";
                     }
 
+                    if(usuario.Email == viewModel.Email)
+                    {
+                        return "Email ya usado";
+                    }
+
                 }
             }
 

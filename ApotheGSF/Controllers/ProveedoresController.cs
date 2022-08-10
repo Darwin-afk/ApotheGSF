@@ -133,6 +133,11 @@ namespace ApotheGSF.Controllers
                     {
                         return "Este proveedor ya existe";
                     }
+
+                    if (_proveedor.Email == proveedor.Email)
+                    {
+                        return "Email ya usado";
+                    }
                 }
             }
 

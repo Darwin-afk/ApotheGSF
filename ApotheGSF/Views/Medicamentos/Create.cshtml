@@ -4,154 +4,147 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="form-group row">
-    <div class="form-group col-sm-10">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
-                <div class="card">
-                    <div class="card-header text-center" style="background-color:#00CC66;">
-                        <h3 class="display-8" style="color:white;"><i class="fa-solid fa-capsules"></i>&nbsp;Crear Medicamento</h3>
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-7">
+        <div class="card">
+            <div class="card-header text-center" style="background-color:#00CC66;">
+                <h3 class="display-8" style="color:white;"><i class="fa-solid fa-capsules"></i>&nbsp;Crear Medicamento</h3>
+            </div>
+            <!--datos-->
+            <div class="card-body">
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Nombre:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
                     </div>
-                    <!--datos-->
-                    <div class="card-body">
-
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Nombre:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                    </div>
-                                    <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
-                                    <span asp-validation-for="Nombre" class="text-danger"></span>
-                                </div>
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Proveedores:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-flask"></i></span>
                             </div>
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Proveedores:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-flask"></i></span>
-                                    </div>
-                                    <div>
-                                        <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
-                                        <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
-                                    </div>
-                                </div>
+                            <div>
+                                <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
+                                <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Categoria:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-tags"></i></span>
-                                    </div>
-                                    <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
-                                    <span asp-validation-for="Categoria" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Sustancia:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
-                                    </div>
-                                    <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
-                                    <span asp-validation-for="Sustancia" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Concentración:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-pills"></i></span>
-                                    </div>
-                                    <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
-                                    <span asp-validation-for="Concentracion" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Unidades por Caja:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-tablets"></i></span>
-                                    </div>
-                                    <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0" onchange="AsignarPrecio()">
-                                    <span asp-validation-for="UnidadesCaja" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Costo:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                    </div>
-                                    <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $" onchange="AsignarPrecio()">
-                                    <span asp-validation-for="Costo" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Precio por Unidad:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                    </div>
-                                    <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-form-label">Indicaciones</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-list"></i></span>
-                                    </div>
-                                    <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
-                                    <span asp-validation-for="Indicaciones" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label for="Direccion" class="col-form-label">Dosis</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
-                                    </div>
-                                    <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
-                                    <span asp-validation-for="Dosis" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!--Fin datos-->
-                    </div>
-                    <div class="card-footer text-center" style="background-color:#00CC66 ;">
-                        <!--Botones-->
-                        <button class="btn btn-secondary" type="button" style="background-color:white;color:#494949;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>
-                        <button class="btn " value="Create" type="submit" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
-                        <a class="btn" asp-controller="Home" asp-action="Index" style="background-color:white;color:red;" type="button"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
-                        <!--Fin Botones-->
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    <div class="col-sm-2">
-    </div>
-</div>
 
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Categoria:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                            </div>
+                            <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
+                            <span asp-validation-for="Categoria" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Sustancia:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
+                            </div>
+                            <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
+                            <span asp-validation-for="Sustancia" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Concentración:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-pills"></i></span>
+                            </div>
+                            <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
+                            <span asp-validation-for="Concentracion" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Unidades por Caja:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tablets"></i></span>
+                            </div>
+                            <input class="form-control" asp-for="UnidadesCaja" type="text" placeholder="0" onchange="AsignarPrecio()">
+                            <span asp-validation-for="UnidadesCaja" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Costo:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input class="form-control" asp-for="Costo" type="text" placeholder="0.00 $" onchange="AsignarPrecio()">
+                            <span asp-validation-for="Costo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Precio por Unidad:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input class="form-control" asp-for="PrecioUnidad" type="text" placeholder="0.00 $" readonly>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Indicaciones</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-list"></i></span>
+                            </div>
+                            <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
+                            <span asp-validation-for="Indicaciones" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="Direccion" class="col-form-label">Dosis</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
+                            </div>
+                            <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
+                            <span asp-validation-for="Dosis" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Fin datos-->
+            </div>
+            <div class="card-footer text-center" style="background-color:#00CC66 ;">
+                <!--Botones-->
+                <button class="btn btn-secondary" type="button" style="background-color:white;color:#494949;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>
+                <button class="btn " value="Create" type="submit" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+                <a class="btn" asp-controller="Home" asp-action="Index" style="background-color:white;color:red;" type="button"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
+                <!--Fin Botones-->
+            </div>
+        </div>
+    </div>
+</form>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

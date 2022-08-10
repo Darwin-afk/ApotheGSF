@@ -848,12 +848,12 @@ namespace ApotheGSF.Controllers
 
         // POST: Facturas/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, FacturaViewModel viewModel)
+        public async Task<bool> DeleteConfirmed(FacturaViewModel viewModel, int id)
         {
             if (_context.Facturas == null)
             {
-                return Problem("Entity set 'AppDbContext.Facturas'  is null.");
+                return false;
+                //return Problem("Entity set 'AppDbContext.Facturas'  is null.");
             }
             var factura = await _context.Facturas.FindAsync(id);
             if (factura != null)
@@ -915,7 +915,8 @@ namespace ApotheGSF.Controllers
                 }
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return true;
+            //return RedirectToAction(nameof(Index));
         }
 
 

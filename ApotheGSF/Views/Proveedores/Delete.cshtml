@@ -69,13 +69,13 @@
             </dl>
         </div>
         <div class="card-footer text-end" style="background-color:#E8E8E8;">
-            <form asp-action="Delete">
+            <form asp-action="Delete" id="form">
                 <div class="row">
                     <div class="col-sm-4">
                         <input type="hidden" asp-for="Codigo" />
                     </div>
                     <div class="col-sm-4 text-center">
-                        <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>
+                        <button onclick="Confirmar()" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>
                     </div>
                     <div class="col-sm-4 text-end">
                         <a asp-action="Index" type="button" style="background-color:white;color:red;" class="btn"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
@@ -85,3 +85,25 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        function Confirmar() {
+            if (confirm("Esta seguro que desea eliminarlo?")) {
+                $.ajax({
+                    data: $('#form').serialize(),
+                    type: "POST",
+                    url: "/Proveedores/Delete",
+                    success: function(response) {
+                        if (response) {
+                            window.location.href = "/Home/Index";
+                        }
+                    },
+                });
+            }
+        }
+    </script>
+    }

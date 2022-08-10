@@ -221,16 +221,14 @@ namespace ApotheGSF.Controllers
         // POST: Proveedores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<bool> DeleteConfirmed(int Codigo)
         {
             if (_context.Proveedores == null)
             {
-                return Problem("Entity set 'AppDbContext.Proveedores'  is null.");
+                return false;
             }
 
-
-
-            var proveedor = await _context.Proveedores.FindAsync(id);
+            var proveedor = await _context.Proveedores.FindAsync(Codigo);
             if (proveedor != null)
             {
                 _context.Proveedores.Update(proveedor);
@@ -242,7 +240,7 @@ namespace ApotheGSF.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return true;
         }
 
         private bool ProveedorExists(int id)

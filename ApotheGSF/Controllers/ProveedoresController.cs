@@ -97,23 +97,12 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
-                //obtener lista de proveedores
-                List<Proveedores> proveedores = _context.Proveedores.Where(p => p.Inactivo == false).ToList();
-                //si la lista no es null
-                if (proveedores != null)
-                {
-                    //por cada elemento de la lista
-                    foreach (var _proveedor in proveedores)
-                    {
-                        //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
-                        if (_proveedor.Nombre.ToUpper() == proveedor.Nombre.ToUpper())
-                        {
-                            //si lo tiene regresa error
-                            _notyf.Error("Este proveedor ya existe");
-                            return View(proveedor);
-                        }
+                string error = ValidarDatos(proveedor);
 
-                    }
+                if (error != "")
+                {
+                    _notyf.Error(error);
+                    return View(proveedor);
                 }
 
                 proveedor.Creado = DateTime.Now;
@@ -127,6 +116,32 @@ namespace ApotheGSF.Controllers
 
             }
             return View(proveedor);
+        }
+
+        private string ValidarDatos(Proveedores proveedor)
+        {
+            //obtener lista de proveedores
+            List<Proveedores> proveedores = _context.Proveedores.Where(p => p.Inactivo == false && p.Codigo != proveedor.Codigo).ToList();
+            //si la lista no es null
+            if (proveedores != null)
+            {
+                //por cada elemento de la lista
+                foreach (var _proveedor in proveedores)
+                {
+                    //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
+                    if (_proveedor.Nombre.ToUpper() == proveedor.Nombre.ToUpper())
+                    {
+                        return "Este proveedor ya existe";
+                    }
+                }
+            }
+
+            if(!proveedor.Email.IsValidEmail())
+            {
+                return "Email invalido";
+            }
+
+            return "";
         }
 
         // GET: Proveedores/Edit/5
@@ -158,23 +173,12 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
-                    //obtener lista de proveedores
-                    List<Proveedores> proveedores = _context.Proveedores.Where(p => p.Inactivo == false && p.Codigo != proveedor.Codigo).ToList();
-                    //si la lista no es null
-                    if (proveedores != null)
-                    {
-                        //por cada elemento de la lista
-                        foreach (var _proveedor in proveedores)
-                        {
-                            //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
-                            if (_proveedor.Nombre.ToUpper() == proveedor.Nombre.ToUpper())
-                            {
-                                //si lo tiene regresa error
-                                _notyf.Error("Este proveedor ya existe");
-                                return View(proveedor);
-                            }
+                    string error = ValidarDatos(proveedor);
 
-                        }
+                    if (error != "")
+                    {
+                        _notyf.Error(error);
+                        return View(proveedor);
                     }
 
                     proveedor.Modificado = DateTime.Now;

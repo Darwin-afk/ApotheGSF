@@ -145,23 +145,12 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
-                //obtener lista de usuarios
-                List<AppUsuario> usuarios = _context.AppUsuarios.Where(m => m.Inactivo == false).ToList();
-                //si la lista no es null
-                if (usuarios != null)
-                {
-                    //por cada elemento de la lista
-                    foreach (var usuario in usuarios)
-                    {
-                        //se verifica si tiene el mismo nombre que el usuario que se quiere crear
-                        if (usuario.UserName.ToUpper() == viewModel.Usuario.ToUpper())
-                        {
-                            //si lo tiene regresa error
-                            _notyf.Error("Este usuario ya existe");
-                            return View(viewModel);
-                        }
+                string error = ValidarDatos(viewModel);
 
-                    }
+                if (error != "")
+                {
+                    _notyf.Error(error);
+                    return View(viewModel);
                 }
 
                 AppUsuario nuevoUsuario = new()
@@ -192,13 +181,40 @@ namespace ApotheGSF.Controllers
                 }
                 else
                 {
-                    foreach (IdentityError error in result.Errors)
+                    foreach (IdentityError _error in result.Errors)
                     {
-                        _notyf.Error($"{error.Code} - {error.Description}");
+                        _notyf.Error($"{_error.Code} - {_error.Description}");
                     }
                 }
             }
             return View(viewModel);
+        }
+
+        private string ValidarDatos(UsuarioViewModel viewModel)
+        {
+            //obtener lista de usuarios
+            List<AppUsuario> usuarios = _context.AppUsuarios.Where(u => u.Inactivo == false && u.Id != viewModel.Codigo).ToList();
+            //si la lista no es null
+            if (usuarios != null)
+            {
+                //por cada elemento de la lista
+                foreach (var usuario in usuarios)
+                {
+                    //se verifica si tiene el mismo nombre que el usuario que se quiere crear
+                    if (usuario.UserName.ToUpper() == viewModel.Usuario.ToUpper())
+                    {
+                        return "Este usuario ya existe";
+                    }
+
+                }
+            }
+
+            if (!viewModel.Email.IsValidEmail())
+            {
+                return "Email invalido";
+            }
+
+            return "";
         }
 
         // GET: Usuarios/Edit/5
@@ -250,6 +266,14 @@ namespace ApotheGSF.Controllers
             {
                 try
                 {
+                    string error = ValidarDatos(viewModel);
+
+                    if (error != "")
+                    {
+                        _notyf.Error(error);
+                        return View(viewModel);
+                    }
+
                     var antiguoUsuario = await _context.AppUsuarios.FirstOrDefaultAsync(x => x.Id == viewModel.Codigo);
                     antiguoUsuario.Nombre = viewModel.Nombre;
                     antiguoUsuario.Apellido = viewModel.Apellido;

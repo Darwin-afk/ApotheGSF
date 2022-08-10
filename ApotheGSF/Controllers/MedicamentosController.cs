@@ -301,16 +301,16 @@ namespace ApotheGSF.Controllers
                     }
 
                 }
+            }
 
-                if(viewModel.Costo <= 0)
-                {
-                    return "El costo debe ser mayor a 0";
-                }
+            if (viewModel.Costo <= 0)
+            {
+                return "El costo debe ser mayor a 0";
+            }
 
-                if (viewModel.UnidadesCaja <= 0)
-                {
-                    return "Las unidades de una caja deben ser mayor a 0";
-                }
+            if (viewModel.UnidadesCaja <= 0)
+            {
+                return "Las unidades de una caja deben ser mayor a 0";
             }
 
             return "";

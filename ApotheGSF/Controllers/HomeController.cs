@@ -304,6 +304,7 @@ namespace ApotheGSF.Controllers
             }
 
             ModelState.Remove("Foto");
+            ModelState.Remove("logo");
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByIdAsync(modelo.Codigo.ToString());

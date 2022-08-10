@@ -239,14 +239,14 @@ namespace ApotheGSF.Controllers
 
         // POST: MedicamentosCajas/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Administrador, Comprador")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int CodigoCaja)
         {
             if (_context.MedicamentosCajas == null)
             {
                 return Problem("Entity set 'AppDbContext.MedicamentosCajas'  is null.");
             }
-            var medicamentosCajas = await _context.MedicamentosCajas.FindAsync(id);
+            var medicamentosCajas = await _context.MedicamentosCajas.FindAsync(CodigoCaja);
             if (medicamentosCajas != null)
             {
                 _context.MedicamentosCajas.Update(medicamentosCajas);
@@ -255,7 +255,6 @@ namespace ApotheGSF.Controllers
 
             await _context.SaveChangesAsync();
             return Json(medicamentosCajas.CodigoMedicamento);
-            //return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
         }
 
         private bool MedicamentosCajasExists(int id)

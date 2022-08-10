@@ -488,13 +488,13 @@ namespace ApotheGSF.Controllers
         // POST: Medicamentos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<bool> DeleteConfirmed(int Codigo)
         {
             if (_context.Medicamentos == null)
             {
-                return Problem("Entity set 'AppDbContext.Medicamentos'  is null.");
+                return false;
             }
-            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == id).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false)).FirstOrDefaultAsync();
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == Codigo).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false)).FirstOrDefaultAsync();
             if (medicamento != null)
             {
                 _context.Medicamentos.Update(medicamento);
@@ -512,7 +512,7 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return true;
         }
 
         private bool MedicamentoExists(int id)

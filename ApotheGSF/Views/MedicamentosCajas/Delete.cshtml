@@ -47,14 +47,13 @@
             </dl>
         </div>
         <div class="card-footer">
-            <form asp-action="Delete">
+            <form asp-action="Delete" id="form">
                 <div class="row">
                     <div class="col-sm-4">
                         <input type="hidden" asp-for="CodigoCaja" />
                     </div>
                     <div class="col-sm-4 text-center">
                         <button onclick="Confirmar()" type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</button>
-                        @*@Html.ActionLink("Eliminar", "Delete", new {id = Model.CodigoCaja}, new {onclick = "return confirm('Esta seguro que desea eliminarlo?');"})*@
                     </div>
                     <div class="col-sm-4 text-end">
                         <a href="@Url.Action("Details", "Medicamentos", new { id = Model.CodigoMedicamento})" type="button" class="btn" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
@@ -73,10 +72,8 @@
     <script type="text/javascript">
         function Confirmar() {
             if (confirm("Esta seguro que desea eliminarlo?")) {
-                var codigo = document.getElementById("CodigoCaja").value;
-
                 $.ajax({
-                    data: {id: codigo },
+                    data: $('#form').serialize(),
                     type: "POST",
                     url: "/MedicamentosCajas/Delete",
                     success: function(response) {

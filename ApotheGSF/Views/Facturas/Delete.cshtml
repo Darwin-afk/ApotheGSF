@@ -147,10 +147,8 @@
     <script type="text/javascript">
         function Confirmar() {
             if (confirm("Esta seguro que desea eliminarlo?")) {
-                var codigo = document.getElementById("Codigo").value;
-
                 $.ajax({
-                    data: $('#form').serialize() + "&id=" + codigo,
+                    data: $('#form').serialize(),
                     type: "POST",
                     url: "/Facturas/Delete",
                     success: function(response) {

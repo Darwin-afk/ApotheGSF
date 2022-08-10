@@ -344,13 +344,13 @@ namespace ApotheGSF.Controllers
         // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<bool> DeleteConfirmed(int Codigo)
         {
             if (_context.AppUsuarios == null)
             {
-                return Problem("Entity set 'AppDbContext.AppUsuario'  is null.");
+                return false;
             }
-            var appUsuario = await _context.AppUsuarios.FindAsync(id);
+            var appUsuario = await _context.AppUsuarios.FindAsync(Codigo);
             if (appUsuario != null)
             {
                 _context.AppUsuarios.Update(appUsuario);
@@ -362,7 +362,7 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return true;
         }
 
         private bool AppUserExists(int id)

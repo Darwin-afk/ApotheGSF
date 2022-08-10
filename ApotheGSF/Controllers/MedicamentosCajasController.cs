@@ -239,7 +239,7 @@ namespace ApotheGSF.Controllers
 
         // POST: MedicamentosCajas/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.MedicamentosCajas == null)
@@ -254,7 +254,8 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
+            return Json(medicamentosCajas.CodigoMedicamento);
+            //return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
         }
 
         private bool MedicamentosCajasExists(int id)

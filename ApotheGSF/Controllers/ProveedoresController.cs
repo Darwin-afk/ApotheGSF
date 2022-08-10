@@ -124,6 +124,7 @@ namespace ApotheGSF.Controllers
                 _context.Add(proveedor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Create));
+                
             }
             return View(proveedor);
         }

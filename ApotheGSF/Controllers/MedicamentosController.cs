@@ -652,7 +652,11 @@ namespace ApotheGSF.Controllers
             mail.Subject = "Reabastecer Inventario";
             mail.SubjectEncoding = Encoding.UTF8;
 
-            mail.Body = $"Se solicitan {correo.Cajas} cajas de {correo.NombreMedicamento}.";
+            mail.Body = $"Saludos {proveedor.Nombre}, <br/> La Botica Popular de la Iglesia Santa Rosa de Lima, " +
+                $"solicita {correo.Cajas} cajas de {correo.NombreMedicamento}. <br/> Por favor enviar las cantidades necesarias lo mas pronto posible." +
+                $"<br/> <br/> Se despide cordialmente la administración. <br/> <br/> " +
+                $"<img src= '~/img/Icon/Portrait.png' />";
+
             mail.IsBodyHtml = true;
             mail.BodyEncoding = Encoding.UTF8;
 

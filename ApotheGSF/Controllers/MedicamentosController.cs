@@ -28,6 +28,7 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
         private readonly INotyfService _notyf;
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
         /*CONFIGURACIÓN SMTP:
     ---------------------------------------------------------
@@ -57,12 +58,14 @@ namespace ApotheGSF.Controllers
 
         public MedicamentosController(AppDbContext context,
                              IHttpContextAccessor accessor,
-                             INotyfService notyf
+                             INotyfService notyf,
+                             Microsoft.AspNetCore.Hosting.IHostingEnvironment env
             )
         {
             _context = context;
             _user = accessor.HttpContext.User;
             _notyf = notyf;
+            _env = env;
         }
 
         // GET: Medicamentos
@@ -654,8 +657,9 @@ namespace ApotheGSF.Controllers
 
             mail.Body = $"Saludos {proveedor.Nombre}, <br/> La Botica Popular de la Iglesia Santa Rosa de Lima, " +
                 $"solicita {correo.Cajas} cajas de {correo.NombreMedicamento}. <br/> Por favor enviar las cantidades necesarias lo mas pronto posible." +
-                $"<br/> <br/> Se despide cordialmente la administración. <br/> <br/> " +
-                $"<img src= '~/img/Icon/Portrait.png' />";
+                "<br/> <br/> Se despide cordialmente la administración.";
+
+            mail.Attachments.Add(new Attachment("wwwroot/img/Icon/Portrait.png"));
 
             mail.IsBodyHtml = true;
             mail.BodyEncoding = Encoding.UTF8;

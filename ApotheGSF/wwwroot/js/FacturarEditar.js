@@ -7,10 +7,7 @@
             if (r.resultado) {
                 var url = '../ReporteFactura?CodigoFactura=' + r.codigofactura;
                 window.open(url, "_blank");
-                window.location.href = "/Home/Index";
-            }
-            else {
-                alert("invalido")
+                window.location.href = "/Home/Index?Mensaje=" + r.mensaje;
             }
         }
     });

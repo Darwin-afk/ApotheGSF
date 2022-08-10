@@ -120,7 +120,7 @@ namespace ApotheGSF.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
             }
             ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
             return View(viewModel);

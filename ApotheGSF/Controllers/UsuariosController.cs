@@ -188,7 +188,7 @@ namespace ApotheGSF.Controllers
                 if (result.Succeeded)
                 {
                     var rr = await _userManager.AddToRoleAsync(nuevoUsuario, viewModel.Rol);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
                 }
                 else
                 {

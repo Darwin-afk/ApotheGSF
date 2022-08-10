@@ -285,7 +285,7 @@ namespace ApotheGSF.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
             }
             ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);

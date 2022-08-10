@@ -42,11 +42,16 @@ namespace ApotheGSF.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string Mensaje = "")
         {
             VerificarInventario();
 
-            _notyf.Information($"{Notificaciones.Mensajes.Count} mensajes nuevos");
+            if(Mensaje != "")
+            {
+                _notyf.Custom(Mensaje, 5, "#0022CC", "fas fa-check");
+            }
+
+            _notyf.Custom($"{Notificaciones.Mensajes.Count} mensajes nuevos",5, "#A2D0F1", "fas fa-question");
 
             return View();
         }

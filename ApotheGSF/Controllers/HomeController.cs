@@ -82,7 +82,7 @@ namespace ApotheGSF.Controllers
                     diasRestantes = (caja.FechaVencimiento - DateTime.Now).Days;
 
                     //si es menor que x cantidad de dias
-                    if(diasRestantes <= 30 && diasRestantes > 0)
+                    if(diasRestantes <= 21 && diasRestantes > 0)
                     {
                         //si la caja esta activa se desactiva
                         if(caja.Inactivo == false)

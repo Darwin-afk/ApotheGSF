@@ -22,6 +22,14 @@ namespace ApotheGSF.Models
         [Display(Name = "Fecha de Vencimiento: ")]
         public DateTime FechaVencimiento { get; set; }
         public bool Detallada { get; set; }
+        [Display(Name = "Fecha de Creación: ")]
+        public DateTime? Creado { get; set; }
+        [Display(Name = "Creado por: ")]
+        public string? CreadoNombreUsuario { get; set; }
+        [Display(Name = "Última Modificación: ")]
+        public DateTime? Modificado { get; set; }
+        [Display(Name = "Modificado por: ")]
+        public string? ModificadoNombreUsuario { get; set; }
         public bool Inactivo { get; set; }
 
         public MedicamentosCajas()

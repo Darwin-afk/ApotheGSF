@@ -45,7 +45,11 @@ namespace ApotheGSF.Controllers
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
                                                FechaVencimiento = mc.FechaVencimiento,
-                                               Detallada = mc.Detallada
+                                               Detallada = mc.Detallada,
+                                               Creado = mc.Creado,
+                                               CreadoNombreUsuario = mc.CreadoNombreUsuario,
+                                               Modificado = mc.Modificado,
+                                               ModificadoNombreUsuario = mc.ModificadoNombreUsuario
                                            }).Where(x => x.CodigoCaja == id).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)
@@ -243,7 +247,11 @@ namespace ApotheGSF.Controllers
                                                CantidadUnidad = mc.CantidadUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
                                                FechaVencimiento = mc.FechaVencimiento,
-                                               Detallada = mc.Detallada
+                                               Detallada = mc.Detallada,
+                                               Creado = mc.Creado,
+                                               CreadoNombreUsuario = mc.CreadoNombreUsuario,
+                                               Modificado = mc.Modificado,
+                                               ModificadoNombreUsuario = mc.ModificadoNombreUsuario
                                            }).Where(x => x.CodigoCaja == id).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)

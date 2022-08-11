@@ -7,8 +7,8 @@
             if (resultado.error == false) {
                 $('#ListaDetalle').html(resultado.partial);
 
-                document.getElementById('SubTotal').value = resultado.subtotal;
-                document.getElementById('Total').value = resultado.subtotal * 1.18;
+                document.getElementById('SubTotal').value = resultado.subtotal.toFixed(2);
+                document.getElementById('Total').value = (resultado.subtotal * 1.18).toFixed(2);
             }
         }
     });

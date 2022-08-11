@@ -166,6 +166,10 @@ namespace ApotheGSF.Controllers
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
                                          Dosis = meds.Dosis,
+                                         Creado = meds.Creado,
+                                         CreadoNombreUsuario = meds.CreadoNombreUsuario,
+                                         Modificado = meds.Modificado,
+                                         ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
 
                                          NombreProveedor = string.Join(", ",
                                          (from p in _context.Proveedores
@@ -467,6 +471,10 @@ namespace ApotheGSF.Controllers
                                          PrecioUnidad = meds.PrecioUnidad,
                                          Indicaciones = meds.Indicaciones,
                                          Dosis = meds.Dosis,
+                                         Creado = meds.Creado,
+                                         CreadoNombreUsuario = meds.CreadoNombreUsuario,
+                                         Modificado = meds.Modificado,
+                                         ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
 
                                          NombreProveedor = string.Join(", ",

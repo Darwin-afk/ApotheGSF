@@ -49,5 +49,14 @@ namespace ApotheGSF.ViewModels
             PrecioUnidad = 0;
         }
 
+        [Display(Name = "Fecha de Creación: ")]
+        public DateTime? Creado { get; set; }
+        [Display(Name = "Creado por: ")]
+        public string? CreadoNombreUsuario { get; set; }
+        [Display(Name = "Última Modificación: ")]
+        public DateTime? Modificado { get; set; }
+        [Display(Name = "Modificado por: ")]
+        public string? ModificadoNombreUsuario { get; set; }
+
     }
 }

@@ -99,7 +99,7 @@ namespace ApotheGSF.Controllers
 
                 //agregar mensaje de cajas eliminadas
                 if(cajasVencidas > 0)
-                    Notificaciones.Mensajes.Add($"{cajasVencidas} cajas de {medicamento.Nombre} estan por vencerse");
+                    Notificaciones.Mensajes.Add($"&nbsp;&nbsp;&nbsp;{cajasVencidas} cajas de {medicamento.Nombre} estan por vencerse");
 
             }
 
@@ -112,7 +112,7 @@ namespace ApotheGSF.Controllers
                 if(medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count < 20 && medicamento.EnvioPendiente == false)
                 {
                     //se agrega una notificacion de reabastecimiento
-                    Notificaciones.Mensajes.Add($"{medicamento.Nombre} le queda poca mercancia, desea <a href=\"/Medicamentos/EnviarCorreo?codigoMedicamento={medicamento.Codigo}\">solicitar mas</a>");
+                    Notificaciones.Mensajes.Add($"&nbsp;&nbsp;&nbsp;{medicamento.Nombre} le queda poca mercancia, desea <a href=\"/Medicamentos/EnviarCorreo?codigoMedicamento={medicamento.Codigo}\">solicitar mas</a>");
                 }
             }
 

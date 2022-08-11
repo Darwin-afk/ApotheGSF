@@ -8,7 +8,7 @@
 <h3 class="text-center"><i class="fa-solid fa-cash-register"></i>&nbsp;Eliminar Factura&nbsp<i class="fa-solid fa-cash-register"></i></h3>
 
 <form asp-action="Delete" id="form">
-    <div class="container shadow-lg p-3 rb-5 bg-light rounded col-md-8">
+    <div class="container shadow-lg p-3 rb-5 bg-light rounded col-md-10">
         <div class="card">
             <div class="card-header text-center" style="background-color:#E8E8E8">
                 <h3>Esta seguro que desea eliminar esta Factura?</h3>
@@ -32,6 +32,18 @@
                     </dt>
                     <dd class="col-sm-8">
                         @Html.DisplayFor(model => model.CreadoNombreUsuario)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Modificado)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Modificado)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.ModificadoNombreUsuario)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.ModificadoNombreUsuario)
                     </dd>
                 </dl>
                 <table class="table">
@@ -101,15 +113,21 @@
                                     @Model.MedicamentosDetalle[j].Total
                                 </td>
                                 <td>
-                                    @if (Model.MedicamentosDetalle[j].TipoCantidad == 1)
-                                    {
-                                        <input type="number" asp-for="MedicamentosDetalle[j].CantidadAbierto">
-                                    }
-                                    else
-                                    {
-                                        <input type="hidden" asp-for="MedicamentosDetalle[j].CantidadAbierto">
-                                    }
-                                    <label><input type="checkbox" asp-for="MedicamentosDetalle[j].Abierto"> Fue Abierto?</label>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            @if (Model.MedicamentosDetalle[j].TipoCantidad == 1)
+                                            {
+                                                <input type="number" class="form-control" asp-for="MedicamentosDetalle[j].CantidadAbierto">
+                                            }
+                                            else
+                                            {
+                                                <input type="hidden" class="form-control" asp-for="MedicamentosDetalle[j].CantidadAbierto">
+                                            }
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label><input type="checkbox"  asp-for="MedicamentosDetalle[j].Abierto"> Fue Abierto?</label>
+                                        </div>
+                                    </div>                                    
                                 </td>
                             </tr>
                             i = i + 1;
@@ -123,6 +141,12 @@
                     </dt>
                     <dd class="col-sm-2">
                         @Html.DisplayFor(model => model.SubTotal)
+                    </dd>
+                    <dt class="col-sm-10">
+                        ITBIS
+                    </dt>
+                    <dd class="col-sm-2">
+                        <text>@((Model.SubTotal * 0.18).ToString("0.00"))</text>
                     </dd>
                     <dt class="col-sm-10">
                         @Html.DisplayNameFor(model => model.Total)

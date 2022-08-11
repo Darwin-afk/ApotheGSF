@@ -94,6 +94,10 @@ namespace ApotheGSF.Controllers
                                      Codigo = f.Codigo,
                                      SubTotal = f.SubTotal,
                                      Total = f.Total,
+                                     Creado = f.Creado,
+                                     CreadoNombreUsuario = f.CreadoNombreUsuario,
+                                     Modificado = f.Modificado,
+                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario
                                  }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
 
             if (factura == null)
@@ -837,6 +841,10 @@ namespace ApotheGSF.Controllers
                                      Codigo = f.Codigo,
                                      SubTotal = f.SubTotal,
                                      Total = f.Total,
+                                     Creado = f.Creado,
+                                     CreadoNombreUsuario = f.CreadoNombreUsuario,
+                                     Modificado = f.Modificado,
+                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario
                                  }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
 
             if (factura == null)

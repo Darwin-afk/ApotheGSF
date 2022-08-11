@@ -9,6 +9,8 @@ using ApotheGSF.Models;
 using ApotheGSF.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using ApotheGSF.Clases;
 
 namespace ApotheGSF.Controllers
 {
@@ -17,12 +19,15 @@ namespace ApotheGSF.Controllers
     {
         private readonly AppDbContext _context;
         private readonly INotyfService _notyf;
+        private readonly ClaimsPrincipal _user;
 
         public MedicamentosCajasController(AppDbContext context, 
-                                           INotyfService notyf)
+                                           INotyfService notyf,
+                                           IHttpContextAccessor accessor)
         {
             _context = context;
             _notyf = notyf;
+            _user = accessor.HttpContext.User;
         }
 
         // GET: MedicamentosCajas/Details/5
@@ -102,11 +107,11 @@ namespace ApotheGSF.Controllers
                     return View(viewModel);
                 }
 
-                if(viewModel.FechaVencimiento < DateTime.Now.AddMonths(1))
+                if (viewmodel.fechavencimiento < datetime.now.addmonths(1))
                 {
-                    _notyf.Error("Fecha vencimiento invalida");
-                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
-                    return View(viewModel);
+                    _notyf.error("fecha vencimiento invalida");
+                    viewdata["medicamentosid"] = new selectlist(_context.medicamentos.where(m => m.inactivo == false), "codigo", "nombre");
+                    return view(viewmodel);
                 }
 
                 Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento).FirstOrDefault();
@@ -128,6 +133,10 @@ namespace ApotheGSF.Controllers
                     medicamentoCaja.FechaVencimiento = viewModel.FechaVencimiento;
                     medicamentoCaja.Detallada = false;
                     medicamentoCaja.Inactivo = false;
+                    medicamentoCaja.Creado = DateTime.Now;
+                    medicamentoCaja.CreadoNombreUsuario = _user.GetUserName();
+                    medicamentoCaja.Modificado = DateTime.Now;
+                    medicamentoCaja.ModificadoNombreUsuario = _user.GetUserName();
 
                     _context.Add(medicamentoCaja);
                 }

@@ -13,78 +13,102 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-4">
-                    <dl class="row">
+                    <dl class="row">                        
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Codigo)
+                                @Html.DisplayNameFor(model => model.Codigo)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Codigo)
+                                @Html.DisplayFor(model => model.Codigo)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Nombre)
+                                @Html.DisplayNameFor(model => model.Nombre)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Nombre)
+                                @Html.DisplayFor(model => model.Nombre)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.NombreProveedor)
+                                @Html.DisplayNameFor(model => model.NombreProveedor)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.NombreProveedor)
+                                @Html.DisplayFor(model => model.NombreProveedor)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Categoria)
+                                @Html.DisplayNameFor(model => model.Categoria)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Categoria)
+                                @Html.DisplayFor(model => model.Categoria)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Sustancia)
+                                @Html.DisplayNameFor(model => model.Sustancia)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Sustancia)
+                                @Html.DisplayFor(model => model.Sustancia)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Concentracion)
+                                @Html.DisplayNameFor(model => model.Concentracion)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Concentracion)
+                                @Html.DisplayFor(model => model.Concentracion)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.UnidadesCaja)
+                                @Html.DisplayNameFor(model => model.UnidadesCaja)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.UnidadesCaja)
+                                @Html.DisplayFor(model => model.UnidadesCaja)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Costo)
+                                @Html.DisplayNameFor(model => model.Costo)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Costo)
+                                @Html.DisplayFor(model => model.Costo)
                         </dd>
                         <dt class="col-sm-6">
-                            Precio Caja
+                            Precio Caja:
                         </dt>
                         <dd class="col-sm-6">
                             <text>@(Model.PrecioUnidad * Model.UnidadesCaja)</text>
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.PrecioUnidad)
+                                @Html.DisplayNameFor(model => model.PrecioUnidad)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.PrecioUnidad)
+                                @Html.DisplayFor(model => model.PrecioUnidad)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Indicaciones)
+                                @Html.DisplayNameFor(model => model.Indicaciones)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Indicaciones)
+                                @Html.DisplayFor(model => model.Indicaciones)
                         </dd>
                         <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.Dosis)
+                                @Html.DisplayNameFor(model => model.Dosis)
                         </dt>
                         <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Dosis)
+                                @Html.DisplayFor(model => model.Dosis)
+                        </dd>
+                        <dt class="col-sm-6">
+                                @Html.DisplayNameFor(model => model.Creado)
+                        </dt>
+                        <dd class="col-sm-6">
+                                @Html.DisplayFor(model => model.Creado)
+                        </dd>
+                        <dt class="col-sm-6">
+                                @Html.DisplayNameFor(model => model.CreadoNombreUsuario)
+                        </dt>
+                        <dd class="col-sm-6">
+                                @Html.DisplayFor(model => model.CreadoNombreUsuario)
+                        </dd>
+                        <dt class="col-sm-6">
+                                @Html.DisplayNameFor(model => model.Modificado)
+                        </dt>
+                        <dd class="col-sm-6">
+                                @Html.DisplayFor(model => model.Modificado)
+                        </dd>
+                        <dt class="col-sm-6">
+                                @Html.DisplayNameFor(model => model.ModificadoNombreUsuario)
+                        </dt>
+                        <dd class="col-sm-6">
+                                @Html.DisplayFor(model => model.ModificadoNombreUsuario)
                         </dd>
                     </dl>
                 </div>

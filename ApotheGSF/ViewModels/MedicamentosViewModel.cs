@@ -36,7 +36,7 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Código del proveedor: ")]
         public List<int>? CodigosProveedores { get; set; }
-        [Display(Name = "Nombre del proveedor: ")]
+        [Display(Name = "Proveedor: ")]
         public string? NombreProveedor { get; set; }
         [Display(Name = "Lotes: ")]
         public int Cajas { get; set; }

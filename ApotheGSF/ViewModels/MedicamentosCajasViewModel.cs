@@ -12,9 +12,11 @@ namespace ApotheGSF.ViewModels
         [Display(Name = "Cantidad de Unidades: ")]
         public int CantidadUnidad { get; set; }
         [Required(ErrorMessage = "Digite la fecha de adquisición")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         [Display(Name = "Fecha de Adquisición: ")]
         public DateTime FechaAdquirido { get; set; }
         [Required(ErrorMessage = "Digite la fecha de vencimiento")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         [Display(Name = "Fecha de Vencimiento: ")]
         public DateTime FechaVencimiento { get; set; }
         [Display(Name = "Detallada? ")]
@@ -27,6 +29,7 @@ namespace ApotheGSF.ViewModels
         public int Cajas { get; set; }
 
         [Display(Name = "Fecha de Creación: ")]
+
         public DateTime? Creado { get; set; }
         [Display(Name = "Creado por: ")]
         public string? CreadoNombreUsuario { get; set; }

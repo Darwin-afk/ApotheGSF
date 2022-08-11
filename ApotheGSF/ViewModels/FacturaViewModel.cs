@@ -8,8 +8,11 @@ namespace ApotheGSF.ViewModels
     {
         [Display(Name = "Código: ")]
         public int Codigo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "SubTotal: ")]
+        
         public float SubTotal { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "Total: ")]
         public float Total { get; set; }
         public List<MedicamentosDetalle> MedicamentosDetalle { get; set; }

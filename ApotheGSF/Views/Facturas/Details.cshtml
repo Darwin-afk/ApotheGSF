@@ -32,6 +32,18 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.CreadoNombreUsuario)
                 </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Modificado)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Modificado)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.ModificadoNombreUsuario)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.ModificadoNombreUsuario)
+                </dd>
             </dl>
             <table class="table">
                 <thead>
@@ -97,6 +109,12 @@
                 </dt>
                 <dd class="col-sm-2">
                     @Html.DisplayFor(model => model.SubTotal)
+                </dd>
+                <dt class="col-sm-10">
+                    ITBIS
+                </dt>
+                <dd class="col-sm-2">
+                    <text>@((Model.SubTotal * 0.18).ToString("0.00"))</text>
                 </dd>
                 <dt class="col-sm-10">
                     @Html.DisplayNameFor(model => model.Total)

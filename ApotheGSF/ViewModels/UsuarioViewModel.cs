@@ -40,6 +40,7 @@ namespace ApotheGSF.ViewModels
 
         [Required(ErrorMessage = "Digite la fecha de nacimiento")]		
 		[Display(Name = "Fecha de Nacimiento: ")]
+		[DisplayFormat(DataFormatString = "{0:d}")]
 		public DateTime FechaNacimiento { get; set; }
 
 		[Display(Name = "Cédula: ")]

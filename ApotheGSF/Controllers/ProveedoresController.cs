@@ -73,7 +73,7 @@ namespace ApotheGSF.Controllers
             }
 
             var proveedor = _context.Proveedores
-                .FirstOrDefault();
+                .FirstOrDefault(p => p.Codigo == id);
             if (proveedor == null)
             {
                 return NotFound();

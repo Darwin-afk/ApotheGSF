@@ -257,16 +257,17 @@
         margin-right: 10px;
         padding: 1px
     }
-
+    /*diseño del select colores example*/
     .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #e4e4e4;
+        background-color: white;
         border: 1px solid #aaa;
         border-radius: 4px;
         cursor: default;
         float: left;
         margin-right: 5px;
         margin-top: 5px;
-        padding: 0 5px
+        padding: 0 5px;
+        color:black;
     }
 
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {

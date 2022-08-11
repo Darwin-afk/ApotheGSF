@@ -58,6 +58,9 @@ namespace ApotheGSF.Controllers
                 listado = await _context.Facturas.Where(filtro.ToString()).ToListAsync();
             }
 
+            for (int i = 0; i < listado.Count; i++)
+                listado[i].Posicion = i + 1;
+
             sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Creado" : sortExpression;//verificar para fecha
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
             model.RouteValue = new RouteValueDictionary {

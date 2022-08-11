@@ -4,7 +4,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    int i = 1;
 }
 
 <div class="form-group row">
@@ -56,7 +55,7 @@
                 {
                     <tr>
                         <td>
-                            @i
+                            @item.Posicion
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Creado)
@@ -73,7 +72,6 @@
                             <a asp-action="Delete" asp-route-id="@item.Codigo" style="color:#CC2200;"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
-                    i = i + 1;
                 }
             </tbody>
         </table>

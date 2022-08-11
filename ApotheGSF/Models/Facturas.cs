@@ -25,5 +25,8 @@ namespace ApotheGSF.Models
         }
         
         public ICollection<FacturaMedicamentosCajas> FacturasMedicamentosCajas { get; set; }
+
+        [NotMapped]
+        public int Posicion { get; set; }
     }
 }

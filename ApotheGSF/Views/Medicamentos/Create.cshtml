@@ -46,9 +46,21 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-tags"></i></span>
                             </div>
-                            <input type="text" asp-for="Categoria" class="form-control" placeholder="Categoria">
-                            <span asp-validation-for="Categoria" class="text-danger"></span>
+                            <select asp-for="Categoria" class="form-control">
+                                <option selected disabled>Seleccione una Categoria</option>
+                                <option value="Analgesicos">Analgésicos</option>
+                                <option value="Antiacidos y Antiulcerosos">Antiácidos y Antiulcerosos</option>
+                                <option value="Antialergicos">Antialérgicos</option>
+                                <option value="Antidiarreicos y Laxantes">Antidiarreicos y Laxantes</option>
+                                <option value="Antiinfecciosos y Antivial">Antiinfecciosos y Antivial</option>
+                                <option value="Antiinflamatorios">Antiinflamatorios</option>
+                                <option value="Antipireticos">Antipiréticos</option>
+                                <option value="Antitusivos y Mucoliticos">Antitusivos y Mucolíticos</option>
+                                <option value="Antidepresivos">Antidepresivos</option>
+                                <option value="Anticonceptivos">Anticonceptivos</option>
+                            </select>
                         </div>
+                        <span asp-validation-for="Categoria" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
                         <label class="col-form-label">Sustancia:</label>
@@ -56,9 +68,15 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
                             </div>
-                            <input class="form-control" asp-for="Sustancia" type="text" placeholder="Sustancia">
-                            <span asp-validation-for="Sustancia" class="text-danger"></span>
+                            <select asp-for="Sustancia" class="form-control">
+                                <option selected disabled>Seleccione una Sustancia</option>
+                                <option value="Liquida">Líquida</option>
+                                <option value="Solida">Sólida</option>
+                                <option value="Semi-Sólida">Semi-Sólida</option>
+                                <option value="Otras">Otras</option>
+                            </select>
                         </div>
+                        <span asp-validation-for="Sustancia" class="text-danger"></span>
                     </div>
                 </div>
 

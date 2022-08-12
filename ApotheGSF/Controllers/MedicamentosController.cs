@@ -395,6 +395,7 @@ namespace ApotheGSF.Controllers
                     var editmedicamento = await _context.Medicamentos.Include(x => x.ProveedoresMedicamentos).
                                        FirstOrDefaultAsync(y => y.Codigo == viewModel.Codigo);
 
+                    _context.Update(editmedicamento);
                     editmedicamento.Nombre = viewModel.Nombre;
                     editmedicamento.Categoria = viewModel.Categoria;
                     editmedicamento.Sustancia = viewModel.Sustancia;
@@ -406,7 +407,9 @@ namespace ApotheGSF.Controllers
                     editmedicamento.Dosis = viewModel.Dosis;
                     editmedicamento.Modificado = DateTime.Now;
                     editmedicamento.ModificadoNombreUsuario = _user.GetUserName();
-                    _context.Update(editmedicamento);
+                    _context.Entry(editmedicamento).Property(c => c.Creado).IsModified = false;
+                    _context.Entry(editmedicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
+                    _context.Entry(editmedicamento).Property(c => c.Inactivo).IsModified = false;
 
 
                     foreach (var proveedor in editmedicamento.ProveedoresMedicamentos.ToList())

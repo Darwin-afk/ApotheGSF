@@ -221,6 +221,9 @@ namespace ApotheGSF.Controllers
                     _context.Update(medicamentosCajas);
                     medicamentosCajas.Modificado = DateTime.Now;
                     medicamentosCajas.ModificadoNombreUsuario = _user.GetUserName();
+                    _context.Entry(medicamentosCajas).Property(c => c.Creado).IsModified = false;
+                    _context.Entry(medicamentosCajas).Property(c => c.CreadoNombreUsuario).IsModified = false;
+                    _context.Entry(medicamentosCajas).Property(c => c.Inactivo).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

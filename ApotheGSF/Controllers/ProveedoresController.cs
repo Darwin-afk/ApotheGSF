@@ -190,6 +190,9 @@ namespace ApotheGSF.Controllers
                     _context.Update(proveedor);
                     proveedor.Modificado = DateTime.Now;
                     proveedor.ModificadoNombreUsuario = _user.GetUserName();
+                    _context.Entry(proveedor).Property(c => c.Creado).IsModified = false;
+                    _context.Entry(proveedor).Property(c => c.CreadoNombreUsuario).IsModified = false;
+                    _context.Entry(proveedor).Property(c => c.Inactivo).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

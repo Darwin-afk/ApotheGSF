@@ -364,7 +364,15 @@ namespace ApotheGSF.Controllers
                                                     .CodigoProveedor equals proveedores.Codigo
                                                      select proveedores.Codigo).ToListAsync();
 
-            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", medicamentos.CodigosProveedores);
+            List<Proveedores> _proveedores = _context.Proveedores.Where(p => p.Inactivo == false).ToList();
+
+            if (_proveedores.Count == 0)
+            {
+                _notyf.Information("Es necesario tener algun proveedor");
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.CodigoProveedores = new MultiSelectList(_proveedores, "Codigo", "Nombre", medicamentos.CodigosProveedores);
 
             return View(medicamentos);
         }

@@ -219,6 +219,12 @@ namespace ApotheGSF.Controllers
                 try
                 {
                     _context.Update(medicamentosCajas);
+
+                    if (medicamentosCajas.CantidadUnidad < medicamento.UnidadesCaja)
+                        medicamentosCajas.Detallada = true;
+                    else
+                        medicamentosCajas.Detallada = false;
+
                     medicamentosCajas.Modificado = DateTime.Now;
                     medicamentosCajas.ModificadoNombreUsuario = _user.GetUserName();
                     _context.Entry(medicamentosCajas).Property(c => c.Creado).IsModified = false;

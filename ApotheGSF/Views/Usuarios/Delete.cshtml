@@ -123,7 +123,6 @@
     }
     <script type="text/javascript">
         function Confirmar() {
-            alert("prueba 3");
             if (confirm("Esta seguro que desea eliminarlo?")) {
                 $.ajax({
                     data: $('#form').serialize(),
@@ -131,7 +130,7 @@
                     url: "/Usuarios/Delete",
                     success: function(response) {
                         if (response) {
-                            window.location.href = "/Home/Index";
+                            window.location.href = "/Home/Index?Mensaje=Se ha eliminado exitosamente!!!";
                         }
                     },
                 });

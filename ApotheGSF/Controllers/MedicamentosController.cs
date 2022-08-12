@@ -142,12 +142,17 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Medicamentos/Details/5
-        public async Task<IActionResult> Details(int? id, int pageindex = 1)
+        public async Task<IActionResult> Details(int? id, int pageindex = 1, string Mensaje = "")
         {
 
             if (id == null || _context.Medicamentos == null)
             {
                 return NotFound();
+            }
+
+            if (Mensaje != "")
+            {
+                _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
             }
 
             var medicamento = await (from meds in _context.Medicamentos

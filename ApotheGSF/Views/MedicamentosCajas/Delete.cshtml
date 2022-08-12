@@ -101,7 +101,7 @@
                     type: "POST",
                     url: "/MedicamentosCajas/Delete",
                     success: function(response) {
-                        window.location.href = "/Medicamentos/Details/" + response;
+                        window.location.href = "/Medicamentos/Details/" + response + "?Mensaje=Se ha eliminado exitosamente!!!";
                     },
                 });
             }

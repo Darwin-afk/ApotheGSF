@@ -245,7 +245,7 @@ namespace ApotheGSF.Controllers
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, modelo.Password);
                 if (result.Succeeded)
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
                 else
                     _notyf.Error(result.Errors.FirstOrDefault().ToString());
             }

@@ -224,6 +224,12 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            if (proveedores.Count == 0)
+            {
+                _notyf.Information("Es necesario tener algun proveedor");
+                return RedirectToAction("Index", "Home");
+            }
+
             ViewBag.CodigoProveedores = new MultiSelectList(proveedores, "Codigo", "Nombre");
             return View(new MedicamentosViewModel());
         }

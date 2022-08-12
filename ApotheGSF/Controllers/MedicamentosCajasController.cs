@@ -77,6 +77,12 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            if(medicamentos.Count == 0)
+            {
+                _notyf.Information("Es necesario tener algun medicamento");
+                return RedirectToAction("Index", "Home");
+            }
+
             ViewData["MedicamentosId"] = new SelectList(medicamentos, "Codigo", "Nombre");
             return View();
         }
@@ -107,11 +113,11 @@ namespace ApotheGSF.Controllers
                     return View(viewModel);
                 }
 
-                if (viewmodel.fechavencimiento < datetime.now.addmonths(1))
+                if (viewModel.FechaVencimiento < DateTime.Now.AddMonths(1))
                 {
-                    _notyf.error("fecha vencimiento invalida");
-                    viewdata["medicamentosid"] = new selectlist(_context.medicamentos.where(m => m.inactivo == false), "codigo", "nombre");
-                    return view(viewmodel);
+                    _notyf.Error("fecha vencimiento invalida");
+                    ViewData["medicamentosid"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "codigo", "nombre");
+                    return View(viewModel);
                 }
 
                 Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento).FirstOrDefault();

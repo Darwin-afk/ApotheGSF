@@ -17,16 +17,6 @@ body {
     margin-bottom: 60px;
 }
 
-.tableFixHead {
-    overflow: auto;
-    height: 200px;
-}
-
-.tableFixHead thead th {
-    /*position : sticky;*/
-    top: 0;
-}
-
 .dropmenuScroll {
     height: 300px;
     max-height: 300px;

@@ -371,6 +371,7 @@ namespace ApotheGSF.Controllers
                         await _userManager.AddClaimAsync(user, new Claim("Foto", user.Foto));
 
                     await _signInManager.RefreshSignInAsync(user);
+                    _notyf.Custom("Se ha guardado exitosamente!!!", 5, "#17D155", "fas fa-check");
                     return RedirectToAction("PerfilUsuario", "Home");
                 }
 

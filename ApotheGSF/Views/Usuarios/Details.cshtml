@@ -2,6 +2,13 @@
 
 @{
     ViewData["Title"] = "Details";
+
+    string fotoUrl = appSettings.Value.UserSinFoto;
+
+    if (Model.Foto != null)
+    {
+        fotoUrl = appSettings.Value.UrlFotosUsuario + Model.Foto;
+    }
 }
 
 <h3 class="text-center"><i class="fas fa-list"></i>&nbsp;Detalle Usuario&nbsp<i class="fas fa-list"></i></h3>
@@ -10,6 +17,15 @@
     <div class="card">
         <div class="card-header text-center" style="background-color:#E8E8E8">
             <h3>Información del Usuario</h3>
+            <center>
+                <div class="row">
+                    <div class="form-group col-md-12" style="color:white;">
+                        <img id="preview" src="@Url.Content(fotoUrl)" width="100" height="100" />
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </center>
         </div>
         <div class="card-body">
             <dl class="row">

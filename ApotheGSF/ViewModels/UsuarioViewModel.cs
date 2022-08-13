@@ -38,7 +38,9 @@ namespace ApotheGSF.ViewModels
 		[Required(ErrorMessage = "Debe elegir un rol.")]
 		public string Rol { get; set; }
 
-        [Required(ErrorMessage = "Digite la fecha de nacimiento")]		
+		public string? Foto { get; set; }
+
+		[Required(ErrorMessage = "Digite la fecha de nacimiento")]		
 		[Display(Name = "Fecha de Nacimiento: ")]
 		[DisplayFormat(DataFormatString = "{0:d}")]
 		public DateTime FechaNacimiento { get; set; }

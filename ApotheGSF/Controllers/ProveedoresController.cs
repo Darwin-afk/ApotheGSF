@@ -125,18 +125,47 @@ namespace ApotheGSF.Controllers
             //si la lista no es null
             if (proveedores != null)
             {
-                //por cada elemento de la lista
+                //por cada elemento de la lista verificar repeticion de datos
                 foreach (var _proveedor in proveedores)
                 {
-                    //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
+                    //nombre
                     if (_proveedor.Nombre.ToUpper() == proveedor.Nombre.ToUpper())
                     {
                         return "Este proveedor ya existe";
                     }
 
+                    //rnc
+                    if (_proveedor.RNC == proveedor.RNC)
+                    {
+                        return "RNC existente";
+                    }
+
+                    //telefono
+                    if(proveedor.Telefono1 == proveedor.Telefono2)
+                    {
+                        return "Los teléfono no pueden ser iguales";
+                    }
+                    //telefono 1
+                    if(_proveedor.Telefono1 == proveedor.Telefono1 || _proveedor.Telefono2 == proveedor.Telefono1)
+                    {
+                        return "Teléfono 1 existente";
+                    }
+                    //telefono 2
+                    if (_proveedor.Telefono1 == proveedor.Telefono2 || _proveedor.Telefono2 == proveedor.Telefono2)
+                    {
+                        return "Teléfono 2 existente";
+                    }
+
+                    //fax
+                    if (_proveedor.Fax == proveedor.Fax)
+                    {
+                        return "Fax existente";
+                    }
+
+                    //email
                     if (_proveedor.Email == proveedor.Email)
                     {
-                        return "Email ya usado";
+                        return "Email existente";
                     }
                 }
             }

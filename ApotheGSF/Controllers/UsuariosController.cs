@@ -198,19 +198,28 @@ namespace ApotheGSF.Controllers
             //si la lista no es null
             if (usuarios != null)
             {
-                //por cada elemento de la lista
+                //por cada elemento de la lista verificar repeticion de datos
                 foreach (var usuario in usuarios)
                 {
-                    //se verifica si tiene el mismo nombre que el usuario que se quiere crear
+                    //nombre de usuario
                     if (usuario.UserName.ToUpper() == viewModel.Usuario.ToUpper())
                     {
                         return "Este usuario ya existe";
                     }
 
+                    //cedula
+                    if(usuario.Cedula == viewModel.Cedula)
+                    {
+                        return "Cedula existente";
+                    }
+
+                    //email
                     if(usuario.Email == viewModel.Email)
                     {
-                        return "Email ya usado";
+                        return "Email existente";
                     }
+
+
 
                 }
             }

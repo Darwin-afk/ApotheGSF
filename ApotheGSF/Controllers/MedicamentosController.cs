@@ -701,7 +701,10 @@ namespace ApotheGSF.Controllers
                 $"solicita {correo.Cajas} cajas de {correo.NombreMedicamento}. <br/> Por favor enviar las cantidades necesarias lo mas pronto posible." +
                 "<br/> <br/> Se despide cordialmente la administración.";
 
-            mail.Attachments.Add(new Attachment("wwwroot/img/Icon/Portrait.png"));
+            mail.Body = $"Saludos {proveedor.Nombre}, <br/><br/> La Botica Popular de la Iglesia Santa Rosa de Lima, " +
+                $"solicita {correo.Cajas} cajas de {correo.NombreMedicamento}.<br/> Por favor enviar las cantidades necesarias lo mas pronto posible." +
+                $"<br/> <br/> Se despide cordialmente la administración. <br/> <br/> " +
+                $"<img src='https://i.pinimg.com/564x/aa/15/11/aa1511c58c50fa378a4b45f986c20b4e.jpg' alt='Portrait1'  />";
 
             mail.IsBodyHtml = true;
             mail.BodyEncoding = Encoding.UTF8;

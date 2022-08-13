@@ -237,6 +237,7 @@ namespace ApotheGSF.Controllers
         {
             if (_context.Proveedores == null)
             {
+                _notyf.Error("No se ha podido eliminar");
                 return false;
             }
 

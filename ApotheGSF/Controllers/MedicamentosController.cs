@@ -536,6 +536,7 @@ namespace ApotheGSF.Controllers
         {
             if (_context.Medicamentos == null)
             {
+                _notyf.Error("No se ha podido eliminar");
                 return false;
             }
             var medicamento = await _context.Medicamentos.Where(m => m.Codigo == Codigo).Include(m => m.MedicamentosCajas.Where(mc => mc.Inactivo == false)).FirstOrDefaultAsync();

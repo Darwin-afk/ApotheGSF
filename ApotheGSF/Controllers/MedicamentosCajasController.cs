@@ -292,6 +292,7 @@ namespace ApotheGSF.Controllers
         {
             if (_context.MedicamentosCajas == null)
             {
+                _notyf.Error("No se ha podido eliminar");
                 return Problem("Entity set 'AppDbContext.MedicamentosCajas'  is null.");
             }
             var medicamentosCajas = await _context.MedicamentosCajas.FindAsync(CodigoCaja);

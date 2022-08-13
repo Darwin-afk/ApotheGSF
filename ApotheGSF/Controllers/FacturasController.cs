@@ -877,6 +877,7 @@ namespace ApotheGSF.Controllers
         {
             if (_context.Facturas == null)
             {
+                _notyf.Error("No se ha podido eliminar");
                 return false;
             }
             var factura = await _context.Facturas.FindAsync(viewModel.Codigo);

@@ -386,8 +386,11 @@ namespace ApotheGSF.Controllers
         {
             if (_context.AppUsuarios == null)
             {
+                _notyf.Error("No se ha podido eliminar");
                 return false;
             }
+
+
             var appUsuario = await _context.AppUsuarios.FindAsync(Codigo);
             if (appUsuario != null)
             {

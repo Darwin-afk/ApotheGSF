@@ -905,6 +905,7 @@ namespace ApotheGSF.Controllers
 
                                     _context.Update(caja);
                                     caja.CantidadUnidad = medicamento.UnidadesCaja;
+                                    caja.Detallada = false;
                                 }
                             }
                             else
@@ -933,7 +934,12 @@ namespace ApotheGSF.Controllers
                                     caja.CantidadUnidad += medicamento.UnidadesCaja - cantidadDevolver;
                                     cantidadDevolver -= medicamento.UnidadesCaja - cantidadDevolver;
                                 }
-                                
+
+                                if (caja.CantidadUnidad == medicamento.UnidadesCaja)
+                                {
+                                    caja.Detallada = false;
+                                }
+
                             }
                         }
                     }

@@ -97,8 +97,9 @@ namespace ApotheGSF.Controllers
                                      Creado = f.Creado,
                                      CreadoNombreUsuario = f.CreadoNombreUsuario,
                                      Modificado = f.Modificado,
-                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario
-                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario,
+                                     Inactivo = f.Inactivo
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (factura == null)
             {
@@ -528,7 +529,8 @@ namespace ApotheGSF.Controllers
                                      Codigo = f.Codigo,
                                      SubTotal = f.SubTotal,
                                      Total = f.Total,
-                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                     Inactivo = f.Inactivo
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (factura == null)
             {
@@ -857,8 +859,9 @@ namespace ApotheGSF.Controllers
                                      Creado = f.Creado,
                                      CreadoNombreUsuario = f.CreadoNombreUsuario,
                                      Modificado = f.Modificado,
-                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario
-                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario,
+                                     Inactivo = f.Inactivo
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (factura == null)
             {

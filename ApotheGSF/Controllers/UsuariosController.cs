@@ -94,6 +94,12 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            if (id == _user.GetUserID().ToInt())
+            {
+                _notyf.Error("Opcion no valida");
+                return RedirectToAction("Index", "Home");
+            }
+
             var usuario = await (from u in _context.AppUsuarios
                             .AsNoTracking()
                             .AsQueryable()
@@ -253,6 +259,13 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
+
+            if (id == _user.GetUserID().ToInt())
+            {
+                _notyf.Error("Opcion no valida");
+                return RedirectToAction("Index", "Home");
+            }
+
             var usuario = await (from u in _context.AppUsuarios
                              .AsNoTracking()
                              .AsQueryable()
@@ -356,6 +369,12 @@ namespace ApotheGSF.Controllers
             if (id == null || _context.AppUsuarios == null)
             {
                 return NotFound();
+            }
+
+            if(id == _user.GetUserID().ToInt())
+            {
+                _notyf.Error("Opcion no valida");
+                return RedirectToAction("Index", "Home");
             }
 
             var usuario = await (from u in _context.AppUsuarios

@@ -41,7 +41,7 @@ namespace ApotheGSF.ViewModels
         [Display(Name = "Lotes: ")]
         public int Cajas { get; set; }
 
-        public bool Inactivo { get; set; }
+        public bool? Inactivo { get; set; }
 
         public MedicamentosViewModel()
         {

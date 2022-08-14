@@ -54,8 +54,9 @@ namespace ApotheGSF.Controllers
                                                Creado = mc.Creado,
                                                CreadoNombreUsuario = mc.CreadoNombreUsuario,
                                                Modificado = mc.Modificado,
-                                               ModificadoNombreUsuario = mc.ModificadoNombreUsuario
-                                           }).Where(x => x.CodigoCaja == id).FirstOrDefaultAsync();
+                                               ModificadoNombreUsuario = mc.ModificadoNombreUsuario,
+                                               Inactivo = mc.Inactivo
+                                           }).Where(x => x.CodigoCaja == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)
             {
@@ -163,7 +164,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var medicamentosCajas = await _context.MedicamentosCajas.FindAsync(id);
+            var medicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.Codigo == id && mc.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)
             {
@@ -274,8 +275,9 @@ namespace ApotheGSF.Controllers
                                                Creado = mc.Creado,
                                                CreadoNombreUsuario = mc.CreadoNombreUsuario,
                                                Modificado = mc.Modificado,
-                                               ModificadoNombreUsuario = mc.ModificadoNombreUsuario
-                                           }).Where(x => x.CodigoCaja == id).FirstOrDefaultAsync();
+                                               ModificadoNombreUsuario = mc.ModificadoNombreUsuario,
+                                               Inactivo = mc.Inactivo
+                                           }).Where(x => x.CodigoCaja == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamentosCajas == null)
             {

@@ -172,6 +172,7 @@ namespace ApotheGSF.Controllers
                                          CreadoNombreUsuario = meds.CreadoNombreUsuario,
                                          Modificado = meds.Modificado,
                                          ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
+                                         Inactivo = meds.Inactivo,
 
                                          NombreProveedor = string.Join(", ",
                                          (from p in _context.Proveedores
@@ -351,7 +352,8 @@ namespace ApotheGSF.Controllers
                                           Costo = meds.Costo,
                                           PrecioUnidad = meds.PrecioUnidad,
                                           Indicaciones = meds.Indicaciones,
-                                          Dosis = meds.Dosis
+                                          Dosis = meds.Dosis,
+                                          Inactivo = meds.Inactivo
                                       }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamentos == null)
@@ -494,6 +496,7 @@ namespace ApotheGSF.Controllers
                                          CreadoNombreUsuario = meds.CreadoNombreUsuario,
                                          Modificado = meds.Modificado,
                                          ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
+                                         Inactivo = meds.Inactivo,
                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
 
                                          NombreProveedor = string.Join(", ",

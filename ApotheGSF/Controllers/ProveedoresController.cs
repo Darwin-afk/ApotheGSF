@@ -72,8 +72,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var proveedor = _context.Proveedores
-                .FirstOrDefault(p => p.Codigo == id);
+            var proveedor = await _context.Proveedores.Where(p => p.Codigo == id && p.Inactivo == false).FirstOrDefaultAsync();
             if (proveedor == null)
             {
                 return NotFound();
@@ -224,7 +223,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var proveedor = await _context.Proveedores.FindAsync(id);
+            var proveedor = await _context.Proveedores.Where(p => p.Codigo == id && p.Inactivo == false).FirstOrDefaultAsync();
             if (proveedor == null)
             {
                 return NotFound();
@@ -285,8 +284,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var proveedor = await _context.Proveedores
-                .FirstOrDefaultAsync(m => m.Codigo == id);
+            var proveedor = await _context.Proveedores.Where(p => p.Codigo == id && p.Inactivo == false).FirstOrDefaultAsync();
             if (proveedor == null)
             {
                 return NotFound();

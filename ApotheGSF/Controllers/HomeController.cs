@@ -257,15 +257,10 @@ namespace ApotheGSF.Controllers
 
         #region PerfilUsuario
         [Authorize]
-        public async Task<IActionResult> PerfilUsuario(int? id)
+        public async Task<IActionResult> PerfilUsuario()
         {
-            if (id == null)
-            {
-                Response.StatusCode = 404;
-                return View("NotFound");
-            }
 
-            AppUsuario modelo = await _userManager.FindByIdAsync(id.ToString());
+            AppUsuario modelo = await _userManager.FindByIdAsync(_user.GetUserID());
 
             if (modelo == null)
             {

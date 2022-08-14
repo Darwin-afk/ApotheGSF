@@ -650,7 +650,7 @@ namespace ApotheGSF.Controllers
             medicamento.EnvioPendiente = true;
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { Mensaje = "Se ha enviado exitosamente!!!" });
         }
 
         private SmtpClient ConfigurarSmtpClient()

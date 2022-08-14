@@ -207,8 +207,14 @@ namespace ApotheGSF.Controllers
                         return "Este usuario ya existe";
                     }
 
+                    //telefono
+                    if(usuario.PhoneNumber == viewModel.Telefono)
+                    {
+                        return "Telefono existente";
+                    }
+
                     //cedula
-                    if(usuario.Cedula == viewModel.Cedula)
+                    if (usuario.Cedula == viewModel.Cedula)
                     {
                         return "Cedula existente";
                     }

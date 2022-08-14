@@ -23,10 +23,10 @@ namespace ApotheGSF.Models
         [Display(Name = "Teléfono 1: ")]
         public string Telefono1 { get; set; }
 
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
         [Display(Name = "Teléfono 2: ")]
-        public string Telefono2 { get; set; }
+        public string? Telefono2 { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Fax inválido")]
@@ -61,6 +61,8 @@ namespace ApotheGSF.Models
         public Proveedores()
         {
             ProveedoresMedicamentos = new HashSet<ProveedorMedicamentos>();
+
+            Telefono2 = string.Empty;
         }
         
        public ICollection<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }

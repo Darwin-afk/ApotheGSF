@@ -126,44 +126,80 @@ namespace ApotheGSF.Controllers
             if (proveedores != null)
             {
                 //por cada elemento de la lista verificar repeticion de datos
-                foreach (var _proveedor in proveedores)
+                foreach (var item in proveedores)
                 {
                     //nombre
-                    if (_proveedor.Nombre.ToUpper() == proveedor.Nombre.ToUpper())
+                    if (item.Nombre.ToUpper() == proveedor.Nombre.ToUpper())
                     {
                         return "Este proveedor ya existe";
                     }
 
                     //rnc
-                    if (_proveedor.RNC == proveedor.RNC)
+                    if (item.RNC == proveedor.RNC)
                     {
                         return "RNC existente";
                     }
 
-                    //telefono
-                    if(proveedor.Telefono1 == proveedor.Telefono2)
+                    //telefono 1 y fax
+                    if (proveedor.Telefono1 == proveedor.Fax)
                     {
-                        return "Los teléfono no pueden ser iguales";
+                        return "Teléfono 1 y Fax no pueden ser iguales";
                     }
+
                     //telefono 1
-                    if(_proveedor.Telefono1 == proveedor.Telefono1 || _proveedor.Telefono2 == proveedor.Telefono1)
+                    if (item.Telefono1 == proveedor.Telefono1 || item.Fax == proveedor.Telefono1)
                     {
                         return "Teléfono 1 existente";
                     }
-                    //telefono 2
-                    if (_proveedor.Telefono1 == proveedor.Telefono2 || _proveedor.Telefono2 == proveedor.Telefono2)
-                    {
-                        return "Teléfono 2 existente";
-                    }
-
                     //fax
-                    if (_proveedor.Fax == proveedor.Fax)
+                    if (item.Telefono1 == proveedor.Fax || item.Fax == proveedor.Fax)
                     {
                         return "Fax existente";
                     }
 
+                    //telefono 2 viewModel
+                    if(proveedor.Telefono2 != null)
+                    {
+                        if(proveedor.Telefono1 == proveedor.Telefono2)
+                        {
+                            return "Teléfono 1 y Teléfono 2 no pueden ser iguales";
+                        }
+
+                        if (proveedor.Fax == proveedor.Telefono2)
+                        {
+                            return "Teléfono 2 y Fax no pueden ser iguales";
+                        }
+
+                        if (item.Telefono1 == proveedor.Telefono2 || item.Fax == proveedor.Telefono2)
+                        {
+                            return "Teléfono 2 existente";
+                        }
+
+                        if(item.Telefono2 != null)
+                        {
+                            if(item.Telefono2 == proveedor.Telefono2)
+                            {
+                                return "Teléfono 2 existente";
+                            }
+                        }
+                    }
+                    //telefono 2 database
+                    if(item.Telefono2 != null)
+                    {
+                        if(item.Telefono2 == proveedor.Telefono1)
+                        {
+                            return "Teléfono 1 existente";
+                        }
+
+                        if (item.Telefono2 == proveedor.Fax)
+                        {
+                            return "Fax existente";
+                        }
+                    }
+                    
+
                     //email
-                    if (_proveedor.Email == proveedor.Email)
+                    if (item.Email == proveedor.Email)
                     {
                         return "Email existente";
                     }

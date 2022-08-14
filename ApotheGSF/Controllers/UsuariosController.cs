@@ -282,8 +282,9 @@ namespace ApotheGSF.Controllers
                                      Cedula = u.Cedula,
                                      FechaNacimiento = u.FechaNacimiento,
                                      Direccion = u.Direccion,
-                                     Rol = r.Name
-                                 }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                     Rol = r.Name,
+                                     Inactivo = u.Inactivo
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (usuario == null)
             {

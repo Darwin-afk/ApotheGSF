@@ -28,7 +28,6 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
         private readonly INotyfService _notyf;
-        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
         /*CONFIGURACIÓN SMTP:
     ---------------------------------------------------------
@@ -58,14 +57,12 @@ namespace ApotheGSF.Controllers
 
         public MedicamentosController(AppDbContext context,
                              IHttpContextAccessor accessor,
-                             INotyfService notyf,
-                             Microsoft.AspNetCore.Hosting.IHostingEnvironment env
+                             INotyfService notyf
             )
         {
             _context = context;
             _user = accessor.HttpContext.User;
             _notyf = notyf;
-            _env = env;
         }
 
         // GET: Medicamentos
@@ -195,7 +192,7 @@ namespace ApotheGSF.Controllers
                                           }
                                           ).Select(x => x.Nombre).ToList())
 
-                                     }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                     }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamento == null)
             {
@@ -355,7 +352,7 @@ namespace ApotheGSF.Controllers
                                           PrecioUnidad = meds.PrecioUnidad,
                                           Indicaciones = meds.Indicaciones,
                                           Dosis = meds.Dosis
-                                      }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                      }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamentos == null)
             {
@@ -518,7 +515,7 @@ namespace ApotheGSF.Controllers
                                           }
                                           ).Select(x => x.Nombre).ToList())
 
-                                     }).Where(x => x.Codigo == id).FirstOrDefaultAsync();
+                                     }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
 
             if (medicamento == null)

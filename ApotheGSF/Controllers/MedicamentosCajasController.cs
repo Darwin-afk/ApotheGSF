@@ -107,7 +107,7 @@ namespace ApotheGSF.Controllers
                 }
 
                 //validar las fechas
-                if (viewModel.FechaAdquirido > DateTime.Now)
+                if (viewModel.FechaAdquirido > DateTime.Now || viewModel.FechaAdquirido < DateTime.Now.AddDays(-8))
                 {
                     _notyf.Error("Fecha adquirido invalida");
                     ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
@@ -117,7 +117,7 @@ namespace ApotheGSF.Controllers
                 if (viewModel.FechaVencimiento < DateTime.Now.AddMonths(1))
                 {
                     _notyf.Error("fecha vencimiento invalida");
-                    ViewData["medicamentosid"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "codigo", "nombre");
+                    ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
                     return View(viewModel);
                 }
 

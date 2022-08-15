@@ -40,10 +40,10 @@
                             @item.Cantidad
                         </td>
                         <td class="text-end">
-                            @item.Precio
+                            @item.Precio.ToString("n2")
                         </td>
                         <td class="text-end">
-                            @item.Total
+                            @item.Total.ToString("n2")
                         </td>
                     </tr>
                 }
@@ -65,7 +65,7 @@
                     @foreach(var item in Model.MedicamentosDetalle){
                         contador = contador + (item.Total * 0.18);
                     }
-                    <p>@contador</p>
+                    <p>@contador.ToString("n2")</p>
                 </dd>
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Total)

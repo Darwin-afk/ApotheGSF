@@ -8,10 +8,10 @@ namespace ApotheGSF.Models
         [Key]
         [Display(Name = "Código: ")]
         public int Codigo { get; set; }
-        // [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "SubTotal: ")]
         public float SubTotal { get; set; }
-        //  [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "Total: ")]
         public float Total { get; set; }
 

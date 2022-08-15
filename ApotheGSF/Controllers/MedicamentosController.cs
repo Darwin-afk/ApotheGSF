@@ -637,8 +637,21 @@ namespace ApotheGSF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EnviarCorreo(CorreoViewModel correo)
+        public IActionResult EnviarCorreo([Bind("NombreMedicamento,CodigoProveedor,Cajas")] CorreoViewModel correo)
         {
+            if(correo.Cajas <= 0)
+            {
+                _notyf.Error("La cantidad de cajas debe ser mayor a 0");
+
+                Medicamentos _medicamento = _context.Medicamentos.Where(m => m.Nombre == correo.NombreMedicamento).FirstOrDefault();
+
+                List<int> codigosProveedores = _context.ProveedoresMedicamentos.Where(pm => pm.CodigoMedicamento == _medicamento.Codigo).Select(pm => pm.CodigoProveedor).ToList();
+
+                ViewBag.ProveedoresId = new SelectList(_context.Proveedores.Where(p => codigosProveedores.Contains(p.Codigo) && p.Inactivo == false).ToList(), "Codigo", "Nombre");
+
+                return View(correo);
+            }
+
             var smtpClient = ConfigurarSmtpClient();
             var mensaje = GenerarCorreo(correo);
 

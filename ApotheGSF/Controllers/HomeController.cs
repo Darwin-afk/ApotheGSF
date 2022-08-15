@@ -150,7 +150,7 @@ namespace ApotheGSF.Controllers
                 try
                 {
                     //Busca si el usuario que intenta logearse esta activo o inactivo
-                    if (_userManager.FindByNameAsync(model.Usuario) != null)
+                    if (_userManager.FindByNameAsync(model.Usuario).Result != null)
                         usuarioInactivo = (bool)_userManager.FindByNameAsync(model.Usuario).Result.Inactivo;
                     else
                         usuarioInactivo = true;

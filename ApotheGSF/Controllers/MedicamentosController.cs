@@ -722,7 +722,7 @@ namespace ApotheGSF.Controllers
             mail.Body = $"Saludos {proveedor.Nombre}, <br/><br/> La Botica Popular de la Iglesia Santa Rosa de Lima, " +
                 $"solicita {correo.Cajas} cajas de {correo.NombreMedicamento}.<br/> Por favor enviar las cantidades necesarias lo mas pronto posible." +
                 $"<br/> <br/> Se despide cordialmente la administración. <br/> <br/> " +
-                $"<img src='https://i.pinimg.com/564x/aa/15/11/aa1511c58c50fa378a4b45f986c20b4e.jpg' alt='Portrait1'  />";
+                $"<img src='https://i.pinimg.com/564x/4e/b9/b7/4eb9b70dee1f41c59dc790b67d6b498b.jpg' alt='Portrait1'  />";
 
             mail.IsBodyHtml = true;
             mail.BodyEncoding = Encoding.UTF8;

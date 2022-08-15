@@ -22,16 +22,16 @@
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             <input type="text" asp-for="Nombre" class="form-control" placeholder="Nombre">
-                            <span asp-validation-for="Nombre" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
                         <label class="col-form-label">Proveedores:</label>
                         <div class="input-group">
                             <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
 
-                            <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -84,8 +84,8 @@
                                 <span class="input-group-text"><i class="fas fa-pills"></i></span>
                             </div>
                             <input class="form-control" asp-for="Concentracion" type="text" placeholder="0 mg">
-                            <span asp-validation-for="Concentracion" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="Concentracion" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
                         <label class="col-form-label">Unidades por Caja:</label>
@@ -94,8 +94,8 @@
                                 <span class="input-group-text"><i class="fas fa-tablets"></i></span>
                             </div>
                             <input class="form-control" asp-for="UnidadesCaja" type="number" placeholder="0" onchange="AsignarPrecio()">
-                            <span asp-validation-for="UnidadesCaja" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="UnidadesCaja" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -108,8 +108,8 @@
                                 <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
                             <input class="form-control" asp-for="Costo" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
-                            <span asp-validation-for="Costo" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="Costo" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
                         <label class="col-form-label">Precio por Unidad:</label>
@@ -131,8 +131,8 @@
                                 <span class="input-group-text"><i class="fas fa-list"></i></span>
                             </div>
                             <textarea class="form-control" asp-for="Indicaciones" type="textarea" placeholder="Indicaciones" rows="3"></textarea>
-                            <span asp-validation-for="Indicaciones" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="Indicaciones" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
                         <label for="Direccion" class="col-form-label">Dosis</label>
@@ -141,8 +141,8 @@
                                 <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
                             </div>
                             <input class="form-control" asp-for="Dosis" type="text" placeholder="0">
-                            <span asp-validation-for="Dosis" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="Dosis" class="text-danger"></span>
                     </div>
                 </div>
 

@@ -41,8 +41,13 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
+        public async Task<IActionResult> Index(string filter, string Mensaje = "", int pageindex = 1, string sortExpression = "", int search = 0)
         {
+            if (Mensaje != "")
+            {
+                _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
+            }
+
             StringBuilder filtro = new StringBuilder($" Inactivo == false && Codigo != {User.GetUserID().ToInt()}");
             if (!string.IsNullOrWhiteSpace(filter))
             {
@@ -181,6 +186,7 @@ namespace ApotheGSF.Controllers
                 //Se debe validar que el email y el telefono no se repitan.
                 // Verificar si _userManager tiene una opcion, se pueden hacer indeces unique y se puede hacer un query antes de.
                 var result = await _userManager.CreateAsync(nuevoUsuario, viewModel.Password);
+                
                 if (result.Succeeded)
                 {
                     var rr = await _userManager.AddToRoleAsync(nuevoUsuario, viewModel.Rol);
@@ -188,11 +194,46 @@ namespace ApotheGSF.Controllers
                 }
                 else
                 {
+                    //si el nombre de usuario existe lo actualiza
+                    if(_userManager.FindByNameAsync(nuevoUsuario.UserName).Result != null)
+                    {
+                        AppUsuario antiguoUsuario = _userManager.FindByNameAsync(nuevoUsuario.UserName).Result;
+                        antiguoUsuario.Nombre = viewModel.Nombre;
+                        antiguoUsuario.Apellido = viewModel.Apellido;
+                        antiguoUsuario.Foto = null;
+                        antiguoUsuario.PhoneNumber = viewModel.Telefono;
+                        antiguoUsuario.Cedula = viewModel.Cedula;
+                        antiguoUsuario.FechaNacimiento = viewModel.FechaNacimiento;
+                        antiguoUsuario.Direccion = viewModel.Direccion;
+                        antiguoUsuario.Email = viewModel.Email;
+                        antiguoUsuario.UserName = viewModel.Usuario;
+                        antiguoUsuario.Creado = DateTime.Now;
+                        antiguoUsuario.ModificadoNombreUsuario = _user.GetUserName();
+                        antiguoUsuario.Modificado = DateTime.Now;
+                        antiguoUsuario.ModificadoNombreUsuario = _user.GetUserName();
+                        antiguoUsuario.Inactivo = false;
+
+                        _context.Update(antiguoUsuario);
+                        var resultado = await _context.SaveChangesAsync();
+
+                        // verificar si se grabó bien, para luego asignar el rol
+                        if (resultado > 0)
+                        {
+                            var rolesViejos = await _context.AppUsuariosRoles.Where(x => x.UserId == antiguoUsuario.Id).ToListAsync();
+                            _context.RemoveRange(rolesViejos);
+                            await _context.SaveChangesAsync();
+                            await _userManager.AddToRoleAsync(antiguoUsuario, viewModel.Rol);
+                        }
+
+                        return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
+
+                    }
                     foreach (IdentityError _error in result.Errors)
                     {
                         _notyf.Error($"{_error.Code} - {_error.Description}");
                     }
                 }
+                
             }
             return View(viewModel);
         }
@@ -230,9 +271,6 @@ namespace ApotheGSF.Controllers
                     {
                         return "Email existente";
                     }
-
-
-
                 }
             }
 
@@ -324,7 +362,6 @@ namespace ApotheGSF.Controllers
                     antiguoUsuario.FechaNacimiento = viewModel.FechaNacimiento;
                     antiguoUsuario.Direccion = viewModel.Direccion;
                     antiguoUsuario.Email = viewModel.Email;
-                    antiguoUsuario.UserName = viewModel.Usuario;
                     antiguoUsuario.Modificado = DateTime.Now;
                     antiguoUsuario.ModificadoNombreUsuario = _user.GetUserName();
 
@@ -341,6 +378,9 @@ namespace ApotheGSF.Controllers
                     // verificar si se grabó bien, para luego asignar el rol
                     if (result > 0)
                     {
+                        var token = await _userManager.GeneratePasswordResetTokenAsync(antiguoUsuario);
+                        await _userManager.ResetPasswordAsync(antiguoUsuario, token, viewModel.Password);
+
                         var rolesViejos = await _context.AppUsuariosRoles.Where(x => x.UserId == viewModel.Codigo).ToListAsync();
                         _context.RemoveRange(rolesViejos);
                         await _context.SaveChangesAsync();
@@ -358,6 +398,7 @@ namespace ApotheGSF.Controllers
                         throw;
                     }
                 }
+                _notyf.Custom("Se ha guardado exitosamente!!!", 5, "#17D155", "fas fa-check");
                 return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
@@ -438,6 +479,7 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
+            
             return true;
         }
 

@@ -228,12 +228,14 @@ namespace ApotheGSF.Controllers
             if (!checkPassResult)
             {
                 _notyf.Error("Contraseña actual incorrecta");
+                return View(modelo);
             }
 
             //verifica si el campo confirmar contraseña es igual a la nueva contraseña
             if (!modelo.Password.Equals(modelo.ConfirmarPassword))
             {
-                _notyf.Error("Las contraseñas con coinciden");
+                _notyf.Error("Las contraseñas no coinciden");
+                return View(modelo);
             }
 
             ModelState.Remove("Nombre");//no se toma en cuenta el nombre al validar

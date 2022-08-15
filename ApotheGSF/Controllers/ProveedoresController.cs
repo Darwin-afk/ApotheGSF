@@ -37,8 +37,13 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Proveedores
-        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sortExpression = "", int search = 0)
+        public async Task<IActionResult> Index(string filter, string Mensaje = "", int pageindex = 1, string sortExpression = "", int search = 0)
         {
+            if (Mensaje != "")
+            {
+                _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
+            }
+
             StringBuilder filtro = new StringBuilder(" Inactivo == false ");
             if (!string.IsNullOrWhiteSpace(filter))
             {
@@ -270,6 +275,7 @@ namespace ApotheGSF.Controllers
                         throw;
                     }
                 }
+                _notyf.Custom("Se ha guardado exitosamente!!!", 5, "#17D155", "fas fa-check");
                 return RedirectToAction(nameof(Index));
             }
             return View(proveedor);

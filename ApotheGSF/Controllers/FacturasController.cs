@@ -42,8 +42,13 @@ namespace ApotheGSF.Controllers
         }
 
         // GET: Facturas
-        public async Task<IActionResult> Index(DateTime desde, DateTime hasta, int pageindex = 1, string sortExpression = "", int search = 0)
+        public async Task<IActionResult> Index(DateTime desde, DateTime hasta, string Mensaje = "", int pageindex = 1, string sortExpression = "", int search = 0)
         {
+            if (Mensaje != "")
+            {
+                _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
+            }
+
             StringBuilder filtro = new StringBuilder(" Inactivo == false ");
 
             if (desde > default(DateTime))
@@ -817,7 +822,7 @@ namespace ApotheGSF.Controllers
                     return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
                 }
                 int ultimaFactura = _context.Facturas.OrderByDescending(f => f.Codigo).First().Codigo;
-                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha editado la factura exitosamente!!" });
+                return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha guardado la factura exitosamente!!" });
             }
 
             //obtener lista de medicamentos que no esten inactivos

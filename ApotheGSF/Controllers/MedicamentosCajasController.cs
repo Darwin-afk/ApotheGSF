@@ -244,6 +244,7 @@ namespace ApotheGSF.Controllers
                         throw;
                     }
                 }
+                _notyf.Custom("Se ha guardado exitosamente!!!", 5, "#17D155", "fas fa-check");
                 return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
             }
             ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;

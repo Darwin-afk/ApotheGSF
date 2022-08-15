@@ -122,6 +122,10 @@ namespace ApotheGSF.Controllers
 
                                  }).Where(filtro.ToString()).ToListAsync();
             }
+
+            if (listado.Count == 0 && search == 1)
+                _notyf.Information("No hay medicamentos existentes");
+
             sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
             model.RouteValue = new RouteValueDictionary {
@@ -210,7 +214,7 @@ namespace ApotheGSF.Controllers
             for (int i = 0; i < cajas.Count; i++)
                 cajas[i].NumeroCaja = i + 1;
 
-            var inventario = PagingList.Create(cajas, 5, pageindex, "Codigo", "");
+            var inventario = PagingList.Create(cajas, 5, pageindex, "NumeroCaja", "");
 
             inventario.Action = "Details";
 

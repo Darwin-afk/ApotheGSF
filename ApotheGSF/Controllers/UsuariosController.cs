@@ -76,6 +76,10 @@ namespace ApotheGSF.Controllers
 
                                  }).Where(filtro.ToString()).ToListAsync();
             }
+
+            if (listado.Count == 0 && search == 1)
+                _notyf.Information("No hay otros usuarios existentes");
+
             sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Nombre" : sortExpression;
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
             model.RouteValue = new RouteValueDictionary {

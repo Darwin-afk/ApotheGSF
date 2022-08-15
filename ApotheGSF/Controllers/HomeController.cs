@@ -46,7 +46,7 @@ namespace ApotheGSF.Controllers
         {
             VerificarInventario();
 
-            if(Mensaje != "")
+            if (Mensaje != "")
             {
                 _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
             }
@@ -61,13 +61,13 @@ namespace ApotheGSF.Controllers
             Notificaciones.Mensajes = new List<string>();
 
             //obtener cada medicamento con su cajas incluidas
-            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc=>mc.CantidadUnidad > 0)).ToList();
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc => mc.CantidadUnidad > 0)).ToList();
 
             if (medicamentos == null)
                 return true;
 
             //por cada medicamento
-            foreach(var medicamento in medicamentos)
+            foreach (var medicamento in medicamentos)
             {
                 int diasRestantes;
                 int cajasVencidas = 0;
@@ -76,16 +76,16 @@ namespace ApotheGSF.Controllers
                     continue;
 
                 //por cada caja
-                foreach(var caja in medicamento.MedicamentosCajas)
+                foreach (var caja in medicamento.MedicamentosCajas)
                 {
                     //verificar la diferencia de su fecha de vencimiento con la fecha actual
                     diasRestantes = (caja.FechaVencimiento - DateTime.Now).Days;
 
                     //si es menor que x cantidad de dias
-                    if(diasRestantes <= 21 && diasRestantes > 0)
+                    if (diasRestantes <= 21 && diasRestantes > 0)
                     {
                         //si la caja esta activa se desactiva
-                        if(caja.Inactivo == false)
+                        if (caja.Inactivo == false)
                         {
                             _context.Update(caja);
                             caja.Inactivo = true;
@@ -98,7 +98,7 @@ namespace ApotheGSF.Controllers
                 }
 
                 //agregar mensaje de cajas eliminadas
-                if(cajasVencidas > 0)
+                if (cajasVencidas > 0)
                     Notificaciones.Mensajes.Add($"&nbsp;&nbsp;&nbsp;{cajasVencidas} cajas de {medicamento.Nombre} estan por vencerse");
 
             }
@@ -109,7 +109,7 @@ namespace ApotheGSF.Controllers
             foreach (var medicamento in medicamentos)
             {
                 //si su cantidad de cajas es menor x limite y no hay envios en curso
-                if(medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count < 20 && medicamento.EnvioPendiente == false)
+                if (medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count < 20 && medicamento.EnvioPendiente == false)
                 {
                     //se agrega una notificacion de reabastecimiento
                     Notificaciones.Mensajes.Add($"&nbsp;&nbsp;&nbsp;{medicamento.Nombre} le queda poca mercancia, desea <a href=\"/Medicamentos/EnviarCorreo?codigoMedicamento={medicamento.Codigo}\">solicitar mas</a>");
@@ -291,16 +291,35 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PerfilUsuario([Bind("Codigo, Nombre, Apellido, Email, Telefono, Foto")] PerfilUsuarioViewModel modelo, IFormFile logo, string removeLogo)
         {
-            //Valida que si se cambia el correo no exista otro usuario con el mismo asignado.
-            var u = await _userManager.FindByEmailAsync(modelo.Email); //No se puede registrar el mismo correo en el sistema dos veces, no importa la Org.
-            if (u != null && u.Id != modelo.Codigo)
+            //validar telefono y email
+            //obtener lista de usuarios
+            List<AppUsuario> usuarios = _context.AppUsuarios.Where(u => u.Inactivo == false && u.Id != modelo.Codigo).ToList();
+            //si la lista no es null
+            if (usuarios != null)
             {
-                _notyf.Error(string.Format("El correo {0} ya está registrado", modelo.Email));
+                //por cada elemento de la lista verificar repeticion de datos
+                foreach (var usuario in usuarios)
+                {
+                    //telefono
+                    if (usuario.PhoneNumber == modelo.Telefono)
+                    {
+                        _notyf.Error("Telefono existente");
+                        return View(modelo);
+                    }
+
+                    //email
+                    if (usuario.Email == modelo.Email)
+                    {
+                        _notyf.Error("Email existente");
+                        return View(modelo);
+                    }
+                }
             }
 
             if (!modelo.Email.IsValidEmail())
             {
-                _notyf.Error(string.Format("El Email {0} no es correcto", modelo.Email));
+                _notyf.Error("Email invalido");
+                return View(modelo);
             }
 
             ModelState.Remove("Foto");

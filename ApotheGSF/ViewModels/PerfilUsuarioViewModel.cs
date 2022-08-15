@@ -18,13 +18,14 @@ namespace ApotheGSF.ViewModels
 		[Display(Name = "Foto: ")]
 		public string? Foto { get; set; }
 
-		[MaxLength(256)]
-		[DataType(DataType.EmailAddress)]
-		[Required(ErrorMessage = "Digite el email.")]
+		[Required(ErrorMessage = "Digite el correo electrónico del usuario.")]
+		[MaxLength(100)]
+		[EmailAddress]
 		[Display(Name = "Email: ")]
 		public string Email { get; set; }
 
 		[Required(ErrorMessage = "Digite el teléfono.")]
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
 		[Display(Name = "Teléfono: ")]
 		public string Telefono { get; set; }
 	}

@@ -25,15 +25,8 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="col-form-label">Proveedores:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-flask"></i></span>
-                            </div>
-                            <div>
-                                <select asp-for="CodigosProveedores" class="form-control select2" asp-items="ViewBag.CodigoProveedores"></select>
-                            </div>
-                            <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
-                        </div>
+                        <select asp-for="CodigosProveedores" class="form-control select2" asp-items="ViewBag.CodigoProveedores"></select>
+                        <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
                     </div>
                 </div>
 

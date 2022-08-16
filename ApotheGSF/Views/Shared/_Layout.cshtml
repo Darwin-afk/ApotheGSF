@@ -104,7 +104,7 @@
                                 <ul class="dropdown-menu menu1" aria-labelledby="navbarDropdownMenuLink">
                                     @if (User.IsInRole("Administrador"))
                                     {
-                                        <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Index"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Usuario</a></li>
+                                        <li><a class="dropdown-item text-dark" asp-controller="Usuarios" asp-action="Index"><i class="fa-solid fa-user" style="color:#006699;"></i>&nbsp;Usuarios</a></li>
                                     }
                                     <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Inventario</a></li>
                                     @if (User.IsInRole("Administrador") || User.IsInRole("Comprador"))

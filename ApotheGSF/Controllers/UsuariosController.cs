@@ -190,7 +190,7 @@ namespace ApotheGSF.Controllers
                 //Se debe validar que el email y el telefono no se repitan.
                 // Verificar si _userManager tiene una opcion, se pueden hacer indeces unique y se puede hacer un query antes de.
                 var result = await _userManager.CreateAsync(nuevoUsuario, viewModel.Password);
-                
+
                 if (result.Succeeded)
                 {
                     var rr = await _userManager.AddToRoleAsync(nuevoUsuario, viewModel.Rol);
@@ -199,7 +199,7 @@ namespace ApotheGSF.Controllers
                 else
                 {
                     //si el nombre de usuario existe lo actualiza
-                    if(_userManager.FindByNameAsync(nuevoUsuario.UserName).Result != null)
+                    if (_userManager.FindByNameAsync(nuevoUsuario.UserName).Result != null)
                     {
                         AppUsuario antiguoUsuario = _userManager.FindByNameAsync(nuevoUsuario.UserName).Result;
                         antiguoUsuario.Nombre = viewModel.Nombre;
@@ -232,12 +232,16 @@ namespace ApotheGSF.Controllers
                         return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
 
                     }
+
                     foreach (IdentityError _error in result.Errors)
                     {
-                        _notyf.Error($"{_error.Code} - {_error.Description}");
+                        if (_error.Code == "InvalidUserName")
+                            _notyf.Error("Nombre de usuario invalido,solo puede tener letras o numeros");
+                        else
+                            _notyf.Error($"{_error.Code}");
                     }
                 }
-                
+
             }
             return View(viewModel);
         }
@@ -259,7 +263,7 @@ namespace ApotheGSF.Controllers
                     }
 
                     //telefono
-                    if(usuario.PhoneNumber == viewModel.Telefono)
+                    if (usuario.PhoneNumber == viewModel.Telefono)
                     {
                         return "Telefono existente";
                     }
@@ -271,7 +275,7 @@ namespace ApotheGSF.Controllers
                     }
 
                     //email
-                    if(usuario.Email == viewModel.Email)
+                    if (usuario.Email == viewModel.Email)
                     {
                         return "Email existente";
                     }
@@ -283,7 +287,7 @@ namespace ApotheGSF.Controllers
             {
                 return "Fecha de nacimiento invalida";
             }
-            
+
             //validar email
             if (!viewModel.Email.IsValidEmail())
             {
@@ -417,7 +421,7 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            if(id == _user.GetUserID().ToInt())
+            if (id == _user.GetUserID().ToInt())
             {
                 _notyf.Error("Opcion no valida");
                 return RedirectToAction("Index", "Home");
@@ -483,7 +487,7 @@ namespace ApotheGSF.Controllers
             }
 
             await _context.SaveChangesAsync();
-            
+
             return true;
         }
 

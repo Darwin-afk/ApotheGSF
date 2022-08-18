@@ -8,6 +8,8 @@ namespace ApotheGSF.ViewModels
     {
         [Display(Name = "Código: ")]
         public int Codigo { get; set; }
+        [Display(Name = "Cliente: ")]
+        public string NombreCliente { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "SubTotal: ")]
         
@@ -20,10 +22,6 @@ namespace ApotheGSF.ViewModels
         public DateTime? Creado { get; set; }
         [Display(Name = "Creado Por: ")]
         public string? CreadoNombreUsuario { get; set; }
-        [Display(Name = "Ultima Modificaión: ")]
-        public DateTime? Modificado { get; set; }
-        [Display(Name = "Modificado Por: ")]
-        public string? ModificadoNombreUsuario { get; set; }
         public bool? Inactivo { get; set; }
 
         public FacturaViewModel()

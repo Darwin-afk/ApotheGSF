@@ -12,6 +12,7 @@ namespace ApotheGSF.Models
         [StringLength(30)]
         [Display(Name = "Nombre: ")]
         public string Nombre { get; set; }
+        [Display(Name = "Nombre Científico: ")]
         public string NombreCientifico { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Categoria: ")]

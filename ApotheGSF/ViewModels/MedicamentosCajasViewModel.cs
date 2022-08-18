@@ -9,8 +9,17 @@ namespace ApotheGSF.ViewModels
         public int CodigoCaja { get; set; }
         [Display(Name = "Código del Medicamento: ")]
         public int CodigoMedicamento { get; set; }
+        [Display(Name = "Código del Laboratorio: ")]
+        public int CodigoLaboratorio { get; set; }
+        [Required(ErrorMessage = "Digite una cantidad")]
         [Display(Name = "Cantidad de Unidades: ")]
         public int CantidadUnidad { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [Display(Name = "Costo: ")]
+        public float Costo { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [Display(Name = "Precio por Unidad: ")]
+        public float PrecioUnidad { get; set; }
         [Required(ErrorMessage = "Digite la fecha de adquisición")]
         [DisplayFormat(DataFormatString = "{0:d}")]
         [Display(Name = "Fecha de Adquisición: ")]

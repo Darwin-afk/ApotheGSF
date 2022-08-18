@@ -42,12 +42,17 @@ namespace ApotheGSF.Controllers
                                            .AsNoTracking()
                                            .AsQueryable()
                                            join m in _context.Medicamentos on mc.CodigoMedicamento equals m.Codigo
+                                           join l in _context.Laboratorios on mc.CodigoLaboratorio equals l.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
                                                CodigoCaja = mc.Codigo,
                                                CodigoMedicamento = mc.CodigoMedicamento,
                                                NombreMedicamento = m.Nombre,
+                                               CodigoLaboratorio = mc.CodigoLaboratorio,
+                                               NombreLaboratorio = l.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
+                                               Costo = mc.Costo,
+                                               PrecioUnidad = mc.PrecioUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
                                                FechaVencimiento = mc.FechaVencimiento,
                                                Detallada = mc.Detallada,
@@ -70,7 +75,7 @@ namespace ApotheGSF.Controllers
         [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
-            List<Medicamentos> medicamentos = _context.Medicamentos.Where(p => p.Inactivo == false).ToList();
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).ToList();
 
             if (medicamentos == null)
             {
@@ -84,7 +89,22 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            List<Laboratorios> laboratorios = _context.Laboratorios.Where(l => l.Inactivo == false).ToList();
+
+            if (laboratorios == null)
+            {
+                _notyf.Information("Es necesario tener algun laboratorio");
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (laboratorios.Count == 0)
+            {
+                _notyf.Information("Es necesario tener algun laboratorio");
+                return RedirectToAction("Index", "Home");
+            }
+
             ViewData["MedicamentosId"] = new SelectList(medicamentos, "Codigo", "Nombre");
+            ViewData["LaboratoriosId"] = new SelectList(laboratorios, "Codigo", "Nombre");
             return View();
         }
 
@@ -93,7 +113,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CodigoMedicamento,Cajas,FechaAdquirido,FechaVencimiento")] MedicamentosCajasViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("CodigoMedicamento,CodigoLaboratorio,Cajas,Costo,PrecioUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajasViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -103,6 +123,7 @@ namespace ApotheGSF.Controllers
                 {
                     _notyf.Error("Cantidad de cajas debe ser mayor a 0");
                     ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    ViewData["LaboratoriosId"] = new SelectList(_context.Laboratorios.Where(m => m.Inactivo == false), "Codigo", "Nombre");
                     return View(viewModel);
                 }
 
@@ -111,6 +132,7 @@ namespace ApotheGSF.Controllers
                 {
                     _notyf.Error("Fecha adquirido invalida");
                     ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    ViewData["LaboratoriosId"] = new SelectList(_context.Laboratorios.Where(m => m.Inactivo == false), "Codigo", "Nombre");
                     return View(viewModel);
                 }
 
@@ -118,6 +140,7 @@ namespace ApotheGSF.Controllers
                 {
                     _notyf.Error("fecha vencimiento invalida");
                     ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+                    ViewData["LaboratoriosId"] = new SelectList(_context.Laboratorios.Where(m => m.Inactivo == false), "Codigo", "Nombre");
                     return View(viewModel);
                 }
 
@@ -136,6 +159,9 @@ namespace ApotheGSF.Controllers
                                                                                 .Select(m => m.UnidadesCaja)
                                                                                 .FirstOrDefaultAsync();
                     medicamentoCaja.CodigoMedicamento = viewModel.CodigoMedicamento;
+                    medicamentoCaja.CodigoLaboratorio = viewModel.CodigoLaboratorio;
+                    medicamentoCaja.Costo = viewModel.Costo;
+                    medicamentoCaja.PrecioUnidad = viewModel.PrecioUnidad;
                     medicamentoCaja.FechaAdquirido = viewModel.FechaAdquirido;
                     medicamentoCaja.FechaVencimiento = viewModel.FechaVencimiento;
                     medicamentoCaja.Detallada = false;
@@ -152,6 +178,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
             }
             ViewData["MedicamentosId"] = new SelectList(_context.Medicamentos.Where(m => m.Inactivo == false), "Codigo", "Nombre");
+            ViewData["LaboratoriosId"] = new SelectList(_context.Laboratorios.Where(m => m.Inactivo == false), "Codigo", "Nombre");
             return View(viewModel);
         }
 
@@ -170,7 +197,9 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
+
             ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+            ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
 
             return View(medicamentosCajas);
         }
@@ -180,7 +209,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("Codigo,CodigoMedicamento,CantidadUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajas medicamentosCajas)
+        public async Task<IActionResult> Edit([Bind("Codigo,CodigoMedicamento,CodigoLaboratorio,CantidadUnidad,Costo,PrecioUnidad,FechaAdquirido,FechaVencimiento")] MedicamentosCajas medicamentosCajas)
         {
             //obtener el medicamento de la caja
             Medicamentos medicamento = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault();
@@ -189,6 +218,7 @@ namespace ApotheGSF.Controllers
             {
                 _notyf.Error("Cantidad Superior a la Valida");
                 ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
                 return View(medicamentosCajas);
             }
 
@@ -199,6 +229,7 @@ namespace ApotheGSF.Controllers
                 {
                     _notyf.Error("Cantidad de cajas debe ser mayor a 0");
                     ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                    ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
                     return View(medicamentosCajas);
                 }
 
@@ -207,6 +238,7 @@ namespace ApotheGSF.Controllers
                 {
                     _notyf.Error("Fecha adquirido invalida");
                     ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                    ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
                     return View(medicamentosCajas);
                 }
 
@@ -214,6 +246,7 @@ namespace ApotheGSF.Controllers
                 {
                     _notyf.Error("Fecha vencimiento invalida");
                     ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                    ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
                     return View(medicamentosCajas);
                 }
 
@@ -248,6 +281,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Details", "Medicamentos", new { id = medicamentosCajas.CodigoMedicamento });
             }
             ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+            ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
             return View(medicamentosCajas);
         }
 
@@ -264,12 +298,17 @@ namespace ApotheGSF.Controllers
                                            .AsNoTracking()
                                            .AsQueryable()
                                            join m in _context.Medicamentos on mc.CodigoMedicamento equals m.Codigo
+                                           join l in _context.Laboratorios on mc.CodigoLaboratorio equals l.Codigo
                                            select new MedicamentosCajasViewModel
                                            {
                                                CodigoCaja = mc.Codigo,
                                                CodigoMedicamento = mc.CodigoMedicamento,
                                                NombreMedicamento = m.Nombre,
+                                               CodigoLaboratorio = mc.CodigoLaboratorio,
+                                               NombreLaboratorio = l.Nombre,
                                                CantidadUnidad = mc.CantidadUnidad,
+                                               Costo = mc.Costo,
+                                               PrecioUnidad = mc.PrecioUnidad,
                                                FechaAdquirido = mc.FechaAdquirido,
                                                FechaVencimiento = mc.FechaVencimiento,
                                                Detallada = mc.Detallada,

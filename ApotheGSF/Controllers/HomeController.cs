@@ -107,7 +107,7 @@ namespace ApotheGSF.Controllers
             foreach (var medicamento in medicamentos)
             {
                 //si su cantidad de cajas es menor x limite y no hay envios en curso
-                if (medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count < 20 && medicamento.EnvioPendiente == false)
+                if (medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count < medicamento.Reorden && medicamento.EnvioPendiente == false)
                 {
                     //se agrega una notificacion de reabastecimiento
                     Notificaciones.Mensajes.Add($"&nbsp;&nbsp;&nbsp;{medicamento.Nombre} le queda poca mercancia, desea <a href=\"/Medicamentos/EnviarCorreo?codigoMedicamento={medicamento.Codigo}\">solicitar mas</a>");

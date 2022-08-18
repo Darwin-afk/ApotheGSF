@@ -80,13 +80,13 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var Laboratorios = await _context.Laboratorios.Where(p => p.Codigo == id && p.Inactivo == false).FirstOrDefaultAsync();
-            if (Laboratorios == null)
+            var laboratorio = await _context.Laboratorios.Where(p => p.Codigo == id && p.Inactivo == false).FirstOrDefaultAsync();
+            if (laboratorio == null)
             {
                 return NotFound();
             }
 
-            return View(Laboratorios);
+            return View(laboratorio);
         }
 
         // GET: Laboratorios/Create

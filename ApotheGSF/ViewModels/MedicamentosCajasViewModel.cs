@@ -7,9 +7,9 @@ namespace ApotheGSF.ViewModels
     {
         [Display(Name = "Código: ")]
         public int CodigoCaja { get; set; }
-        [Display(Name = "Código del Medicamento: ")]
+        [Display(Name = "Medicamento: ")]
         public int CodigoMedicamento { get; set; }
-        [Display(Name = "Código del Laboratorio: ")]
+        [Display(Name = "Laboratorio: ")]
         public int CodigoLaboratorio { get; set; }
         [Required(ErrorMessage = "Digite una cantidad")]
         [Display(Name = "Cantidad de Unidades: ")]
@@ -33,12 +33,12 @@ namespace ApotheGSF.ViewModels
         public bool Inactivo { get; set; }
         [Display(Name = "Medicamento: ")]
         public string? NombreMedicamento { get; set; }
+        [Display(Name = "Laboratorio: ")]
+        public string? NombreLaboratorio { get; set; }
         [Required(ErrorMessage = "Digite una cantidad")]
         [Display(Name = "Lotes: ")]
         public int Cajas { get; set; }
-
         [Display(Name = "Fecha de Creación: ")]
-
         public DateTime? Creado { get; set; }
         [Display(Name = "Creado por: ")]
         public string? CreadoNombreUsuario { get; set; }

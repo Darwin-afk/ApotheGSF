@@ -17,7 +17,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-capsules"></i></span>
                     </div>
-                    <select asp-for="CodigoMedicamento" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
+                    <select asp-for="CodigoMedicamento" class="form-control" placeholder="Seleccione el Medicamento" asp-items="ViewBag.MedicamentosId">
+                        <option value="">Seleccione el Medicamento</option>
+                    </select>
                 </div>
                 <label class="control-label">Lotes:</label>
                 <div class="input-group">
@@ -29,7 +31,7 @@
                 <div>
                     <span asp-validation-for="Cajas" class="text-danger"></span>
                 </div>
-                <div class="col-sm-6">
+                <div class="input-group">
                     <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
                     <div class="input-group">
                         <input type="text" asp-for="CodigoLaboratorio" class="form-control"/>

@@ -28,7 +28,10 @@
                     <div class="col-sm-6">
                         <label class="col-form-label">Nombre Cientifico:</label>
                         <div class="input-group">
-                            <input type="text" asp-for="NombreCientifico" class="form-control" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" asp-for="NombreCientifico" class="form-control" placeholder="Nombre Cientifico" />
                         </div>
                         <span asp-validation-for="NombreCientifico" class="text-danger"></span>
                     </div>
@@ -111,11 +114,15 @@
                     </div>
                     <div class="col-sm-6">
                         <label asp-for="Detallable" class="col-form-label"></label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
+                        <div class="input-group text-center">
+                            <div class="form-check col-sm-6">
+                                <input asp-for="Detallable" class="form-check-input" type="radio" value="true">
+                                <label class="form-check-label" asp-for="Detallable">SI</label>
                             </div>
-                            <input class="form-control" asp-for="Detallable" type="text" placeholder="Detallable">
+                            <div class="form-check col-sm-6">
+                                <input asp-for="Detallable" class="form-check-input" type="radio" value="true">
+                                <label class="form-check-label" asp-for="Detallable">NO</label>
+                            </div>
                         </div>
                         <span asp-validation-for="Detallable" class="text-danger"></span>
                     </div>

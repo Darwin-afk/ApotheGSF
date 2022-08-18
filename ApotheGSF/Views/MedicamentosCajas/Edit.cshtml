@@ -25,18 +25,18 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-box"></i></span>
                     </div>
-                    <input asp-for="Cajas" class="form-control" />
+                    <input asp-for="CantidadUnidad" class="form-control" />
                 </div>
                 <div>
-                    <span asp-validation-for="Cajas" class="text-danger"></span>
+                    <span asp-validation-for="CantidadUnidad" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <label asp-for="Proveedor" class="col-form-label"></label>
+                    <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
                     <div class="input-group">
-                        <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
+                        <input type="text" asp-for="CodigoLaboratorio" class="form-control"/>
 
                     </div>
-                    <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
+                    <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
                     <label class="col-form-label">Costo:</label>

@@ -22,15 +22,16 @@
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <div class="col">
-                            <label class="col-form-label">Medicamento</label>
+                            <label class="col-form-label">Medicamento:</label>
                             <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId" placeholder="Seleccione un Medicamento">
                                 <option value="">Seleccione un Medicamento</option>
                             </select>
                         </div>
                     </div>
+
                     <div class="col-sm-3">
                         <div class="col">
-                            <label class="col-form-label">TipoCantidad</label>
+                            <label class="col-form-label">TipoCantidad:</label>
                             <select asp-for="@TipoCantidad" class="form-control">
                                 <option value="" selected>Seleccione un Tipo</option>
                                 <option value="1">Cajas</option>
@@ -38,9 +39,10 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-sm-5">
                         <div class="col">
-                            <label class="col-form-label">Cantidad</label>
+                            <label class="col-form-label">Cantidad:</label>
                             <div class="form-group input-group col">
                             <input asp-for="@Cantidad" type="number" class="form-control col-sm-5" />
                             <span class="text-end col-sm-7"><button class="btn" style="background-color:white;color:blue;" onclick="AgregarDetalle()" type="button"><i class="fas fa-arrow-down"></i>&nbsp;Agregar</button></span>

@@ -12,9 +12,9 @@
             </div>
             <!--datos-->
             <div class="card-body">
-                <div class="form-group row">
+               <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="col-form-label">Nombre:</label>
+                        <label asp-for="Nombre" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -24,7 +24,7 @@
                         <span asp-validation-for="Nombre" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label class="col-form-label">Nombre Cientifico:</label>
+                        <label asp-for="NombreCientifico" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -37,12 +37,12 @@
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="col-form-label">Categoria:</label>
+                        <label asp-for="Categoria" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-tags"></i></span>
                             </div>
-                            <select asp-for="Categoria" class="form-control" placeholder="Seleccione una Categoria">
+                            <select asp-for="Categoria" class="form-control"placeholder="Seleccione una Categoria">
                                 <option value="">Seleccione una Categoria</option>
                                 <option value="Analgesicos">Analgésicos</option>
                                 <option value="Antiacidos y Antiulcerosos">Antiácidos y Antiulcerosos</option>
@@ -59,7 +59,7 @@
                         <span asp-validation-for="Categoria" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label class="col-form-label">Sustancia:</label>
+                        <label asp-for="Sustancia" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
@@ -78,7 +78,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="col-form-label">Concentración:</label>
+                        <label asp-for="Concentracion" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-pills"></i></span>
@@ -88,7 +88,7 @@
                         <span asp-validation-for="Concentracion" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label class="col-form-label">Unidades por Caja:</label>
+                        <label asp-for="UnidadesCaja" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-tablets"></i></span>
@@ -125,6 +125,7 @@
                         <span asp-validation-for="Detallable" class="text-danger"></span>
                     </div>
                 </div>
+
                 <!--Fin datos-->
             </div>
             <div class="card-footer text-center" style="background-color:#00CC66 ;">

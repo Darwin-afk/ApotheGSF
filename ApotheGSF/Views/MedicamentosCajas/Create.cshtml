@@ -12,7 +12,7 @@
             </div>
 
             <div class="card-body">
-                <label class="form-group">Medicamento:</label>
+                <label asp-for="NombreMedicamento" class="form-group"></label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-capsules"></i></span>
@@ -22,16 +22,8 @@
                     </select>
                 </div>
 
-                <label class="control-label">Lotes:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-box"></i></span>
-                    </div>
-                    <input asp-for="Cajas" class="form-control" />
-                </div>
-                <div>
-                    <span asp-validation-for="Cajas" class="text-danger"></span>
-                </div>
+
+
 
                 <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
                 <div class="input-group">
@@ -45,7 +37,36 @@
                 <div>
                 <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
                 </div>
-                <label class="col-form-label">Costo:</label>
+
+
+
+                <label asp-for="Cajas" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-box"></i></span>
+                    </div>
+                    <input asp-for="Cajas" class="form-control" />
+                </div>
+                <div>
+                    <span asp-validation-for="Cajas" class="text-danger"></span>
+                </div>
+
+                
+
+                <label asp-for="PrecioUnidad" class="col-form-label"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    </div>
+                    <input class="form-control" asp-for="PrecioUnidad" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
+                </div>
+                <div>
+                <span asp-validation-for="PrecioUnidad" class="text-danger"></span>
+                </div>
+
+
+
+                <label asp-for="Costo" class="col-form-label"></label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
@@ -55,7 +76,10 @@
                 <div>
                 <span asp-validation-for="Costo" class="text-danger"></span>
                 </div>
-                <label class="control-label">Fecha de Adquisición:</label>
+
+
+
+                <label asp-for="FechaAdquirido" class="control-label"></label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-calendar"></i></span>
@@ -65,7 +89,10 @@
                 <div>
                     <span asp-validation-for="FechaAdquirido" class="text-danger"></span>
                 </div>
-                <label class="control-label">Fecha de Vencimiento:</label>
+
+
+
+                <label asp-for="FechaVencimiento" class="control-label"></label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-calendar"></i></span>
@@ -75,10 +102,14 @@
                 <div>
                     <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
                 </div>
+
+
+
             </div>
             <div class="card-footer text-center" style="background-color:#994400;">
                 <button class="btn" type="reset" style="background-color:white;color:#494949;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>
                 <button type="submit" class="btn" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+                <a class="btn" asp-controller="Home" asp-action="Index" style="background-color:white;color:red;" type="button"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
             </div>
         </div>
     </div>

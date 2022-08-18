@@ -761,8 +761,6 @@ namespace ApotheGSF.Controllers
                         Total = viewModel.Total,
                         Creado = DateTime.Now,
                         CreadoNombreUsuario = _user.GetUserName(),
-                        Modificado = DateTime.Now,
-                        ModificadoNombreUsuario = _user.GetUserName(),
                         Inactivo = false
                     };
 

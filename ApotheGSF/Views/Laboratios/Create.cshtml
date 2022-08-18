@@ -1,15 +1,15 @@
-﻿@model ApotheGSF.Models.Proveedores
+﻿@model ApotheGSF.Models.Laboratorios
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
-<form asp-action="Edit">
+<form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-7">
         <div class="card">
             <div class="card-header text-center" style="background-color: #7F0099;">
-                <h3 class="display-8" style="color:white;"><i class="fas fa-flask"></i>&nbsp;Modificar Laboratorio</h3>
+                <h3 class="display-8" style="color:white;"><i class="fas fa-flask"></i>&nbsp;Crear Laboratorio</h3>
             </div>
             <!--datos-->
             <div class="card-body">
@@ -101,6 +101,7 @@
                                 <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
                             </div>
                             <select asp-for="TerminosdePago" class="form-control">
+                                <option selected disabled>Seleccione Tipo de Pago</option>
                                 <option value="Efectivo">Efectivo</option>
                                 <option value="Credito">Credito</option>
                             </select>
@@ -112,14 +113,15 @@
             </div>
             <div class="card-footer text-center" style="background-color: #7F0099 ;">
                 <!--Botones-->
-                <input type="hidden" asp-for="Codigo" />
-                <button class="btn" type="submit" style="background-color:white;color:#008F00;"><i class="fas fa-save"></i>&nbsp;Actualizar</button>
+                <button class="btn" type="reset" style="background-color:white;color:#494949;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>
+                <button class="btn" value="Create" style="background-color:white;color:#008F00;" type="submit"><i class="fas fa-save"></i>&nbsp;Guardar</button>
                 <a class="btn" asp-controller="Home" style="background-color:white;color:red;" asp-action="Index" type="button"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
                 <!--Fin Botones-->
             </div>
         </div>
     </div>
 </form>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

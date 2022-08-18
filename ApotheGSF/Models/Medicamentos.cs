@@ -51,6 +51,7 @@ namespace ApotheGSF.Models
         public bool? Inactivo { get; set; }
         public bool? EnvioPendiente { get; set; }
 
-
+        [NotMapped]
+        public int Cajas { get; set; }
     }
 }

@@ -79,25 +79,15 @@ namespace ApotheGSF.Controllers
                 filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
             }
 
-            List<MedicamentosViewModel> listado = new List<MedicamentosViewModel>();
+            List<Medicamentos> listado = new List<Medicamentos>();
             if (search == 1 || (search == 0 && !string.IsNullOrWhiteSpace(sortExpression)))
             {
-                listado = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                 select new MedicamentosViewModel
-                                 {
+                listado = await _context.Medicamentos.Where(filtro.ToString()).ToListAsync();
 
-                                     Codigo = meds.Codigo,
-                                     Nombre = meds.Nombre,
-                                     Categoria = meds.Categoria,
-                                     Sustancia = meds.Sustancia,
-                                     Concentracion = meds.Concentracion,
-                                     UnidadesCaja = meds.UnidadesCaja,
-                                     Inactivo = (bool)meds.Inactivo,
-                                     Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).ToList().Count
-
-                                 }).Where(filtro.ToString()).ToListAsync();
+                foreach (var item in listado)
+                {
+                    item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+                }
             }
 
             if (listado.Count == 0 && search == 1)
@@ -138,25 +128,7 @@ namespace ApotheGSF.Controllers
                 _notyf.Custom(Mensaje, 5, "#17D155", "fas fa-check");
             }
 
-            var medicamento = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                     select new MedicamentosViewModel
-                                     {
-
-                                         Codigo = meds.Codigo,
-                                         Nombre = meds.Nombre,
-                                         Categoria = meds.Categoria,
-                                         Sustancia = meds.Sustancia,
-                                         Concentracion = meds.Concentracion,
-                                         UnidadesCaja = meds.UnidadesCaja,
-                                         Creado = meds.Creado,
-                                         CreadoNombreUsuario = meds.CreadoNombreUsuario,
-                                         Modificado = meds.Modificado,
-                                         ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
-                                         Inactivo = meds.Inactivo
-
-                                     }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == id && m.Inactivo == false).FirstOrDefaultAsync();
 
             if (medicamento == null)
             {
@@ -181,7 +153,7 @@ namespace ApotheGSF.Controllers
         [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
-            return View(new MedicamentosViewModel());
+            return View(new Medicamentos());
         }
 
         // POST: Medicamentos/Create
@@ -189,54 +161,40 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja,Reorden,Detallable")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja,Reorden,Detallable")] Medicamentos medicamento)
         {
-            ModelState.Remove("NombreProveedor");
-
             if (ModelState.IsValid)
             {
-                string error = ValidarDatos(viewModel);
+                string error = ValidarDatos(medicamento);
 
                 if (error != "")
                 {
                     _notyf.Error(error);
-                    return View(viewModel);
+                    return View(medicamento);
                 }
 
-                Medicamentos newMedicamentos = new()
-                {
-                    Nombre = viewModel.Nombre,
-                    NombreCientifico = viewModel.NombreCientifico,
-                    Categoria = viewModel.Categoria,
-                    Sustancia = viewModel.Sustancia,
-                    Concentracion = viewModel.Concentracion,
-                    UnidadesCaja = viewModel.UnidadesCaja,
-                    Reorden = viewModel.Reorden,
-                    Detallable = viewModel.Detallable,
-                    Creado = DateTime.Now,
-                    CreadoNombreUsuario = _user.GetUserName(),
-                    Modificado = DateTime.Now,
-                    ModificadoNombreUsuario = _user.GetUserName(),
-                    Inactivo = false,
-                    EnvioPendiente = false
-                };
+                medicamento.Creado = DateTime.Now;
+                medicamento.CreadoNombreUsuario = _user.GetUserName();
+                medicamento.Modificado = DateTime.Now;
+                medicamento.ModificadoNombreUsuario = _user.GetUserName();
+                medicamento.Inactivo = false;
 
-                _context.Medicamentos.Add(newMedicamentos);
+                _context.Medicamentos.Add(medicamento);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
             }
-            return View(viewModel);
+            return View(medicamento);
         }
 
-        private string ValidarDatos(MedicamentosViewModel viewModel)
+        private string ValidarDatos(Medicamentos medicamento)
         {
-            if (viewModel.UnidadesCaja <= 0)
+            if (medicamento.UnidadesCaja <= 0)
             {
                 return "Las unidades de una caja deben ser mayor a 0";
             }
 
-            if (viewModel.Reorden <= 0)
+            if (medicamento.Reorden <= 0)
             {
                 return "El reorden debe ser mayor a 0";
             }
@@ -254,25 +212,14 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
-            var medicamentos = await (from meds in _context.Medicamentos
-                                      select new MedicamentosViewModel
-                                      {
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == id && m.Inactivo == false).FirstOrDefaultAsync();
 
-                                          Codigo = meds.Codigo,
-                                          Nombre = meds.Nombre,
-                                          Categoria = meds.Categoria,
-                                          Sustancia = meds.Sustancia,
-                                          Concentracion = meds.Concentracion,
-                                          UnidadesCaja = meds.UnidadesCaja,
-                                          Inactivo = meds.Inactivo
-                                      }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
-
-            if (medicamentos == null)
+            if (medicamento == null)
             {
                 return NotFound();
             }
 
-            return View(medicamentos);
+            return View(medicamento);
         }
 
         // POST: Medicamentos/Edit/5
@@ -280,43 +227,32 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja,Reorden,Detallable")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja,Reorden,Detallable")] Medicamentos medicamento)
         {
-
-            ModelState.Remove("NombreProveedor");
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string error = ValidarDatos(viewModel);
+                    string error = ValidarDatos(medicamento);
 
                     if (error != "")
                     {
                         _notyf.Error(error);
-                        return View(viewModel);
+                        return View(medicamento);
                     }
 
-                    var editmedicamento = await _context.Medicamentos.
-                                       FirstOrDefaultAsync(y => y.Codigo == viewModel.Codigo);
-
-                    _context.Update(editmedicamento);
-                    editmedicamento.Nombre = viewModel.Nombre;
-                    editmedicamento.Categoria = viewModel.Categoria;
-                    editmedicamento.Sustancia = viewModel.Sustancia;
-                    editmedicamento.Concentracion = viewModel.Concentracion;
-                    editmedicamento.UnidadesCaja = viewModel.UnidadesCaja;
-                    editmedicamento.Modificado = DateTime.Now;
-                    editmedicamento.ModificadoNombreUsuario = _user.GetUserName();
-                    _context.Entry(editmedicamento).Property(c => c.Creado).IsModified = false;
-                    _context.Entry(editmedicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
-                    _context.Entry(editmedicamento).Property(c => c.Inactivo).IsModified = false;
+                    _context.Update(medicamento);
+                    medicamento.Modificado = DateTime.Now;
+                    medicamento.ModificadoNombreUsuario = _user.GetUserName();
+                    _context.Entry(medicamento).Property(c => c.Creado).IsModified = false;
+                    _context.Entry(medicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
+                    _context.Entry(medicamento).Property(c => c.Inactivo).IsModified = false;
 
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MedicamentoExists(viewModel.Codigo))
+                    if (!MedicamentoExists(medicamento.Codigo))
                     {
                         return NotFound();
                     }
@@ -329,7 +265,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(viewModel);
+            return View(medicamento);
         }
 
         // GET: Medicamentos/Delete/5
@@ -342,28 +278,9 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == id && m.Inactivo == false).FirstOrDefaultAsync();
 
-            var medicamento = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                     select new MedicamentosViewModel
-                                     {
-
-                                         Codigo = meds.Codigo,
-                                         Nombre = meds.Nombre,
-                                         Categoria = meds.Categoria,
-                                         Sustancia = meds.Sustancia,
-                                         Concentracion = meds.Concentracion,
-                                         UnidadesCaja = meds.UnidadesCaja,
-                                         Creado = meds.Creado,
-                                         CreadoNombreUsuario = meds.CreadoNombreUsuario,
-                                         Modificado = meds.Modificado,
-                                         ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
-                                         Inactivo = meds.Inactivo,
-                                         Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
-
-                                     }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
-
+            medicamento.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
 
             if (medicamento == null)
             {
@@ -387,13 +304,13 @@ namespace ApotheGSF.Controllers
             if (medicamento != null)
             {
                 _context.Medicamentos.Update(medicamento);
-                medicamento.Modificado = DateTime.Now;  
+                medicamento.Modificado = DateTime.Now;
                 medicamento.ModificadoNombreUsuario = _user.GetUserName();
                 medicamento.Inactivo = true;
                 _context.Entry(medicamento).Property(c => c.Creado).IsModified = false;
                 _context.Entry(medicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
 
-                foreach(var caja in medicamento.MedicamentosCajas)
+                foreach (var caja in medicamento.MedicamentosCajas)
                 {
                     _context.MedicamentosCajas.Update(caja);
                     caja.Inactivo = true;
@@ -419,22 +336,12 @@ namespace ApotheGSF.Controllers
                 filtro.AppendFormat("  && (Nombre.ToUpper().Contains(\"{0}\")) ", filter.ToUpper());
             }
 
-            List<MedicamentosViewModel> medicamentos = await (from meds in _context.Medicamentos
-                                                              .AsNoTracking()
-                                                              .AsQueryable()
-                                                              select new MedicamentosViewModel
-                                                              {
+            List<Medicamentos> medicamentos = await _context.Medicamentos.Where(filtro.ToString()).ToListAsync();
 
-                                                                  Codigo = meds.Codigo,
-                                                                  Nombre = meds.Nombre,
-                                                                  Categoria = meds.Categoria,
-                                                                  Sustancia = meds.Sustancia,
-                                                                  Concentracion = meds.Concentracion,
-                                                                  UnidadesCaja = meds.UnidadesCaja,
-                                                                  Inactivo = (bool)meds.Inactivo,
-                                                                  Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
-
-                                                              }).Where(filtro.ToString()).ToListAsync();
+            foreach (var item in medicamentos)
+            {
+                item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+            }
 
             return new ViewAsPdf("ReporteInventario", medicamentos);
         }
@@ -457,7 +364,7 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EnviarCorreo([Bind("NombreMedicamento,CodigoProveedor,Cajas")] CorreoViewModel correo)
         {
-            if(correo.Cajas <= 0)
+            if (correo.Cajas <= 0)
             {
                 _notyf.Error("La cantidad de cajas debe ser mayor a 0");
 

@@ -62,7 +62,7 @@ namespace ApotheGSF.ViewModels
 		public string Telefono { get; set; }
 
 		[Required(ErrorMessage = "Digite la dirección")]
-		[Display(Name = "Dirección")]
+		[Display(Name = "Dirección: ")]
 		public string Direccion { get; set; }
 
         [Display(Name = "Creado Por: ")]

@@ -14,7 +14,7 @@
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="Nombre" class="col-form-label">Nombre:</label>
+                        <label asp-for="Nombre" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -24,7 +24,7 @@
                         <span asp-validation-for="Nombre" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label for="Apellido" class="col-form-label">Appellido:</label>
+                        <label asp-for="Apellido" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -37,7 +37,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="Telefono" class="col-form-label">Teléfono:</label>
+                        <label asp-for="Telefono" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
@@ -47,7 +47,7 @@
                         <span asp-validation-for="Telefono" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label for="Cedula" class="col-form-label">Cédula:</label>
+                        <label asp-for="Cedula" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
@@ -60,7 +60,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento:</label>
+                        <label asp-for="FechaNacimiento" class="col-form-label"></label>
                         <div class="input-group prepend">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -70,7 +70,7 @@
                         <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label for="Direccion" class="col-form-label">Dirección:</label>
+                        <label asp-for="Direccion" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa-solid fa-address-book"></i></span>
@@ -83,7 +83,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="Email" class="col-form-label">Email:</label>
+                        <label asp-for="Email" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
@@ -93,7 +93,7 @@
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label for="NombreUsuario" class="col-form-label">Nombre de Usuario:</label>
+                        <label asp-for="Usuario" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -106,7 +106,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="Contrasena" class="col-form-label">Contraseña:</label>
+                        <label asp-for="Password" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
@@ -116,7 +116,7 @@
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <label class="col-form-label">Confirmar Contraseña:</label>
+                        <label asp-for="ConfirmarPassword" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
@@ -129,7 +129,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <label class="col-form-label" for="Roles">Rol:</label>
+                        <label asp-for="Rol" class="col-form-label"></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>

@@ -17,55 +17,28 @@
             </div>
             <!--datos-->
             <div class="card-body">
-                @*
-                <div class="form-group row">
-                    <div class="col-sm-1">
-                        <label class="col-form-label">Código</label>
-                    </div>
-
-                    <div class="col-sm-2 row">
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="0">
-                        </div>
-                        <div class="col-sm-3">
-                            <button class="btn btn-primary" type="button">Buscar</button>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-9 row text-end">
-                        @* 
-
-                        // La Fecha seria mejor colocarla en la accion facturar como DateTime.Now al momento de realizar la Factura
-
-                        <div class="col-sm-9">
-                            <label for="Cedula" class="col-form-label">Fecha Creacion</label>
-                        </div>
-                        <div class="col-sm-3">
-                            <input type="date" class="form-control" placeholder="">
-                        </div>
-                        
-                    </div>
-                </div>
-                *@
-
+                
                 <!--Agregar Medicamento-->
                 <div class="form-group row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="col">
                             <label class="col-form-label">Medicamento</label>
-                            <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
+                            <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId" placeholder="Seleccione un Medicamento">
+                                <option value="">Seleccione un Medicamento</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="col">
                             <label class="col-form-label">TipoCantidad</label>
                             <select asp-for="@TipoCantidad" class="form-control">
+                                <option value="" selected>Seleccione un Tipo</option>
                                 <option value="1">Cajas</option>
                                 <option value="2">Unidades</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="col">
                             <label class="col-form-label">Cantidad</label>
                             <div class="form-group input-group col">

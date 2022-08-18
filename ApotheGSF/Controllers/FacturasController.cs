@@ -180,18 +180,12 @@ namespace ApotheGSF.Controllers
         public async Task<IActionResult> Create()
         {
             //obtener lista de medicamentos que no esten inactivos
-            var medicamentos = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                      select new MedicamentosViewModel
-                                      {
+            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
 
-                                          Codigo = meds.Codigo,
-                                          Nombre = meds.Nombre,
-                                          Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
-
-                                      }).Where(x => x.Inactivo == false).ToListAsync();
+            foreach (var item in medicamentos)
+            {
+                item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+            }
 
             if (medicamentos == null)
             {
@@ -359,18 +353,13 @@ namespace ApotheGSF.Controllers
                 return Json(new ResultadoFactura() { resultado = true, codigofactura = ultimaFactura, mensaje = "Se ha facturado exitosamente!!" });
             }
             //obtener lista de medicamentos que no esten inactivos
-            var medicamentos = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                      select new MedicamentosViewModel
-                                      {
+            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
 
-                                          Codigo = meds.Codigo,
-                                          Nombre = meds.Nombre,
-                                          Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
+            foreach (var item in medicamentos)
+            {
+                item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+            }
 
-                                      }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 
@@ -614,18 +603,12 @@ namespace ApotheGSF.Controllers
             detallesEdit = listaDetalle;
 
             //obtener lista de medicamentos que no esten inactivos
-            var medicamentos = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                      select new MedicamentosViewModel
-                                      {
+            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
 
-                                          Codigo = meds.Codigo,
-                                          Nombre = meds.Nombre,
-                                          Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
-
-                                      }).Where(x => x.Inactivo == false).ToListAsync();
+            foreach (var item in medicamentos)
+            {
+                item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+            }
 
             if (medicamentos == null)
             {
@@ -823,18 +806,13 @@ namespace ApotheGSF.Controllers
             }
 
             //obtener lista de medicamentos que no esten inactivos
-            var medicamentos = await (from meds in _context.Medicamentos
-                               .AsNoTracking()
-                               .AsQueryable()
-                                      select new MedicamentosViewModel
-                                      {
+            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
 
-                                          Codigo = meds.Codigo,
-                                          Nombre = meds.Nombre,
-                                          Inactivo = (bool)meds.Inactivo,
-                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
+            foreach (var item in medicamentos)
+            {
+                item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+            }
 
-                                      }).Where(x => x.Inactivo == false).ToListAsync();
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
 

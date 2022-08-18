@@ -65,7 +65,14 @@
                     @Html.DisplayNameFor(model => model.Detallable)
                 </dt>
                 <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Detallable)
+                    @if (Model.Detallable)
+                    {
+                        @:Si
+                    }
+                    else
+                    {
+                        @:No
+                    }
                 </dd>
                 <dt class="col-sm-6">
                     @Html.DisplayNameFor(model => model.Creado)

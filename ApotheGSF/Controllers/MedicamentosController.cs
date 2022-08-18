@@ -189,7 +189,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja,Reorden,Detallable")] MedicamentosViewModel viewModel)
         {
             ModelState.Remove("NombreProveedor");
 
@@ -206,10 +206,13 @@ namespace ApotheGSF.Controllers
                 Medicamentos newMedicamentos = new()
                 {
                     Nombre = viewModel.Nombre,
+                    NombreCientifico = viewModel.NombreCientifico,
                     Categoria = viewModel.Categoria,
                     Sustancia = viewModel.Sustancia,
                     Concentracion = viewModel.Concentracion,
                     UnidadesCaja = viewModel.UnidadesCaja,
+                    Reorden = viewModel.Reorden,
+                    Detallable = viewModel.Detallable,
                     Creado = DateTime.Now,
                     CreadoNombreUsuario = _user.GetUserName(),
                     Modificado = DateTime.Now,
@@ -231,6 +234,11 @@ namespace ApotheGSF.Controllers
             if (viewModel.UnidadesCaja <= 0)
             {
                 return "Las unidades de una caja deben ser mayor a 0";
+            }
+
+            if (viewModel.Reorden <= 0)
+            {
+                return "El reorden debe ser mayor a 0";
             }
 
             return "";
@@ -272,7 +280,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja,Reorden,Detallable")] MedicamentosViewModel viewModel)
         {
 
             ModelState.Remove("NombreProveedor");

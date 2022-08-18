@@ -27,10 +27,10 @@
                                 @Html.DisplayFor(model => model.Nombre)
                         </dd>
                         <dt class="col-sm-6">
-                                @Html.DisplayNameFor(model => model.NombreProveedor)
+                                @Html.DisplayNameFor(model => model.NombreCientifico)
                         </dt>
                         <dd class="col-sm-6">
-                                @Html.DisplayFor(model => model.NombreProveedor)
+                                @Html.DisplayFor(model => model.NombreCientifico)
                         </dd>
                         <dt class="col-sm-6">
                                 @Html.DisplayNameFor(model => model.Categoria)
@@ -57,34 +57,16 @@
                                 @Html.DisplayFor(model => model.UnidadesCaja)
                         </dd>
                         <dt class="col-sm-6">
-                                @Html.DisplayNameFor(model => model.Costo)
+                                @Html.DisplayNameFor(model => model.Reorden)
                         </dt>
                         <dd class="col-sm-6">
-                                @Html.DisplayFor(model => model.Costo)
+                                @Html.DisplayFor(model => model.Reorden)
                         </dd>
                         <dt class="col-sm-6">
-                            Precio Caja:
+                                @Html.DisplayNameFor(model => model.Detallable)
                         </dt>
                         <dd class="col-sm-6">
-                            <text>@((Model.PrecioUnidad * Model.UnidadesCaja).ToString("n2"))</text>
-                        </dd>
-                        <dt class="col-sm-6">
-                                @Html.DisplayNameFor(model => model.PrecioUnidad)
-                        </dt>
-                        <dd class="col-sm-6">
-                                @Html.DisplayFor(model => model.PrecioUnidad)
-                        </dd>
-                        <dt class="col-sm-6">
-                                @Html.DisplayNameFor(model => model.Indicaciones)
-                        </dt>
-                        <dd class="col-sm-6">
-                                @Html.DisplayFor(model => model.Indicaciones)
-                        </dd>
-                        <dt class="col-sm-6">
-                                @Html.DisplayNameFor(model => model.Dosis)
-                        </dt>
-                        <dd class="col-sm-6">
-                                @Html.DisplayFor(model => model.Dosis)
+                                @Html.DisplayFor(model => model.Detallable)
                         </dd>
                         <dt class="col-sm-6">
                                 @Html.DisplayNameFor(model => model.Creado)

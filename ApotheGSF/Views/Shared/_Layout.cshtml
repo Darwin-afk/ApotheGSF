@@ -91,7 +91,7 @@
                                             </ul>
                                         </li>
 
-                                        <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedor</a></li>
+                                        <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Create"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Laboratorio</a></li>
 
                                     </ul>
                                 </li>
@@ -109,7 +109,7 @@
                                     <li><a class="dropdown-item text-dark" asp-controller="Medicamentos" asp-action="Index"><i class="fa-solid fa-capsules" style="color:#00CC66;"></i>&nbsp;Inventario</a></li>
                                     @if (User.IsInRole("Administrador") || User.IsInRole("Comprador"))
                                     {
-                                        <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Index"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Proveedores</a></li>
+                                        <li><a class="dropdown-item text-dark" asp-controller="Proveedores" asp-action="Index"><i class="fa-solid fa-flask" style="color:#7F0099;"></i>&nbsp;Laboratorios</a></li>
                                     }
                                     @if (User.IsInRole("Administrador") || User.IsInRole("Vendedor"))
                                     {

@@ -53,26 +53,17 @@
         <div class="card-body">
             <dl class="row text-end">
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.SubTotal)
+                    @Html.DisplayNameFor(model => model.SubTotal) &nbsp; @Html.DisplayFor(model => model.SubTotal)
                 </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.SubTotal)
-                </dd>
                 <dt class="col-sm-2">
-                    <label>ITBIS</label>
-                </dt>
-                <dd class="col-sm-10">
-                    @foreach(var item in Model.MedicamentosDetalle){
+                    <label>ITBIS</label> &nbsp; @foreach(var item in Model.MedicamentosDetalle){
                         contador = contador + (item.Total * 0.18);
                     }
                     <p>@contador.ToString("n2")</p>
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Total)
                 </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Total)
-                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Total) &nbsp; @Html.DisplayFor(model => model.Total)
+                </dt>
             </dl>
         </div>
         <div class="card-footer text-center">

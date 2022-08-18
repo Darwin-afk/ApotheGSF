@@ -29,6 +29,24 @@
                 <div>
                     <span asp-validation-for="Cajas" class="text-danger"></span>
                 </div>
+                <div class="col-sm-6">
+                    <label asp-for="Proveedor" class="col-form-label"></label>
+                    <div class="input-group">
+                        <select asp-for="CodigosProveedores" class="form-control select2" multiple="multiple" asp-items="ViewBag.CodigoProveedores"></select>
+
+                    </div>
+                    <span asp-validation-for="CodigosProveedores" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label class="col-form-label">Costo:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                        </div>
+                        <input class="form-control" asp-for="Costo" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
+                    </div>
+                    <span asp-validation-for="Costo" class="text-danger"></span>
+                </div>
                 <label class="control-label">Fecha de Adquisición:</label>
                 <div class="input-group">
                     <div class="input-group-prepend">

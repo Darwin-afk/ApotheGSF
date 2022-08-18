@@ -12,6 +12,7 @@ namespace ApotheGSF.Models
         [StringLength(30)]
         [Display(Name = "Nombre: ")]
         public string Nombre { get; set; }
+        public string NombreCientifico { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Categoria: ")]
         public string Categoria { get; set; }
@@ -24,26 +25,15 @@ namespace ApotheGSF.Models
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Unidades por Caja: ")]
         public int UnidadesCaja { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Costo: ")]
-        public float Costo { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Precio por Unidad: ")]
-        public float PrecioUnidad { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Indicaciones: ")]
-        public string Indicaciones { get; set; }
-        [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [Display(Name = "Dosis: ")]
-        public string Dosis { get; set; }
-        
+        [Display(Name = "Reorden: ")]
+        public int Reorden { get; set; }
+        [Display(Name = "Detallable: ")]
+        public bool Detallable { get; set; }
+
         public Medicamentos()
         {
-            ProveedoresMedicamentos = new HashSet<ProveedorMedicamentos>();
             MedicamentosCajas = new HashSet<MedicamentosCajas>();
         }
-        
-        public ICollection<ProveedorMedicamentos> ProveedoresMedicamentos { get; set; }
         public ICollection<MedicamentosCajas> MedicamentosCajas { get; set; }
 
         [Column("Creado", TypeName = "datetime")]

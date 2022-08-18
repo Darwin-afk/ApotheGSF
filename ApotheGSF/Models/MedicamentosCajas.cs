@@ -11,10 +11,20 @@ namespace ApotheGSF.Models
         [ForeignKey("Medicamentos")]
         [Display(Name = "Código del Medicamentos: ")]
         public int CodigoMedicamento { get; set; }
-        public virtual Medicamentos? Medicamentos { get; set; }
+        public virtual Medicamentos? Medicamento { get; set; }
+        [ForeignKey("Laboratorios")]
+        [Display(Name = "Código del Laboratorio: ")]
+        public int CodigoLaboratorio { get; set; }
+        public virtual Laboratorios? Laboratorio { get; set; }
         [Required(ErrorMessage = "Digite una cantidad")]
         [Display(Name = "Cantidad de Unidades: ")]
         public int CantidadUnidad { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [Display(Name = "Costo: ")]
+        public float Costo { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
+        [Display(Name = "Precio por Unidad: ")]
+        public float PrecioUnidad { get; set; }
         [Required(ErrorMessage = "Digite la fecha de adquisición")]
         [Display(Name = "Fecha de Adquisición: ")]
         public DateTime FechaAdquirido { get; set; }

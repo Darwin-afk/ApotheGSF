@@ -30,6 +30,15 @@
         "css/select2.min.css",
         "js/select2.full.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "selectize.js@0.13.6",
+      "destination": "wwwroot/lib/selectize.js/",
+      "files": [
+        "js/standalone/selectize.min.js",
+        "css/selectize.bootstrap5.min.css"
+      ]
     }
   ]
 }

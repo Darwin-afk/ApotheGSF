@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ApotheGSF.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/selectize.js/css/selectize.bootstrap5.min.css" />
 
     <link rel="icon" type="image/x-icon" href="~/img/Icon/LogoTitle.png">
     <style>
@@ -46,7 +47,7 @@
         <nav class="navbar navbar-expand-sm navbar-dark border-bottom box-shadow mb-3 fixed-top" style="background-color:#1B242A;">
 
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/Icon/PortratTitleNav2.png" class="img-fuild" style="height:35px;width:150px;"/></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/Icon/PortratTitleNav2.png" class="img-fuild" style="height:35px;width:150px;" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -220,9 +221,14 @@
     <script src="~/lib/admin-lte/js/adminlte.min.js"></script>
     <script src="~/lib/select2/js/select2.full.min.js"></script>
     <script src="~/lib/font-awesome/js/all.min.js"></script>
+    <script src="~/lib/selectize.js/js/standalone/selectize.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $('select').selectize({
+                sortField: 'text'
+            });
+
             $('.select2').select2();
         });
     </script>

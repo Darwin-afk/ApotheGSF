@@ -94,31 +94,8 @@ namespace ApotheGSF.Controllers
                                      Sustancia = meds.Sustancia,
                                      Concentracion = meds.Concentracion,
                                      UnidadesCaja = meds.UnidadesCaja,
-                                     Costo = meds.Costo,
-                                     PrecioUnidad = meds.PrecioUnidad,
-                                     Indicaciones = meds.Indicaciones,
-                                     Dosis = meds.Dosis,
                                      Inactivo = (bool)meds.Inactivo,
-                                     Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).ToList().Count,
-
-                                     NombreProveedor = string.Join(", ",
-                                     (from p in _context.Proveedores
-                                      .AsNoTracking()
-                                      join provMed in _context.ProveedoresMedicamentos
-                                      on new
-                                      {
-                                          ProveedoresId = p.Codigo,
-                                          MedicamentosId = meds.Codigo
-                                      } equals new
-                                      {
-                                          ProveedoresId = provMed.CodigoProveedor,
-                                          MedicamentosId = provMed.CodigoMedicamento
-                                      }
-                                      select new Proveedores
-                                      {
-                                          Nombre = p.Nombre
-                                      }
-                                      ).Select(x => x.Nombre).ToList())
+                                     Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).ToList().Count
 
                                  }).Where(filtro.ToString()).ToListAsync();
             }
@@ -173,34 +150,11 @@ namespace ApotheGSF.Controllers
                                          Sustancia = meds.Sustancia,
                                          Concentracion = meds.Concentracion,
                                          UnidadesCaja = meds.UnidadesCaja,
-                                         Costo = meds.Costo,
-                                         PrecioUnidad = meds.PrecioUnidad,
-                                         Indicaciones = meds.Indicaciones,
-                                         Dosis = meds.Dosis,
                                          Creado = meds.Creado,
                                          CreadoNombreUsuario = meds.CreadoNombreUsuario,
                                          Modificado = meds.Modificado,
                                          ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
-                                         Inactivo = meds.Inactivo,
-
-                                         NombreProveedor = string.Join(", ",
-                                         (from p in _context.Proveedores
-                                          .AsNoTracking()
-                                          join provMed in _context.ProveedoresMedicamentos
-                                          on new
-                                          {
-                                              ProveedoresId = p.Codigo,
-                                              MedicamentosId = meds.Codigo
-                                          } equals new
-                                          {
-                                              ProveedoresId = provMed.CodigoProveedor,
-                                              MedicamentosId = provMed.CodigoMedicamento
-                                          }
-                                          select new Proveedores
-                                          {
-                                              Nombre = p.Nombre
-                                          }
-                                          ).Select(x => x.Nombre).ToList())
+                                         Inactivo = meds.Inactivo
 
                                      }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
@@ -227,21 +181,6 @@ namespace ApotheGSF.Controllers
         [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
-            List<Proveedores> proveedores = _context.Proveedores.Where(p => p.Inactivo == false).ToList();
-
-            if(proveedores == null)
-            {
-                _notyf.Information("Es necesario tener algun proveedor");
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (proveedores.Count == 0)
-            {
-                _notyf.Information("Es necesario tener algun proveedor");
-                return RedirectToAction("Index", "Home");
-            }
-
-            ViewBag.CodigoProveedores = new MultiSelectList(proveedores, "Codigo", "Nombre");
             return View(new MedicamentosViewModel());
         }
 
@@ -250,7 +189,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,UnidadesCaja,Costo,PrecioUnidad,Indicaciones,Dosis,CodigosProveedores")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja")] MedicamentosViewModel viewModel)
         {
             ModelState.Remove("NombreProveedor");
 
@@ -261,7 +200,6 @@ namespace ApotheGSF.Controllers
                 if (error != "")
                 {
                     _notyf.Error(error);
-                    ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
                     return View(viewModel);
                 }
 
@@ -272,10 +210,6 @@ namespace ApotheGSF.Controllers
                     Sustancia = viewModel.Sustancia,
                     Concentracion = viewModel.Concentracion,
                     UnidadesCaja = viewModel.UnidadesCaja,
-                    Costo = viewModel.Costo,
-                    PrecioUnidad = viewModel.PrecioUnidad,
-                    Indicaciones = viewModel.Indicaciones,
-                    Dosis = viewModel.Dosis,
                     Creado = DateTime.Now,
                     CreadoNombreUsuario = _user.GetUserName(),
                     Modificado = DateTime.Now,
@@ -286,21 +220,9 @@ namespace ApotheGSF.Controllers
 
                 _context.Medicamentos.Add(newMedicamentos);
 
-                foreach (var item in viewModel.CodigosProveedores)
-                {
-                    ProveedorMedicamentos proveedorMedicamentos = new()
-                    {
-                        CodigoProveedor = item
-
-                    };
-
-                    newMedicamentos.ProveedoresMedicamentos.Add(proveedorMedicamentos);
-                }
-
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
             }
-            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);
         }
 
@@ -322,11 +244,6 @@ namespace ApotheGSF.Controllers
                     }
 
                 }
-            }
-
-            if (viewModel.Costo <= 0)
-            {
-                return "El costo debe ser mayor a 0";
             }
 
             if (viewModel.UnidadesCaja <= 0)
@@ -357,10 +274,6 @@ namespace ApotheGSF.Controllers
                                           Sustancia = meds.Sustancia,
                                           Concentracion = meds.Concentracion,
                                           UnidadesCaja = meds.UnidadesCaja,
-                                          Costo = meds.Costo,
-                                          PrecioUnidad = meds.PrecioUnidad,
-                                          Indicaciones = meds.Indicaciones,
-                                          Dosis = meds.Dosis,
                                           Inactivo = meds.Inactivo
                                       }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
@@ -368,23 +281,6 @@ namespace ApotheGSF.Controllers
             {
                 return NotFound();
             }
-
-            medicamentos.CodigosProveedores = await (from provMeds in _context.ProveedoresMedicamentos
-                                               .Where(x => x.CodigoMedicamento == medicamentos.Codigo)
-                                               .AsNoTracking()
-                                                     join proveedores in _context.Proveedores on provMeds
-                                                    .CodigoProveedor equals proveedores.Codigo
-                                                     select proveedores.Codigo).ToListAsync();
-
-            List<Proveedores> _proveedores = _context.Proveedores.Where(p => p.Inactivo == false).ToList();
-
-            if (_proveedores.Count == 0)
-            {
-                _notyf.Information("Es necesario tener algun proveedor");
-                return RedirectToAction("Index", "Home");
-            }
-
-            ViewBag.CodigoProveedores = new MultiSelectList(_proveedores, "Codigo", "Nombre", medicamentos.CodigosProveedores);
 
             return View(medicamentos);
         }
@@ -394,7 +290,7 @@ namespace ApotheGSF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,Categoria,Sustancia,Concentracion,Costo,PrecioUnidad,UnidadesCaja,Indicaciones,Dosis,CodigosProveedores")] MedicamentosViewModel viewModel)
+        public async Task<IActionResult> Edit([Bind("Codigo,Nombre,NombreCientifico,Categoria,Sustancia,Concentracion,UnidadesCaja")] MedicamentosViewModel viewModel)
         {
 
             ModelState.Remove("NombreProveedor");
@@ -408,11 +304,10 @@ namespace ApotheGSF.Controllers
                     if (error != "")
                     {
                         _notyf.Error(error);
-                        ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
                         return View(viewModel);
                     }
 
-                    var editmedicamento = await _context.Medicamentos.Include(x => x.ProveedoresMedicamentos).
+                    var editmedicamento = await _context.Medicamentos.
                                        FirstOrDefaultAsync(y => y.Codigo == viewModel.Codigo);
 
                     _context.Update(editmedicamento);
@@ -421,37 +316,11 @@ namespace ApotheGSF.Controllers
                     editmedicamento.Sustancia = viewModel.Sustancia;
                     editmedicamento.Concentracion = viewModel.Concentracion;
                     editmedicamento.UnidadesCaja = viewModel.UnidadesCaja;
-                    editmedicamento.Costo = viewModel.Costo;
-                    editmedicamento.PrecioUnidad = viewModel.PrecioUnidad;
-                    editmedicamento.Indicaciones = viewModel.Indicaciones;
-                    editmedicamento.Dosis = viewModel.Dosis;
                     editmedicamento.Modificado = DateTime.Now;
                     editmedicamento.ModificadoNombreUsuario = _user.GetUserName();
                     _context.Entry(editmedicamento).Property(c => c.Creado).IsModified = false;
                     _context.Entry(editmedicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
                     _context.Entry(editmedicamento).Property(c => c.Inactivo).IsModified = false;
-
-
-                    foreach (var proveedor in editmedicamento.ProveedoresMedicamentos.ToList())
-                    {
-                        if (!viewModel.CodigosProveedores.Contains(proveedor.CodigoProveedor))
-                        {
-                            editmedicamento.ProveedoresMedicamentos.Remove(proveedor);
-                        }
-                    }
-
-                    foreach (var newProveedorId in viewModel.CodigosProveedores)
-                    {
-                        if (!editmedicamento.ProveedoresMedicamentos.Any(x => x.CodigoProveedor == newProveedorId))
-                        {
-                            var nuevoProv = new ProveedorMedicamentos
-                            {
-                                CodigoProveedor = newProveedorId
-
-                            };
-                            editmedicamento.ProveedoresMedicamentos.Add(nuevoProv);
-                        }
-                    }
 
                     await _context.SaveChangesAsync();
                 }
@@ -470,7 +339,6 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.CodigoProveedores = new MultiSelectList(_context.Proveedores.Where(p => p.Inactivo == false), "Codigo", "Nombre", viewModel.CodigosProveedores);
             return View(viewModel);
         }
 
@@ -497,35 +365,12 @@ namespace ApotheGSF.Controllers
                                          Sustancia = meds.Sustancia,
                                          Concentracion = meds.Concentracion,
                                          UnidadesCaja = meds.UnidadesCaja,
-                                         Costo = meds.Costo,
-                                         PrecioUnidad = meds.PrecioUnidad,
-                                         Indicaciones = meds.Indicaciones,
-                                         Dosis = meds.Dosis,
                                          Creado = meds.Creado,
                                          CreadoNombreUsuario = meds.CreadoNombreUsuario,
                                          Modificado = meds.Modificado,
                                          ModificadoNombreUsuario = meds.ModificadoNombreUsuario,
                                          Inactivo = meds.Inactivo,
                                          Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
-
-                                         NombreProveedor = string.Join(", ",
-                                         (from p in _context.Proveedores
-                                          .AsNoTracking()
-                                          join provMed in _context.ProveedoresMedicamentos
-                                          on new
-                                          {
-                                              ProveedoresId = p.Codigo,
-                                              MedicamentosId = meds.Codigo
-                                          } equals new
-                                          {
-                                              ProveedoresId = provMed.CodigoProveedor,
-                                              MedicamentosId = provMed.CodigoMedicamento
-                                          }
-                                          select new Proveedores
-                                          {
-                                              Nombre = p.Nombre
-                                          }
-                                          ).Select(x => x.Nombre).ToList())
 
                                      }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
@@ -596,31 +441,8 @@ namespace ApotheGSF.Controllers
                                                                   Sustancia = meds.Sustancia,
                                                                   Concentracion = meds.Concentracion,
                                                                   UnidadesCaja = meds.UnidadesCaja,
-                                                                  Costo = meds.Costo,
-                                                                  PrecioUnidad = meds.PrecioUnidad,
-                                                                  Indicaciones = meds.Indicaciones,
-                                                                  Dosis = meds.Dosis,
                                                                   Inactivo = (bool)meds.Inactivo,
-                                                                  Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count,
-
-                                                                  NombreProveedor = string.Join(", ",
-                                                                  (from p in _context.Proveedores
-                                                                   .AsNoTracking()
-                                                                   join provMed in _context.ProveedoresMedicamentos
-                                                                   on new
-                                                                   {
-                                                                       ProveedoresId = p.Codigo,
-                                                                       MedicamentosId = meds.Codigo
-                                                                   } equals new
-                                                                   {
-                                                                       ProveedoresId = provMed.CodigoProveedor,
-                                                                       MedicamentosId = provMed.CodigoMedicamento
-                                                                   }
-                                                                   select new Proveedores
-                                                                   {
-                                                                       Nombre = p.Nombre
-                                                                   }
-                                                                   ).Select(x => x.Nombre).ToList())
+                                                                  Cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == meds.Codigo).ToList().Count
 
                                                               }).Where(filtro.ToString()).ToListAsync();
 
@@ -636,10 +458,7 @@ namespace ApotheGSF.Controllers
                 NombreMedicamento = medicamento.Nombre
             };
 
-            //selectList con los proveedores del medicamento
-            List<int> codigosProveedores = _context.ProveedoresMedicamentos.Where(pm => pm.CodigoMedicamento == medicamento.Codigo).Select(pm => pm.CodigoProveedor).ToList();
-
-            ViewBag.ProveedoresId = new SelectList(_context.Proveedores.Where(p => codigosProveedores.Contains(p.Codigo) && p.Inactivo == false).ToList(), "Codigo", "Nombre");
+            ViewBag.ProveedoresId = new SelectList(_context.Laboratorios.Where(p => p.Inactivo == false).ToList(), "Codigo", "Nombre");
 
             return View(correo);
         }
@@ -654,9 +473,7 @@ namespace ApotheGSF.Controllers
 
                 Medicamentos _medicamento = _context.Medicamentos.Where(m => m.Nombre == correo.NombreMedicamento).FirstOrDefault();
 
-                List<int> codigosProveedores = _context.ProveedoresMedicamentos.Where(pm => pm.CodigoMedicamento == _medicamento.Codigo).Select(pm => pm.CodigoProveedor).ToList();
-
-                ViewBag.ProveedoresId = new SelectList(_context.Proveedores.Where(p => codigosProveedores.Contains(p.Codigo) && p.Inactivo == false).ToList(), "Codigo", "Nombre");
+                ViewBag.ProveedoresId = new SelectList(_context.Laboratorios.Where(p => p.Inactivo == false).ToList(), "Codigo", "Nombre");
 
                 return View(correo);
             }
@@ -710,16 +527,16 @@ namespace ApotheGSF.Controllers
 
         private MailMessage GenerarCorreo(CorreoViewModel correo)
         {
-            Proveedores proveedor = _context.Proveedores.Where(p => p.Codigo == correo.CodigoProveedor).FirstOrDefault();
+            Laboratorios laboratorio = _context.Laboratorios.Where(p => p.Codigo == correo.CodigoProveedor).FirstOrDefault();
 
             var mail = new MailMessage();
             mail.From = new MailAddress($"{correEmisor}", "Botica Popular", Encoding.UTF8);
-            mail.To.Add(new MailAddress($"{proveedor.Email}"));
+            mail.To.Add(new MailAddress($"{laboratorio.Email}"));
 
             mail.Subject = "Reabastecer Inventario";
             mail.SubjectEncoding = Encoding.UTF8;
 
-            mail.Body = $"Saludos {proveedor.Nombre}, <br/><br/> La Botica Popular de la Iglesia Santa Rosa de Lima, " +
+            mail.Body = $"Saludos {laboratorio.Nombre}, <br/><br/> La Botica Popular de la Iglesia Santa Rosa de Lima, " +
                 $"solicita {correo.Cajas} cajas de {correo.NombreMedicamento}.<br/> Por favor enviar las cantidades necesarias lo mas pronto posible." +
                 $"<br/> <br/> Se despide cordialmente la administración. <br/> <br/> " +
                 $"<img src='https://i.pinimg.com/564x/4e/b9/b7/4eb9b70dee1f41c59dc790b67d6b498b.jpg' alt='Portrait1'  />";

@@ -9,6 +9,8 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Nombre: ")]
         public string Nombre { get; set; }
+        [Display(Name = "Nombre Científico: ")]
+        public string NombreCientifico { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Categoria: ")]
         public string Categoria { get; set; }

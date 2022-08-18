@@ -21,6 +21,7 @@
                         <option value="">Seleccione el Medicamento</option>
                     </select>
                 </div>
+
                 <label class="control-label">Lotes:</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -31,23 +32,28 @@
                 <div>
                     <span asp-validation-for="Cajas" class="text-danger"></span>
                 </div>
-                <div class="input-group">
-                    <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
-                    <div class="input-group">
-                        <input type="text" asp-for="CodigoLaboratorio" class="form-control"/>
 
+                <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-flask"></i></span>
                     </div>
-                    <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
+                    <select asp-for="CodigoLaboratorio" class="form-control" placeholder="Seleccione un Laboratorio" asp-items="ViewBag.LaboratoriosId">
+                        <option value="">Seleccione un Laboratorio</option>
+                    </select>
                 </div>
-                <div class="col-sm-6">
-                    <label class="col-form-label">Costo:</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                        </div>
-                        <input class="form-control" asp-for="Costo" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
+                <div>
+                <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
+                </div>
+                <label class="col-form-label">Costo:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                     </div>
-                    <span asp-validation-for="Costo" class="text-danger"></span>
+                    <input class="form-control" asp-for="Costo" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
+                </div>
+                <div>
+                <span asp-validation-for="Costo" class="text-danger"></span>
                 </div>
                 <label class="control-label">Fecha de Adquisición:</label>
                 <div class="input-group">

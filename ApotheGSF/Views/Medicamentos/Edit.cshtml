@@ -1,4 +1,4 @@
-﻿@model ApotheGSF.ViewModels.MedicamentosViewModel
+﻿@model ApotheGSF.Models.Medicamentos
 
 @{
     ViewData["Title"] = "Edit";
@@ -42,7 +42,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-tags"></i></span>
                             </div>
-                            <select asp-for="Categoria" class="form-control"placeholder="Seleccione una Categoria">
+                            <select asp-for="Categoria" class="form-control" placeholder="Seleccione una Categoria">
                                 <option value="">Seleccione una Categoria</option>
                                 <option value="Analgesicos">Analgésicos</option>
                                 <option value="Antiacidos y Antiulcerosos">Antiácidos y Antiulcerosos</option>

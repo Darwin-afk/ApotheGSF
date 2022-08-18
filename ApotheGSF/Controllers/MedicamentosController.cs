@@ -228,24 +228,6 @@ namespace ApotheGSF.Controllers
 
         private string ValidarDatos(MedicamentosViewModel viewModel)
         {
-            //obtener lista de medicamentos
-            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false && m.Codigo != viewModel.Codigo).ToList();
-            //si la lista no es null
-            if (medicamentos != null)
-            {
-                //por cada elemento de la lista
-                foreach (var medicamento in medicamentos)
-                {
-                    //se verifica si tiene el mismo nombre que el medicamento que se quiere crear
-                    if (medicamento.Nombre.ToUpper() == viewModel.Nombre.ToUpper())
-                    {
-                        //si lo tiene regresa error
-                        return "Este medicamento ya existe";
-                    }
-
-                }
-            }
-
             if (viewModel.UnidadesCaja <= 0)
             {
                 return "Las unidades de una caja deben ser mayor a 0";

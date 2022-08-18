@@ -23,6 +23,10 @@ namespace ApotheGSF.ViewModels
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Unidades: ")]
         public int UnidadesCaja { get; set; }
+        [Display(Name = "Reorden: ")]
+        public int Reorden { get; set; }
+        [Display(Name = "Detallable: ")]
+        public bool Detallable { get; set; }
         [Display(Name = "Lotes: ")]
         public int Cajas { get; set; }
         public bool? Inactivo { get; set; }

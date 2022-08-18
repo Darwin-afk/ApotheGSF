@@ -104,8 +104,6 @@ namespace ApotheGSF.Controllers
                                      Total = f.Total,
                                      Creado = f.Creado,
                                      CreadoNombreUsuario = f.CreadoNombreUsuario,
-                                     Modificado = f.Modificado,
-                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario,
                                      Inactivo = f.Inactivo
                                  }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
@@ -296,8 +294,6 @@ namespace ApotheGSF.Controllers
                         Total = viewModel.Total,
                         Creado = DateTime.Now,
                         CreadoNombreUsuario = _user.GetUserName(),
-                        Modificado = DateTime.Now,
-                        ModificadoNombreUsuario = _user.GetUserName(),
                         Inactivo = false
                     };
 
@@ -761,8 +757,6 @@ namespace ApotheGSF.Controllers
                         Total = viewModel.Total,
                         Creado = DateTime.Now,
                         CreadoNombreUsuario = _user.GetUserName(),
-                        Modificado = DateTime.Now,
-                        ModificadoNombreUsuario = _user.GetUserName(),
                         Inactivo = false
                     };
 
@@ -866,8 +860,6 @@ namespace ApotheGSF.Controllers
                                      Total = f.Total,
                                      Creado = f.Creado,
                                      CreadoNombreUsuario = f.CreadoNombreUsuario,
-                                     Modificado = f.Modificado,
-                                     ModificadoNombreUsuario = f.ModificadoNombreUsuario,
                                      Inactivo = f.Inactivo
                                  }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
@@ -1272,11 +1264,11 @@ namespace ApotheGSF.Controllers
                     NombreMedicamento = medicamento.Nombre,
                     TipoCantidad = tipoCantidad,
                     Cantidad = cantidad,
-                    Precio = medicamento.PrecioUnidad
+                    //Precio = medicamento.PrecioUnidad
                 };
 
                 if (tipoCantidad == 1)//cajas
-                    detalle.Precio = medicamento.PrecioUnidad * medicamento.UnidadesCaja;
+                    //detalle.Precio = medicamento.PrecioUnidad * medicamento.UnidadesCaja;
 
                 detalle.Total = detalle.Precio * cantidad;
 

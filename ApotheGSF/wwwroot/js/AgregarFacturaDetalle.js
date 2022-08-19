@@ -1,6 +1,6 @@
 ﻿function AgregarDetalle() {
     $.ajax({
-        data: $('#form').serialize() + "&MedicamentoId=@MedicamentoId&TipoCantidad=@TipoCantidad&Cantidad=@Cantidad",
+        data: $('#form').serialize() + "&MedicamentoId=@MedicamentoId&LaboratorioId=@LaboratorioId&TipoCantidad=@TipoCantidad&Cantidad=@Cantidad",
         type: "POST",
         url: '/Facturas/AgregarMedicamento',
         success: function (resultado) {

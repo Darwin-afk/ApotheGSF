@@ -2,18 +2,24 @@
 
 <input type="hidden" asp-for="CodigoDetalle" />
 
-@Html.HiddenFor(model => Model.CodigoCaja)
-
 <tr>
+    <td>
+        <input type="hidden" asp-for="CodigoCaja" />
+        @Model.CodigoCaja
+    </td>
     <td>
         <input type="hidden" asp-for="NombreMedicamento" />
         @Model.NombreMedicamento
     </td>
     <td>
+        <input type="hidden" asp-for="NombreLaboratorio" />
+        @Model.NombreLaboratorio
+    </td>
+    <td>
         <input type="hidden" asp-for="TipoCantidad" />
         @if (Model.TipoCantidad == 1)
         {
-            @:Cajas
+            @:Caja
         }
         else
         {

@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Create";
 
-    int MedicamentoId = 1;
-    int LaboratorioId = 1;
+    int MedicamentoId = 0;
+    int LaboratorioId = 0;
     int TipoCantidad = 1;
     int Cantidad = 0;
 }
@@ -71,7 +71,13 @@
                         <thead>
                             <tr>
                                 <th>
+                                    Codigo
+                                </th>
+                                <th>
                                     Medicamento
+                                </th>
+                                <th>
+                                    Laboratorio
                                 </th>
                                 <th>
                                     Tipo Cantidad
@@ -158,6 +164,44 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        $(document).ready(function() {
+            $('#MedicamentoId').change(function() {
+                var Id = $(this).val();
+                if (Id == '') {
+                    return;
+                }
+                url = '@this.Url.Content("~/")' + "Laboratorios/ObtenerLaboratorios?CodigoMedicamento=" + Id;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        fillSelectList("LaboratorioId", data);
+                    });
+            });
+
+            ///Limpia y llena un select con datos en formato json pasados en data
+            function fillSelectList(Id, data) {
+                var element = "#" + Id;
+                let option;
+                $(element).empty(); //elimina todos las options del select
+                if (data.length == 0) {
+                    $(element).append("<option value='0'>No hay datos.</option>");
+                }
+
+
+                for (let i = 0; i < data.length; i++) {
+                    option = document.createElement('option');
+                    option.text = data[i]["nombre"];
+                    option.value = data[i]["id"];
+                    $(element).append($(option));
+                }
+            }
+
+
+        });
+    </script>
+
     <script src="~/js/AgregarFacturaDetalle.js"></script>
     <script src="~/js/RemoverFacturaDetalle.js"></script>
     <script src="~/js/Facturar.js"></script>

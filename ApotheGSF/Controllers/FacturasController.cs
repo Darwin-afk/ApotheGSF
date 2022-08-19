@@ -190,12 +190,17 @@ namespace ApotheGSF.Controllers
         public async Task<IActionResult> Create()
         {
             //obtener lista de medicamentos que no esten inactivos
-            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas).ToListAsync();
+            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
 
-            foreach (var item in medicamentos)
+            foreach(var medicamento in medicamentos)
             {
-                item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+                medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
             }
+
+            //foreach (var item in medicamentos)
+            //{
+            //    item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
+            //}
 
             if (medicamentos == null)
             {
@@ -203,15 +208,25 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (medicamentos.Any(m => m.Cajas > 0))
+            if (medicamentos.Any(m => m.MedicamentosCajas.Count > 0))
             {
                 var primerMedicamento = medicamentos[0];
 
-                var laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false && primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == l.Codigo)).ToListAsync();
+                List<Laboratorios> laboratoriosUsar = new();
+                List<Laboratorios> laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false).ToListAsync();
+                
+                foreach(var laboratorio in laboratorios)
+                {
+                    if(primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
+                    {
+                        laboratoriosUsar.Add(laboratorio);
+                    }
+                }
 
                 //usar los medicamentos que tengan alguna caja en inventario
-                ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
-                ViewData["LaboratoriosId"] = new SelectList(laboratorios, "Codigo", "Nombre", primerMedicamento);
+                ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.MedicamentosCajas.Count > 0), "Codigo", "Nombre");
+                ViewData["LaboratoriosId"] = new SelectList(laboratoriosUsar, "Codigo", "Nombre");
+
 
                 detallesEdit = new();
 
@@ -937,342 +952,370 @@ namespace ApotheGSF.Controllers
             return (_context.Facturas?.Any(e => e.Codigo == id)).GetValueOrDefault();
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> AgregarMedicamento(FacturaViewModel viewModel, int MedicamentoId, int TipoCantidad, int Cantidad)
-        //{
-        //    List<int>? cajasUsar = null;
-        //    List<int>? cajasUsadas = null;
-        //    bool existente = false;
-        //    int detalleId = 0;
-        //    Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).Include(m => m.MedicamentosCajas).FirstOrDefaultAsync();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AgregarMedicamento(FacturaViewModel viewModel, int MedicamentoId, int LaboratorioId, int TipoCantidad, int Cantidad)
+        {
+            List<int>? cajasUsar = null;
+            List<int>? cajasUsadas = null;
+            bool existente = false;
+            int detalleId = 0;
+            Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).FirstOrDefaultAsync();
 
-        //    if (medicamento == null)//si despues de entrar el medicamento pasa a estar inactivo
-        //    {
-        //        _notyf.Warning("Medicamento Invalido");
-        //        return Json(GenerarPartialView(true, viewModel));
-        //    }
+            medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
+            
+            if (MedicamentoId == 0)
+            {
+                _notyf.Warning("Seleccione un medicamento");
+                return Json(GenerarPartialView(true, viewModel));
+            }
 
-        //    if (Cantidad <= 0)//cantidad invalida
-        //    {
-        //        _notyf.Warning("Cantidad Invalida");
-        //        return Json(GenerarPartialView(true, viewModel));
-        //    }
+            if (LaboratorioId == 0)
+            {
+                _notyf.Warning("Seleccione un laboratorio");
+                return Json(GenerarPartialView(true, viewModel));
+            }
 
-        //    if (viewModel.MedicamentosDetalle.Any(md => md.NombreMedicamento == medicamento.Nombre))//medicamento existente
-        //    {
-        //        //cajasUsar = a las cajas usadas por el medicamento con el mismo tipoMedicamento
-        //        var detalleUsar = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == TipoCantidad).FirstOrDefault();
-        //        if (detalleUsar != null)
-        //            cajasUsar = detalleUsar.CodigosCajas.ToList();
-        //        //cajasUsadas = a las cajas usadas por el medicamento con diferente tipoMedicamento
-        //        var detalleUsadas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad != TipoCantidad).FirstOrDefault();
-        //        if (detalleUsadas != null)
-        //            cajasUsadas = detalleUsadas.CodigosCajas.ToList();
+            if (medicamento == null)//si despues de entrar el medicamento pasa a estar inactivo
+            {
+                _notyf.Warning("Medicamento Invalido");
+                return Json(GenerarPartialView(true, viewModel));
+            }
 
-        //        if (TipoCantidad == 1)//cajas
-        //        {
-        //            return Json(AgregarCaja(viewModel, medicamento, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
-        //        }
-        //        else//unidades
-        //        {
-        //            return Json(AgregarUnidades(viewModel, medicamento, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
-        //        }
-        //    }
-        //    else//medicamento nuevo
-        //    {
-        //        if (TipoCantidad == 1)//cajas
-        //        {
-        //            return Json(AgregarCaja(viewModel, medicamento, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
-        //        }
-        //        else//unidades
-        //        {
-        //            return Json(AgregarUnidades(viewModel, medicamento, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
-        //        }
-        //    }
-        //}
+            if (Cantidad <= 0)//cantidad invalida
+            {
+                _notyf.Warning("Cantidad Invalida");
+                return Json(GenerarPartialView(true, viewModel));
+            }
 
-        //private ResultadoAjax AgregarCaja(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId, bool UnidadToCaja = false)
-        //{
-        //    //nueva lista de cajasSinDetallar
-        //    List<MedicamentosCajas> cajasSinDetallar = new();
-        //    //si detallesEdit tiene elementos
-        //    if (detallesEdit.Count > 0)
-        //    {
-        //        foreach (var detalle in detallesEdit)
-        //        {
-        //            if (detalle.NombreMedicamento == medicamento.Nombre && detalle.TipoCantidad == 1)
-        //            {
-        //                foreach (var codigoCaja in detalle.CodigosCajas)
-        //                {
-        //                    //se agregan las cajas necesarias
-        //                    cajasSinDetallar.Add(new MedicamentosCajas()
-        //                    {
-        //                        Codigo = codigoCaja
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    }
+            if (viewModel.MedicamentosDetalle.Any(md => md.NombreMedicamento == medicamento.Nombre))//medicamento existente
+            {
+                return Json(GenerarPartialView(true, viewModel));
+                ////cajasUsar = a las cajas usadas por el medicamento con el mismo tipoMedicamento
+                //var detalleUsar = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == TipoCantidad).FirstOrDefault();
+                //if (detalleUsar != null)
+                //    cajasUsar = detalleUsar.CodigosCajas.ToList();
+                ////cajasUsadas = a las cajas usadas por el medicamento con diferente tipoMedicamento
+                //var detalleUsadas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad != TipoCantidad).FirstOrDefault();
+                //if (detalleUsadas != null)
+                //    cajasUsadas = detalleUsadas.CodigosCajas.ToList();
 
-        //    cajasSinDetallar.AddRange(medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList());
+                //if (TipoCantidad == 1)//cajas
+                //{
+                //    return Json(AgregarCaja(viewModel, medicamento, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
+                //}
+                //else//unidades
+                //{
+                //    return Json(AgregarUnidades(viewModel, medicamento, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
+                //}
+            }
+            else//medicamento nuevo
+            {
+                if (TipoCantidad == 1)//cajas
+                {
+                    return Json(AgregarCaja(viewModel, medicamento, LaboratorioId, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
+                }
+                else//unidades
+                {
+                    return Json(AgregarUnidades(viewModel, medicamento, LaboratorioId, TipoCantidad, Cantidad, cajasUsar, cajasUsadas, existente, detalleId));
+                }
+            }
+        }
 
-        //    if (cajasUsadas != null && UnidadToCaja == false)//excluir las cajas ya usadas por el mismo medicamento en unidades, al menos que sea llevar las unidades a caja
-        //    {
-        //        cajasSinDetallar = ExcluirCajas(cajasSinDetallar, cajasUsadas);
-        //    }
+        private ResultadoAjax AgregarCaja(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId, bool UnidadToCaja = false)
+        {
+            //nueva lista de cajasSinDetallar
+            List<MedicamentosCajas> cajasSinDetallar = new();
+            //si detallesEdit tiene elementos
+            //if (detallesEdit.Count > 0)
+            //{
+            //    foreach (var detalle in detallesEdit)
+            //    {
+            //        if (detalle.NombreMedicamento == medicamento.Nombre && detalle.TipoCantidad == 1)
+            //        {
+            //            foreach (var codigoCaja in detalle.CodigosCajas)
+            //            {
+            //                //se agregan las cajas necesarias
+            //                cajasSinDetallar.Add(new MedicamentosCajas()
+            //                {
+            //                    Codigo = codigoCaja
+            //                });
+            //            }
+            //        }
+            //    }
+            //}
 
-        //    if (cajasUsar != null)//si se agregara mas a el detalle existente excluir las ya usadas
-        //    {
-        //        cajasSinDetallar = ExcluirCajas(cajasSinDetallar, cajasUsar);
+            cajasSinDetallar.AddRange(medicamento.MedicamentosCajas.Where(mc => mc.Detallada == false && mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList());
 
-        //        //obtener el detalle Id de la caja
-        //        detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
+            if (cajasUsadas != null && UnidadToCaja == false)//excluir las cajas ya usadas por el mismo medicamento en unidades, al menos que sea llevar las unidades a caja
+            {
+                cajasSinDetallar = ExcluirCajas(cajasSinDetallar, cajasUsadas);
+            }
 
-        //        existente = true;
-        //    }
+            if (cajasUsar != null)//si se agregara mas a el detalle existente excluir las ya usadas
+            {
+                cajasSinDetallar = ExcluirCajas(cajasSinDetallar, cajasUsar);
 
-        //    if (cantidad > cajasSinDetallar.Count)//si se quiere agregar mas cajas de las existentes
-        //    {
-        //        _notyf.Warning("Cantidad Superior a la existente");
-        //        return GenerarPartialView(true, viewModel);
-        //    }
+                //obtener el detalle Id de la caja
+                detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
 
-        //    //si no sean agregado cantidades en cajas del medicamento
-        //    if (cajasUsar == null)
-        //    {
-        //        cajasUsar = new();
-        //    }
+                existente = true;
+            }
 
-        //    for (int i = 0; i < cantidad; i++)
-        //    {
-        //        cajasUsar.Add(cajasSinDetallar[i].Codigo);
-        //    }
+            if (cantidad > cajasSinDetallar.Count)//si se quiere agregar mas cajas de las existentes
+            {
+                _notyf.Warning("Cantidad Superior a la existente");
+                return GenerarPartialView(true, viewModel);
+            }
 
-        //    viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
+            //si no sean agregado cantidades en cajas del medicamento
+            if (cajasUsar == null)
+            {
+                cajasUsar = new();
+            }
 
-        //    return GenerarPartialView(false, viewModel);
-        //}
+            for (int i = 0; i < cantidad; i++)
+            {
+                cajasUsar.Add(cajasSinDetallar[i].Codigo);
+            }
 
-        //private ResultadoAjax AgregarUnidades(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId)
-        //{
-        //    int cantidadUsar = 0;
-        //    int cantidadCajas = 0;
-        //    int cantidadAgregar = 0;
-        //    ResultadoAjax resultado = new ResultadoAjax();
-        //    MedicamentosCajas? cajaDetallada = null;
+            viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
 
-        //    List<MedicamentosCajas> cajas = new();
-        //    //si detallesEdit tiene elementos
-        //    if (detallesEdit.Count > 0)
-        //    {
-        //        foreach (var detalle in detallesEdit)
-        //        {
-        //            if (detalle.NombreMedicamento == medicamento.Nombre && detalle.TipoCantidad == 2)
-        //            {
-        //                foreach (var codigoCaja in detalle.CodigosCajas)
-        //                {
-        //                    if (detalle.Cantidad > medicamento.UnidadesCaja)
-        //                    {
-        //                        cantidadAgregar = medicamento.UnidadesCaja;
-        //                        detalle.Cantidad -= medicamento.UnidadesCaja;
-        //                    }
-        //                    else
-        //                        cantidadAgregar = detalle.Cantidad;
+            return GenerarPartialView(false, viewModel);
+        }
 
-        //                    //se agregan las cajas necesarias
-        //                    cajas.Add(new MedicamentosCajas()
-        //                    {
-        //                        Codigo = codigoCaja,
-        //                        CantidadUnidad = cantidadAgregar,
-        //                        Detallada = true
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    }
+        private ResultadoAjax AgregarUnidades(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int>? cajasUsar, List<int>? cajasUsadas, bool existente, int detalleId)
+        {
+            int cantidadUsar = 0;
+            int cantidadCajas = 0;
+            int cantidadAgregar = 0;
+            ResultadoAjax resultado = new ResultadoAjax();
+            MedicamentosCajas? cajaDetallada = null;
 
-        //    foreach (var medicamentoCaja in medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList())
-        //    {
-        //        if (cajas.Any(c => c.Codigo == medicamentoCaja.Codigo))
-        //        {
-        //            cajas.Where(c => c.Codigo == medicamentoCaja.Codigo).First().CantidadUnidad += medicamentoCaja.CantidadUnidad;
-        //        }
-        //        else
-        //            cajas.Add(medicamentoCaja);
-        //    }
+            List<MedicamentosCajas> cajas = new();
+            //si detallesEdit tiene elementos
+            //if (detallesEdit.Count > 0)
+            //{
+            //    foreach (var detalle in detallesEdit)
+            //    {
+            //        if (detalle.NombreMedicamento == medicamento.Nombre && detalle.TipoCantidad == 2)
+            //        {
+            //            foreach (var codigoCaja in detalle.CodigosCajas)
+            //            {
+            //                if (detalle.Cantidad > medicamento.UnidadesCaja)
+            //                {
+            //                    cantidadAgregar = medicamento.UnidadesCaja;
+            //                    detalle.Cantidad -= medicamento.UnidadesCaja;
+            //                }
+            //                else
+            //                    cantidadAgregar = detalle.Cantidad;
 
-        //    //si se agregaran suficientes unidades para hacer cajas
-        //    while (cantidad >= medicamento.UnidadesCaja)
-        //    {
-        //        //agregar la cantidad de cajas que se agregar y se disminuira de la cantidad de unidades
-        //        cantidadCajas++;
-        //        cantidad -= medicamento.UnidadesCaja;
-        //    }
+            //                //se agregan las cajas necesarias
+            //                cajas.Add(new MedicamentosCajas()
+            //                {
+            //                    Codigo = codigoCaja,
+            //                    CantidadUnidad = cantidadAgregar,
+            //                    Detallada = true
+            //                });
+            //            }
+            //        }
+            //    }
+            //}
 
-        //    //si hay cajas que agregar en vez de unidades
-        //    if (cantidadCajas > 0)
-        //    {
-        //        //obtener el detalle Id de la caja
-        //        if (cajasUsadas != null)
-        //        {
-        //            detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
-        //        }
+            foreach (var medicamentoCaja in medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).OrderBy(mc => mc.FechaVencimiento).ToList())
+            {
+                if (cajas.Any(c => c.Codigo == medicamentoCaja.Codigo))
+                {
+                    cajas.Where(c => c.Codigo == medicamentoCaja.Codigo).First().CantidadUnidad += medicamentoCaja.CantidadUnidad;
+                }
+                else
+                    cajas.Add(medicamentoCaja);
+            }
 
-        //        //se invierte cajasUsar y cajasUsadas porque se cambiar el tipo de agregar
-        //        resultado = AgregarCaja(viewModel, medicamento, 1, cantidadCajas, cajasUsadas, cajasUsar, existente, detalleId);
-        //        if (resultado.error)
-        //        {
-        //            return GenerarPartialView(resultado.error, resultado.viewModel);
-        //        }
+            //si se agregaran suficientes unidades para hacer cajas
+            while (cantidad >= medicamento.UnidadesCaja)
+            {
+                //agregar la cantidad de cajas que se agregar y se disminuira de la cantidad de unidades
+                cantidadCajas++;
+                cantidad -= medicamento.UnidadesCaja;
+            }
 
-        //        //poner como cajas usadas las del viewModel
-        //        var detalleNuevo = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault();
-        //        if (detalleNuevo != null)
-        //            cajasUsadas = detalleNuevo.CodigosCajas;
-        //    }
+            //si hay cajas que agregar en vez de unidades
+            //if (cantidadCajas > 0)
+            //{
+            //    //obtener el detalle Id de la caja
+            //    if (cajasUsadas != null)
+            //    {
+            //        detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
+            //    }
 
-        //    //si se agregaron cajas y ya no quedan unidades que agregar
-        //    if (cantidad == 0)
-        //    {
-        //        return GenerarPartialView(resultado.error, resultado.viewModel);
-        //    }
+            //    //se invierte cajasUsar y cajasUsadas porque se cambiar el tipo de agregar
+            //    resultado = AgregarCaja(viewModel, medicamento, 1, cantidadCajas, cajasUsadas, cajasUsar, existente, detalleId);
+            //    if (resultado.error)
+            //    {
+            //        return GenerarPartialView(resultado.error, resultado.viewModel);
+            //    }
 
-        //    //si cajasUsar no es null
-        //    if (cajasUsar != null)
-        //    {
-        //        existente = true;
+            //    //poner como cajas usadas las del viewModel
+            //    var detalleNuevo = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault();
+            //    if (detalleNuevo != null)
+            //        cajasUsadas = detalleNuevo.CodigosCajas;
+            //}
 
-        //        //obtener el detalle anterior del mismo medicamento con el mismo TipoCantidad
-        //        MedicamentosDetalle detalleAnterior = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == tipoCantidad).FirstOrDefault();
+            //si se agregaron cajas y ya no quedan unidades que agregar
+            if (cantidad == 0)
+            {
+                return GenerarPartialView(resultado.error, resultado.viewModel);
+            }
 
-        //        //si la suma de la cantidad del detalle anterior mas la cantidad agregar es => a las unidades por medicamento
-        //        if (detalleAnterior.Cantidad + cantidad >= medicamento.UnidadesCaja)
-        //        {
-        //            existente = false;
+            //si cajasUsar no es null
+            if (cajasUsar != null)
+            {
+                existente = true;
 
-        //            //obtener el detalle Id de la caja
-        //            if (cajasUsadas != null)
-        //            {
-        //                detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
-        //            }
+                //obtener el detalle anterior del mismo medicamento con el mismo TipoCantidad
+                MedicamentosDetalle detalleAnterior = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == tipoCantidad).FirstOrDefault();
 
-        //            //se agregar otra caja
-        //            cantidad -= medicamento.UnidadesCaja - detalleAnterior.Cantidad;
-        //            viewModel = AgregarCaja(viewModel, medicamento, 1, 1, cajasUsadas, cajasUsar, existente, detalleId, true).viewModel;
+                //si la suma de la cantidad del detalle anterior mas la cantidad agregar es => a las unidades por medicamento
+                if (detalleAnterior.Cantidad + cantidad >= medicamento.UnidadesCaja)
+                {
+                    existente = false;
 
-        //            //se eliminar el detalle anterior
-        //            viewModel.MedicamentosDetalle.RemoveAt(detalleAnterior.CodigoDetalle);
+                    //obtener el detalle Id de la caja
+                    if (cajasUsadas != null)
+                    {
+                        detalleId = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == 1).FirstOrDefault().CodigoDetalle;
+                    }
 
-        //            //Para que los detallesId que estaban despues del elemento eleminado no pierdan continuidad
-        //            for (int i = detalleAnterior.CodigoDetalle; i < viewModel.MedicamentosDetalle.Count; i++)
-        //            {
-        //                viewModel.MedicamentosDetalle[i].CodigoDetalle = i;
-        //            }
-        //        }
-        //        //para que se modifique el mismo detalle
-        //        detalleId = detalleAnterior.CodigoDetalle;
-        //        //obtener ultima caja del detalle anterior
-        //        MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.Codigo == detalleAnterior.CodigosCajas.Last()).FirstOrDefault();
-        //        //cantidadUsar = cantidad caja - cantidad del detalle anterior
-        //        cantidadUsar = ultimaCaja.CantidadUnidad - detalleAnterior.Cantidad;
-        //    }
-        //    else
-        //    {
-        //        cajasUsar = new();
+                    //se agregar otra caja
+                    cantidad -= medicamento.UnidadesCaja - detalleAnterior.Cantidad;
+                    viewModel = AgregarCaja(viewModel, medicamento, laboratorioId, 1, 1, cajasUsadas, cajasUsar, existente, detalleId, true).viewModel;
 
-        //        cajaDetallada = cajas.Where(mc => mc.Detallada == true).FirstOrDefault();
+                    //se eliminar el detalle anterior
+                    viewModel.MedicamentosDetalle.RemoveAt(detalleAnterior.CodigoDetalle);
 
-        //        if (cajaDetallada != null)
-        //        {
-        //            cajasUsar.Add(cajaDetallada.Codigo);
-        //            cantidadUsar += cajaDetallada.CantidadUnidad;
+                    //Para que los detallesId que estaban despues del elemento eleminado no pierdan continuidad
+                    for (int i = detalleAnterior.CodigoDetalle; i < viewModel.MedicamentosDetalle.Count; i++)
+                    {
+                        viewModel.MedicamentosDetalle[i].CodigoDetalle = i;
+                    }
+                }
+                //para que se modifique el mismo detalle
+                detalleId = detalleAnterior.CodigoDetalle;
+                //obtener ultima caja del detalle anterior
+                //MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.Codigo == detalleAnterior.CodigosCajas.Last()).FirstOrDefault();
+                MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.Codigo == detalleAnterior.CodigoCaja.ToInt()).FirstOrDefault();
+                //cantidadUsar = cantidad caja - cantidad del detalle anterior
+                cantidadUsar = ultimaCaja.CantidadUnidad - detalleAnterior.Cantidad;
+            }
+            else
+            {
+                cajasUsar = new();
 
-        //            cajas.Remove(cajaDetallada);
-        //        }
-        //    }
+                cajaDetallada = cajas.Where(mc => mc.Detallada == true).FirstOrDefault();
 
-        //    //si se agregaron cajas y ya no quedan unidades que agregar
-        //    if (cantidad == 0)
-        //    {
-        //        return GenerarPartialView(false, viewModel);
-        //    }
+                if (cajaDetallada != null)
+                {
+                    cajasUsar.Add(cajaDetallada.Codigo);
+                    cantidadUsar += cajaDetallada.CantidadUnidad;
 
-        //    if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en cajas
-        //    {
-        //        cajas = ExcluirCajas(cajas, cajasUsadas);
-        //    }
+                    cajas.Remove(cajaDetallada);
+                }
+            }
 
-        //    if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
-        //    {
-        //        viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
-        //        return GenerarPartialView(false, viewModel);
-        //    }
+            //si se agregaron cajas y ya no quedan unidades que agregar
+            if (cantidad == 0)
+            {
+                return GenerarPartialView(false, viewModel);
+            }
 
-        //    //si la cantidad que se pide es mayor a la que se usara
-        //    for (int i = 0; i < cajas.Count; i++)
-        //    {
-        //        cajasUsar.Add(cajas[i].Codigo);
-        //        cantidadUsar += cajas[i].CantidadUnidad;
+            if (cajasUsadas != null)//excluir las cajas ya usadas por el mismo medicamento en cajas
+            {
+                cajas = ExcluirCajas(cajas, cajasUsadas);
+            }
 
-        //        if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
-        //        {
-        //            viewModel = AgregarDetalle(viewModel, medicamento, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
-        //            return GenerarPartialView(false, viewModel);
-        //        }
-        //    }
+            if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
+            {
+                viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
+                return GenerarPartialView(false, viewModel);
+            }
 
-        //    _notyf.Warning("Cantidad Superior a la existente");
-        //    return GenerarPartialView(true, viewModel);
-        //}
+            //si la cantidad que se pide es mayor a la que se usara
+            for (int i = 0; i < cajas.Count; i++)
+            {
+                cajasUsar.Add(cajas[i].Codigo);
+                cantidadUsar += cajas[i].CantidadUnidad;
 
-        //private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int tipoCantidad, int cantidad, List<int> cajasUsar, bool existente, int detalleId)
-        //{
-        //    if (existente == true)
-        //    {
-        //        viewModel.MedicamentosDetalle[detalleId].CodigosCajas = cajasUsar;
-        //        viewModel.MedicamentosDetalle[detalleId].Cantidad += cantidad;
-        //        viewModel.MedicamentosDetalle[detalleId].Total = viewModel.MedicamentosDetalle[detalleId].Precio * viewModel.MedicamentosDetalle[detalleId].Cantidad;
-        //    }
-        //    else
-        //    {
-        //        MedicamentosDetalle detalle = new()
-        //        {
-        //            CodigoDetalle = viewModel.MedicamentosDetalle.Count(),
-        //            CodigosCajas = cajasUsar,
-        //            NombreMedicamento = medicamento.Nombre,
-        //            TipoCantidad = tipoCantidad,
-        //            Cantidad = cantidad,
-        //            //Precio = medicamento.PrecioUnidad
-        //        };
+                if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
+                {
+                    viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
+                    return GenerarPartialView(false, viewModel);
+                }
+            }
 
-        //        if (tipoCantidad == 1)//cajas
-        //                              //detalle.Precio = medicamento.PrecioUnidad * medicamento.UnidadesCaja;
+            _notyf.Warning("Cantidad Superior a la existente");
+            return GenerarPartialView(true, viewModel);
+        }
 
-        //            detalle.Total = detalle.Precio * cantidad;
+        private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int> cajasUsar, bool existente, int detalleId)
+        {
+            if (existente == true)
+            {
+                //viewModel.MedicamentosDetalle[detalleId].CodigosCajas = cajasUsar;
+                viewModel.MedicamentosDetalle[detalleId].Cantidad += cantidad;
+                viewModel.MedicamentosDetalle[detalleId].Total = viewModel.MedicamentosDetalle[detalleId].Precio * viewModel.MedicamentosDetalle[detalleId].Cantidad;
+            }
+            else
+            {
+                var laboratorio = _context.Laboratorios.Where(l => l.Codigo == laboratorioId).FirstOrDefault();
 
-        //        viewModel.MedicamentosDetalle.Add(detalle);
-        //    }
+                int cantidadUsar = 0;
 
-        //    return viewModel;
-        //}
+                foreach(var caja in cajasUsar)
+                {
+                    if(tipoCantidad == 1)
+                    {
+                        cantidadUsar = 1;
+                        cantidad--;
+                    }
 
-        //private List<MedicamentosCajas> ExcluirCajas(List<MedicamentosCajas> cajas, List<int> cajasExcluir)
-        //{
-        //    if (cajas != null && cajasExcluir != null)
-        //    {
-        //        for (int i = 0; i < cajas.Count; i++)
-        //        {
-        //            if (cajasExcluir.Contains(cajas[i].Codigo))
-        //            {
-        //                cajas.Remove(cajas[i]);
-        //                i--;
-        //            }
-        //        }
-        //    }
+                    MedicamentosDetalle detalle = new()
+                    {
+                        CodigoDetalle = viewModel.MedicamentosDetalle.Count(),
+                        CodigoCaja = caja.ToString(),
+                        NombreMedicamento = medicamento.Nombre,
+                        NombreLaboratorio = laboratorio.Nombre,
+                        TipoCantidad = tipoCantidad,
+                        Cantidad = cantidadUsar,
+                        Precio = medicamento.MedicamentosCajas.Where(mc => mc.Codigo == caja).First().PrecioUnidad
+                    };
 
-        //    return cajas;
-        //}
+                    if (tipoCantidad == 1)//cajas
+                        detalle.Total = detalle.Precio * detalle.Cantidad;
+
+                    viewModel.MedicamentosDetalle.Add(detalle);
+                }
+            }
+
+            return viewModel;
+        }
+
+        private List<MedicamentosCajas> ExcluirCajas(List<MedicamentosCajas> cajas, List<int> cajasExcluir)
+        {
+            if (cajas != null && cajasExcluir != null)
+            {
+                for (int i = 0; i < cajas.Count; i++)
+                {
+                    if (cajasExcluir.Contains(cajas[i].Codigo))
+                    {
+                        cajas.Remove(cajas[i]);
+                        i--;
+                    }
+                }
+            }
+
+            return cajas;
+        }
 
         private ResultadoAjax GenerarPartialView(bool error, FacturaViewModel viewModel)
         {

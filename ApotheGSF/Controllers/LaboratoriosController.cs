@@ -332,5 +332,27 @@ namespace ApotheGSF.Controllers
         {
             return (_context.Laboratorios?.Any(e => e.Codigo == id)).GetValueOrDefault();
         }
+
+        public async Task<JsonResult> ObtenerLaboratorios(int CodigoMedicamento)
+        {
+            var medicamento = await _context.Medicamentos.Where(m => m.Codigo == CodigoMedicamento).FirstOrDefaultAsync();
+
+            medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
+
+            List<Laboratorios> laboratoriosUsar = new();
+            List<Laboratorios> laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false).ToListAsync();
+
+            foreach (var laboratorio in laboratorios)
+            {
+                if (medicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
+                {
+                    laboratoriosUsar.Add(laboratorio);
+                }
+            }
+
+            //var laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false && medicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == l.Codigo)).ToListAsync();
+
+            return Json(laboratoriosUsar);
+        }
     }
 }

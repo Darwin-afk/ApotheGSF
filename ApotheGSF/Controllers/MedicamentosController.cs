@@ -178,6 +178,7 @@ namespace ApotheGSF.Controllers
                 medicamento.Modificado = DateTime.Now;
                 medicamento.ModificadoNombreUsuario = _user.GetUserName();
                 medicamento.Inactivo = false;
+                medicamento.EnvioPendiente = false;
 
                 _context.Medicamentos.Add(medicamento);
 
@@ -247,6 +248,7 @@ namespace ApotheGSF.Controllers
                     _context.Entry(medicamento).Property(c => c.Creado).IsModified = false;
                     _context.Entry(medicamento).Property(c => c.CreadoNombreUsuario).IsModified = false;
                     _context.Entry(medicamento).Property(c => c.Inactivo).IsModified = false;
+                    _context.Entry(medicamento).Property(c => c.EnvioPendiente).IsModified = false;
 
                     await _context.SaveChangesAsync();
                 }

@@ -182,22 +182,19 @@
             ///Limpia y llena un select con datos en formato json pasados en data
             function fillSelectList(Id, data) {
                 var element = "#" + Id;
-                let option;
-                $(element).empty(); //elimina todos las options del select
-                if (data.length == 0) {
-                    $(element).append("<option value='0'>No hay datos.</option>");
-                }
 
+                var selector = $(element).selectize().data('selectize');
+                selector.clearOptions();
+
+                selector.addOption({ value: data[0]["codigo"], text: data[0]["nombre"]});
+                if (data.length == 0) {
+                    selector.addOption({ value: 0, text: "No hay datos"});
+                }
 
                 for (let i = 0; i < data.length; i++) {
-                    option = document.createElement('option');
-                    option.text = data[i]["nombre"];
-                    option.value = data[i]["id"];
-                    $(element).append($(option));
+                    selector.addOption({ value: data[i]["codigo"], text: data[i]["nombre"]});
                 }
             }
-
-
         });
     </script>
 

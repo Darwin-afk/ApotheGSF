@@ -523,26 +523,26 @@ namespace ApotheGSF.Controllers
         // GET: Facturas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            //if (id == null || _context.Facturas == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null || _context.Facturas == null)
+            {
+                return NotFound();
+            }
 
-            //var factura = await (from f in _context.Facturas
-            //                   .AsNoTracking()
-            //                   .AsQueryable()
-            //                     select new FacturaViewModel
-            //                     {
-            //                         Codigo = f.Codigo,
-            //                         SubTotal = f.SubTotal,
-            //                         Total = f.Total,
-            //                         Inactivo = f.Inactivo
-            //                     }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
+            var factura = await (from f in _context.Facturas
+                               .AsNoTracking()
+                               .AsQueryable()
+                                 select new FacturaViewModel
+                                 {
+                                     Codigo = f.Codigo,
+                                     SubTotal = f.SubTotal,
+                                     Total = f.Total,
+                                     Inactivo = f.Inactivo
+                                 }).Where(x => x.Codigo == id && x.Inactivo == false).FirstOrDefaultAsync();
 
-            //if (factura == null)
-            //{
-            //    return NotFound();
-            //}
+            if (factura == null)
+            {
+                return NotFound();
+            }
 
             ////obtener listado de facturamedicamentocaja con facturaId == factura.codigo
             //List<FacturaMedicamentosCajas> facturasCajas = _context.FacturasMedicamentosCajas.Where(fmv => fmv.CodigoFactura == factura.Codigo).ToList();
@@ -557,7 +557,7 @@ namespace ApotheGSF.Controllers
             //MedicamentosDetalle detalle = new MedicamentosDetalle()
             //{
             //    CodigoDetalle = listaDetalle.Count,
-            //    CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
+            //    CodigoCaja = facturasCajas[0].CodigoCaja.ToString(),
             //    TipoCantidad = facturasCajas[0].TipoCantidad,
             //    Cantidad = facturasCajas[0].CantidadUnidad,
             //    Precio = facturasCajas[0].Precio
@@ -612,31 +612,55 @@ namespace ApotheGSF.Controllers
             //    }
             //}
 
-            //factura.MedicamentosDetalle = listaDetalle;
+            var listaDetalle = ObtenerDetalles(factura);
 
-            //detallesEdit = listaDetalle;
+            factura.MedicamentosDetalle = listaDetalle;
 
-            ////obtener lista de medicamentos que no esten inactivos
-            //var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
+            detallesEdit = listaDetalle;
+
+            //obtener lista de medicamentos que no esten inactivos
+            var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
+
+            foreach (var medicamento in medicamentos)
+            {
+                medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
+            }
 
             //foreach (var item in medicamentos)
             //{
             //    item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
             //}
 
-            //if (medicamentos == null)
-            //{
-            //    _notyf.Information("Es necesario tener algun medicamento");
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (medicamentos == null)
+            {
+                _notyf.Information("Es necesario tener algun medicamento");
+                return RedirectToAction("Index", "Home");
+            }
 
-            //if (medicamentos.Any(m => m.Cajas > 0))
-            //{
-            //    //usar los medicamentos que tengan alguna caja en inventario
-            //    ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
+            if (medicamentos.Any(m => m.MedicamentosCajas.Count > 0))
+            {
+                var primerMedicamento = medicamentos[0];
 
-            //    return View(factura);
-            //}
+                List<Laboratorios> laboratoriosUsar = new();
+                List<Laboratorios> laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false).ToListAsync();
+
+                foreach (var laboratorio in laboratorios)
+                {
+                    if (primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
+                    {
+                        laboratoriosUsar.Add(laboratorio);
+                    }
+                }
+
+                //usar los medicamentos que tengan alguna caja en inventario
+                ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.MedicamentosCajas.Count > 0), "Codigo", "Nombre");
+                ViewData["LaboratoriosId"] = new SelectList(laboratoriosUsar, "Codigo", "Nombre");
+
+
+                detallesEdit = new();
+
+                return View(factura);
+            }
 
             _notyf.Information("Es necesario tener inventario");
             return RedirectToAction("Index", "Home");

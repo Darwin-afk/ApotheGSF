@@ -36,7 +36,13 @@
                         @Html.SortableHeaderFor(model => model.Nombre)
                     </th>
                     <th>
-                        @Html.SortableHeaderFor(model => model.Sustancia)
+                        @Html.SortableHeaderFor(model => model.NombreCientifico)
+                    </th>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.Categoria)
+                    </th>
+                    <th>
+                        @Html.SortableHeaderFor(model => model.Concentracion)
                     </th>
                     <th>
                         @Html.SortableHeaderFor(model => model.Cajas)
@@ -52,7 +58,13 @@
                             @Html.DisplayFor(modelItem => item.Nombre)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Sustancia)
+                            @Html.DisplayFor(modelItem => item.NombreCientifico)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Categoria)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Concentracion)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Cajas)

@@ -32,6 +32,9 @@
             <thead>
                 <tr>
                     <th>
+                        @Html.SortableHeaderFor(model => model.Cedula)
+                    </th>
+                    <th>
                         @Html.SortableHeaderFor(model => model.Nombre)
                     </th>
                     <th>
@@ -42,9 +45,6 @@
                     </th>
                     <th>
                         @Html.SortableHeaderFor(model => model.Direccion)
-                    </th>
-                    <th>
-                        @Html.SortableHeaderFor(model => model.Usuario)
                     </th>
                     <th>
                         @Html.SortableHeaderFor(model => model.Email)
@@ -60,6 +60,9 @@
                 {
                     <tr>
                         <td>
+                            @Html.DisplayFor(modelItem => item.Cedula)
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.Nombre)
                         </td>
                         <td>
@@ -70,9 +73,6 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Direccion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Usuario)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)

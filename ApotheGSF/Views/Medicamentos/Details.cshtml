@@ -104,7 +104,7 @@
                 <div class="col-sm-8">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th>
                                     Caja
                                 </th>
@@ -123,24 +123,24 @@
                         <tbody>
                             @foreach (var item in ViewBag.Inventario)
                             {
-                                <tr>
+                                <tr class="text-end">
                                     <td>
-                                        @item.Codigo
+                                        @item.Codigo |
                                     </td>
                                     <td>
-                                        @item.CantidadUnidad
+                                        @item.CantidadUnidad |
                                     </td>
                                     <td>
-                                        @item.FechaVencimiento.ToString("dd/MM/yyyy")
+                                        @item.FechaVencimiento.ToString("dd/MM/yyyy") |
                                     </td>
                                     <td>
                                         @if (item.Detallada == true)
                                         {
-                                            @:Si
+                                            @:Si |
                                         }
                                         else
                                         {
-                                            @:No
+                                            @:No |
                                         }
                                     </td>
                                     <td>

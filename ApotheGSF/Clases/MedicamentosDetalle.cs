@@ -3,7 +3,9 @@
     public class MedicamentosDetalle
     {
         public int CodigoDetalle { get; set; }
-        public string CodigoCaja { get; set; }
+        public int CodigoCaja { get; set; }
+        public int CodigoMedicamento { get; set; }
+        public int CodigoLaboratorio { get; set; }
         public string NombreMedicamento { get; set; }
         public string NombreLaboratorio { get; set; }
         public int TipoCantidad { get; set; }

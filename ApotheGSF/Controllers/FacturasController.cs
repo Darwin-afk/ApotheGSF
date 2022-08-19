@@ -685,7 +685,7 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AgregarMedicamento(FacturaViewModel viewModel, int MedicamentoId, int LaboratorioId, int TipoCantidad, int Cantidad)
         {
-            List<int>? cajasUsadas = null;
+            List<int>? cajasUsadas = new();
             bool existente = false;
             int detalleId = 0;
             Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).FirstOrDefaultAsync();
@@ -716,6 +716,13 @@ namespace ApotheGSF.Controllers
                 return Json(GenerarPartialView(true, viewModel));
             }
 
+            if (medicamento.Detallable == false && TipoCantidad == 2)//si el medicamento no es detallable
+            {
+                _notyf.Warning("Este medicamento no es detallable");
+                return Json(GenerarPartialView(true, viewModel));
+            }
+
+
             if (viewModel.MedicamentosDetalle.Any(md => md.CodigoMedicamento == medicamento.Codigo))//medicamento existente
             {
                 //por cada detalle
@@ -728,16 +735,6 @@ namespace ApotheGSF.Controllers
                         cajasUsadas.Add(detalle.CodigoCaja);
                     }
                 }
-
-
-                //cajasUsar = a las cajas usadas por el medicamento con el mismo tipoMedicamento
-                //var detalleUsar = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad == TipoCantidad).FirstOrDefault();
-                //if (detalleUsar != null)
-                //    cajasUsar = detalleUsar.CodigoCaja.ToList();
-                ////cajasUsadas = a las cajas usadas por el medicamento con diferente tipoMedicamento
-                //var detalleUsadas = viewModel.MedicamentosDetalle.Where(md => md.NombreMedicamento == medicamento.Nombre && md.TipoCantidad != TipoCantidad).FirstOrDefault();
-                //if (detalleUsadas != null)
-                //    cajasUsadas = detalleUsadas.CodigosCajas.ToList();
 
                 if (TipoCantidad == 1)//cajas
                 {
@@ -993,6 +990,7 @@ namespace ApotheGSF.Controllers
                     CodigoDetalle = viewModel.MedicamentosDetalle.Count(),
                     CodigoCaja = codigo,
                     CodigoMedicamento = medicamento.Codigo,
+                    CodigoLaboratorio = laboratorioId,
                     NombreMedicamento = medicamento.Nombre,
                     NombreLaboratorio = laboratorio.Nombre,
                     TipoCantidad = tipoCantidad,

@@ -147,21 +147,10 @@ namespace ApotheGSF.Controllers
                         return "RNC existente";
                     }
 
-                    //telefono 1 y fax
-                    if (laboratorio.Telefono1 == laboratorio.Fax)
-                    {
-                        return "Teléfono 1 y Fax no pueden ser iguales";
-                    }
-
                     //telefono 1
-                    if (item.Telefono1 == laboratorio.Telefono1 || item.Fax == laboratorio.Telefono1)
+                    if (item.Telefono1 == laboratorio.Telefono1)
                     {
                         return "Teléfono 1 existente";
-                    }
-                    //fax
-                    if (item.Telefono1 == laboratorio.Fax || item.Fax == laboratorio.Fax)
-                    {
-                        return "Fax existente";
                     }
 
                     //telefono 2 viewModel
@@ -172,12 +161,7 @@ namespace ApotheGSF.Controllers
                             return "Teléfono 1 y Teléfono 2 no pueden ser iguales";
                         }
 
-                        if (laboratorio.Fax == laboratorio.Telefono2)
-                        {
-                            return "Teléfono 2 y Fax no pueden ser iguales";
-                        }
-
-                        if (item.Telefono1 == laboratorio.Telefono2 || item.Fax == laboratorio.Telefono2)
+                        if (item.Telefono1 == laboratorio.Telefono2)
                         {
                             return "Teléfono 2 existente";
                         }
@@ -185,6 +169,22 @@ namespace ApotheGSF.Controllers
                         if (item.Telefono2 != null)
                         {
                             if (item.Telefono2 == laboratorio.Telefono2)
+                            {
+                                return "Teléfono 2 existente";
+                            }
+                        }
+
+                        if(laboratorio.Fax != null)
+                        {
+                            if (laboratorio.Fax == laboratorio.Telefono2)
+                            {
+                                return "Teléfono 2 y Fax no pueden ser iguales";
+                            }
+                        }
+
+                        if (item.Fax != null)
+                        {
+                            if (item.Fax == laboratorio.Telefono2)
                             {
                                 return "Teléfono 2 existente";
                             }
@@ -198,12 +198,37 @@ namespace ApotheGSF.Controllers
                             return "Teléfono 1 existente";
                         }
 
-                        if (item.Telefono2 == laboratorio.Fax)
+                        if (laboratorio.Fax != null)
+                        {
+                            if (laboratorio.Fax == item.Telefono2)
+                            {
+                                return "Fax existente";
+                            }
+                        }
+                    }
+
+                    //fax viewModel
+                    if (laboratorio.Fax != null)
+                    {
+                        if (laboratorio.Telefono1 == laboratorio.Fax)
+                        {
+                            return "Teléfono 1 y Fax no pueden ser iguales";
+                        }
+
+                        if (item.Telefono1 == laboratorio.Fax)
                         {
                             return "Fax existente";
                         }
                     }
 
+                    //fact database
+                    if (item.Fax != null)
+                    {
+                        if (item.Fax == laboratorio.Telefono1)
+                        {
+                            return "Teléfono 1 existente";
+                        }
+                    }
 
                     //email
                     if (item.Email == laboratorio.Email)

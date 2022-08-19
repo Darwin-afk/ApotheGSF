@@ -17,12 +17,10 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-capsules"></i></span>
                     </div>
-                    <select asp-for="CodigoMedicamento" class="form-control" placeholder="Seleccione el Medicamento" asp-items="ViewBag.MedicamentosId">
+                    <select asp-for="CodigoMedicamento" class="form-control" placeholder="Seleccione el Medicamento" asp-items="ViewBag.MedicamentosId" onchange="AsignarPrecio()">
                         <option value="">Seleccione el Medicamento</option>
                     </select>
                 </div>
-
-
 
 
                 <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
@@ -35,7 +33,7 @@
                     </select>
                 </div>
                 <div>
-                <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
+                    <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
                 </div>
 
 
@@ -51,20 +49,6 @@
                     <span asp-validation-for="Cajas" class="text-danger"></span>
                 </div>
 
-                
-
-                <label asp-for="PrecioUnidad" class="col-form-label"></label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                    </div>
-                    <input class="form-control" asp-for="PrecioUnidad" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
-                </div>
-                <div>
-                <span asp-validation-for="PrecioUnidad" class="text-danger"></span>
-                </div>
-
-
 
                 <label asp-for="Costo" class="col-form-label"></label>
                 <div class="input-group">
@@ -74,9 +58,20 @@
                     <input class="form-control" asp-for="Costo" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
                 </div>
                 <div>
-                <span asp-validation-for="Costo" class="text-danger"></span>
+                    <span asp-validation-for="Costo" class="text-danger"></span>
                 </div>
 
+
+                <label asp-for="PrecioUnidad" class="col-form-label"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    </div>
+                    <input class="form-control" asp-for="PrecioUnidad" type="number" placeholder="0.00 $">
+                </div>
+                <div>
+                    <span asp-validation-for="PrecioUnidad" class="text-danger"></span>
+                </div>
 
 
                 <label asp-for="FechaAdquirido" class="control-label"></label>
@@ -119,6 +114,25 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        function AsignarPrecio() {
+            var costo = document.getElementById('Costo').value;
+            var codigo = document.getElementById('CodigoMedicamento').value;
 
-    <script src="~/js/AsignarPrecio.js"></script>
+            $.ajax({
+                data: { CodigoMedicamento: codigo },
+                type: "POST",
+                url: '/Medicamentos/ObtenerUnidades',
+                success: function(unidades) {
+                    if (unidades > 0 && costo > 0) {
+                        document.getElementById('PrecioUnidad').value = ((costo * 1.10) / unidades).toFixed(2);
+                    }
+                    else {
+                        document.getElementById('PrecioUnidad').value = 0.00
+                    }
+                }
+            });
+        };
+    </script>
+    @*<script src="~/js/AsignarPrecio.js"></script>*@
     }

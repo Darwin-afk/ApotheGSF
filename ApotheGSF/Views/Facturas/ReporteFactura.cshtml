@@ -6,7 +6,7 @@
 }
 <dl>
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Codigo) &nbsp; @Html.DisplayFor(model => model.Codigo)
+        Factura No.: &nbsp; @Html.DisplayFor(model => model.Codigo)
     </dt>
 </dl>
 
@@ -67,6 +67,7 @@
             </dl>
         </div>
         <div class="card-footer text-center">
+            <h6>Le antendió el sr./sra. @User.GetUserName()</h6>
             <p>Gracias por preferirnos!!</p>
         </div>
     </div>

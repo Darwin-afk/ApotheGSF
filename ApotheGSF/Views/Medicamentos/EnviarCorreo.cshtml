@@ -14,12 +14,14 @@
                 <label class="form-group">Medicamento:</label>
                 <input type="text" class="form-control" asp-for="NombreMedicamento" readonly />
 
-                <label class="form-group">Proveedor:</label>
+                <label class="form-group">Laboratorio:</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-flask"></i></span>
                     </div>
-                    <select asp-for="CodigoProveedor" class="form-control" asp-items="ViewBag.ProveedoresId"></select>
+                    <select asp-for="Laboratorio" class="form-control" asp-items="ViewBag.ProveedoresId" placeholder="Seleccione un Laboratorio">
+                        <option value="">Seleccione un Laboratorio</option>
+                    </select>
                 </div>
 
                 <label class="control-label">Lotes:</label>

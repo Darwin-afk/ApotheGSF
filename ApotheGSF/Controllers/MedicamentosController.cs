@@ -439,7 +439,7 @@ namespace ApotheGSF.Controllers
 
         private MailMessage GenerarCorreo(CorreoViewModel correo)
         {
-            Laboratorios laboratorio = _context.Laboratorios.Where(p => p.Codigo == correo.CodigoProveedor).FirstOrDefault();
+            Laboratorios laboratorio = _context.Laboratorios.Where(p => p.Codigo == correo.Laboratorio).FirstOrDefault();
 
             var mail = new MailMessage();
             mail.From = new MailAddress($"{correEmisor}", "Botica Popular", Encoding.UTF8);

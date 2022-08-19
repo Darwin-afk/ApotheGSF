@@ -17,33 +17,51 @@
             </div>
             <!--datos-->
             <div class="card-body">
-                
+
                 <!--Agregar Medicamento-->
                 <div class="form-group row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="col">
                             <label class="col-form-label">Medicamento:</label>
-                            <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId"></select>
+                            <select asp-for="@MedicamentoId" class="form-control" asp-items="ViewBag.MedicamentosId" placeholder="Seleccione un Medicamento">
+                                <option value="">Seleccione un Medicamento</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+
+                    <div class="col-sm-4">
+                        <div class="col">
+                            <label class="col-form-label">Laboratorio:</label>
+                            <select asp-for="@LaboratorioId" class="form-control" placeholder="Seleccione un Laboratorio" asp-items="ViewBag.LaboratoriosId">
+                                <option value="">Seleccione un Laboratorio</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
                         <div class="col">
                             <label class="col-form-label">TipoCantidad:</label>
                             <select asp-for="@TipoCantidad" class="form-control">
+                                <option value="" selected>Seleccione un Tipo</option>
                                 <option value="1">Cajas</option>
                                 <option value="2">Unidades</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+
+                    <div class="col-sm-2">
                         <div class="col">
                             <label class="col-form-label">Cantidad:</label>
-                            <div class="form-group input-group col">
-                            <input asp-for="@Cantidad" type="number" class="form-control col-sm-5" />
-                            <span class="text-end col-sm-7"><button class="btn" style="background-color:white;color:blue;" onclick="AgregarDetalle()" type="button"><i class="fas fa-arrow-down"></i>&nbsp;Agregar</button></span>
-                            </div>
+                            <input asp-for="@Cantidad" type="number" class="form-control" />
                         </div>
                     </div>
+                </div>
+                <div class="form-group row">
+                    <span class="text-end ">
+                        <button class="btn" style="background-color:white;color:blue;" onclick="AgregarDetalle()" type="button">
+                            <i class="fas fa-arrow-down"></i>&nbsp;Agregar
+                        </button>
+                    </span>
                 </div>
 
                 <!--Detalle-->
@@ -78,15 +96,15 @@
                 <div class="form-group row">
                     <div class="col-sm-8">
                         @*<div class="form-group col-sm-8 row">
-                            <div class="col-sm-4">
-                                <label for="Estado" class="col-form-label">Estado</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <select asp-for="Estado" type="text" class="form-control">
-                                    <option value="Activo">Activo</option>
-                                    <option value="Inactivo">Inactivo</option>
-                                </select>
-                            </div>
+                        <div class="col-sm-4">
+                        <label for="Estado" class="col-form-label">Estado</label>
+                        </div>
+                        <div class="col-sm-8">
+                        <select asp-for="Estado" type="text" class="form-control">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                        </select>
+                        </div>
                         </div>
                         <div class="col-sm-4">
                         </div>*@
@@ -106,7 +124,7 @@
                                 <label class="col-form-label">ITBIS</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" disabled value="0.00" id="itbis">
+                                <input type="number" id="itbis" class="form-control" disabled value="0.00">
                             </div>
                         </div>
 

@@ -52,20 +52,6 @@
                     <span asp-validation-for="CantidadUnidad" class="text-danger"></span>
                 </div>
 
-                
-
-                <label asp-for="PrecioUnidad" class="col-form-label"></label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                    </div>
-                    <input class="form-control" asp-for="PrecioUnidad" type="number" placeholder="0.00 $" onchange="AsignarPrecio()">
-                </div>
-                <div>
-                <span asp-validation-for="PrecioUnidad" class="text-danger"></span>
-                </div>
-
-
 
                 <label asp-for="Costo" class="col-form-label"></label>
                 <div class="input-group">
@@ -78,6 +64,17 @@
                 <span asp-validation-for="Costo" class="text-danger"></span>
                 </div>
 
+
+                <label asp-for="PrecioUnidad" class="col-form-label"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    </div>
+                    <input class="form-control" asp-for="PrecioUnidad" type="number" placeholder="0.00 $">
+                </div>
+                <div>
+                <span asp-validation-for="PrecioUnidad" class="text-danger"></span>
+                </div>
 
 
                 <label asp-for="FechaAdquirido" class="control-label"></label>
@@ -126,5 +123,26 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script src="~/js/AsignarPrecio.js"></script>
+    <script>
+        function AsignarPrecio() {
+            var costo = document.getElementById('Costo').value;
+            var codigo = document.getElementById('CodigoMedicamento').value;
+
+            $.ajax({
+                data: { CodigoMedicamento: codigo },
+                type: "POST",
+                url: '/Medicamentos/ObtenerUnidades',
+                success: function(unidades) {
+                    if (unidades > 0 && costo > 0) {
+                        document.getElementById('PrecioUnidad').value = ((costo * 1.10) / unidades).toFixed(2);
+                    }
+                    else {
+                        document.getElementById('PrecioUnidad').value = 0.00
+                    }
+                }
+            });
+        };
+    </script>
+
+    @*<script src="~/js/AsignarPrecio.js"></script>*@
     }

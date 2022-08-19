@@ -21,7 +21,7 @@ namespace ApotheGSF.Controllers
         private readonly INotyfService _notyf;
         private readonly ClaimsPrincipal _user;
 
-        public MedicamentosCajasController(AppDbContext context, 
+        public MedicamentosCajasController(AppDbContext context,
                                            INotyfService notyf,
                                            IHttpContextAccessor accessor)
         {
@@ -83,7 +83,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if(medicamentos.Count == 0)
+            if (medicamentos.Count == 0)
             {
                 _notyf.Information("Es necesario tener algun medicamento");
                 return RedirectToAction("Index", "Home");
@@ -117,7 +117,6 @@ namespace ApotheGSF.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 //validar la cantidad
                 if (viewModel.Cajas <= 0)
                 {
@@ -146,7 +145,7 @@ namespace ApotheGSF.Controllers
 
                 Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == viewModel.CodigoMedicamento).FirstOrDefault();
 
-                if(medicamento.EnvioPendiente == true)
+                if (medicamento.EnvioPendiente == true)
                 {
                     _context.Update(medicamento);
                     medicamento.EnvioPendiente = false;
@@ -234,7 +233,7 @@ namespace ApotheGSF.Controllers
                 }
 
                 //validar las fechas
-                if (medicamentosCajas.FechaAdquirido > DateTime.Now)
+                if (medicamentosCajas.FechaAdquirido > DateTime.Now || medicamentosCajas.FechaAdquirido < DateTime.Now.AddDays(-8))
                 {
                     _notyf.Error("Fecha adquirido invalida");
                     ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;

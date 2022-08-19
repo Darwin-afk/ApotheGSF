@@ -326,6 +326,19 @@ namespace ApotheGSF.Controllers
             return (_context.Medicamentos?.Any(e => e.Codigo == id)).GetValueOrDefault();
         }
 
+        [HttpPost]
+        public async Task<int> ObtenerUnidades(int CodigoMedicamento)
+        {
+            if(CodigoMedicamento == 0)
+            {
+                return 0;
+            }
+
+            Medicamentos medicamento = await _context.Medicamentos.Where(m => m.Codigo == CodigoMedicamento).FirstOrDefaultAsync();
+
+            return medicamento.UnidadesCaja;
+        }
+
         [Authorize(Roles = "Administrador, Comprador")]
         public async Task<IActionResult> ReporteInventario(string filter)
         {

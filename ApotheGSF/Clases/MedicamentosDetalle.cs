@@ -3,8 +3,9 @@
     public class MedicamentosDetalle
     {
         public int CodigoDetalle { get; set; }
-        public List<int> CodigosCajas { get; set; }
+        public string CodigoCaja { get; set; }
         public string NombreMedicamento { get; set; }
+        public string NombreLaboratorio { get; set; }
         public int TipoCantidad { get; set; }
         public int Cantidad { get; set; }
         public float Precio { get; set; }

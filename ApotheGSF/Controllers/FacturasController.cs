@@ -133,7 +133,7 @@ namespace ApotheGSF.Controllers
                 MedicamentosDetalle detalle = new MedicamentosDetalle()
                 {
                     CodigoDetalle = listaDetalle.Count,
-                    CodigosCajas = new List<int>() { facturasCajas[0].CodigoCaja },
+                    CodigoCaja = facturasCajas[0].CodigoCaja.ToString(),
                     TipoCantidad = facturasCajas[0].TipoCantidad,
                     Cantidad = facturasCajas[0].CantidadUnidad,
                     Precio = facturasCajas[0].Precio
@@ -141,6 +141,8 @@ namespace ApotheGSF.Controllers
 
                 caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
                 detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
+                detalle.NombreLaboratorio = _context.Laboratorios.Where(l => l.Codigo == caja.CodigoLaboratorio).FirstOrDefault().Nombre;
+                detalle.Total = detalle.Cantidad * detalle.Precio;
 
                 //excluir ese elemento de facturasCajas
                 facturasCajas.RemoveAt(0);
@@ -150,13 +152,24 @@ namespace ApotheGSF.Controllers
                 {
                     caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
                     string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
+                    string nombreLaboratorio = _context.Laboratorios.Where(l => l.Codigo == caja.CodigoLaboratorio).FirstOrDefault().Nombre;
 
                     //mientras el nombreMedicamento y tipoCantidad sean igual al detalle
                     while (nombreMedicamento == detalle.NombreMedicamento && facturasCajas[0].TipoCantidad == detalle.TipoCantidad)
                     {
-                        //add(cajaId, cantidad)
-                        detalle.CodigosCajas.Add(facturasCajas[0].CodigoCaja);
-                        detalle.Cantidad += facturasCajas[0].CantidadUnidad;
+                        listaDetalle.Add(detalle);
+                        detalle = new MedicamentosDetalle()
+                        {
+                            CodigoDetalle = listaDetalle.Count,
+                            CodigoCaja = facturasCajas[0].CodigoCaja.ToString(),
+                            TipoCantidad = facturasCajas[0].TipoCantidad,
+                            Cantidad = facturasCajas[0].CantidadUnidad,
+                            Precio = facturasCajas[0].Precio
+                        };
+
+                        detalle.NombreMedicamento = nombreMedicamento;
+                        detalle.NombreLaboratorio = nombreLaboratorio;
+                        detalle.Total = detalle.Cantidad * detalle.Precio;
 
                         //excluir ese elemento de facturasCajas
                         facturasCajas.RemoveAt(0);
@@ -165,9 +178,6 @@ namespace ApotheGSF.Controllers
                             break;
                     }
                 }
-
-                //al final del mientras calcular el total del detalle
-                detalle.Total = detalle.Cantidad * detalle.Precio;
 
                 listaDetalle.Add(detalle);
 

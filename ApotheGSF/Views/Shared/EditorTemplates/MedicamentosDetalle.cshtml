@@ -1,11 +1,8 @@
 ﻿@model ApotheGSF.Clases.MedicamentosDetalle
 
-<input type="hidden" asp-for="CodigoDetalle"/>
+<input type="hidden" asp-for="CodigoDetalle" />
 
-@for (int j = 0; j < Model.CodigosCajas.Count; j++)
-{
-    @Html.HiddenFor(model => Model.CodigosCajas[j])
-}
+@Html.HiddenFor(model => Model.CodigoCaja)
 
 <tr>
     <td>

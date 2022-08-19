@@ -65,10 +65,7 @@
                         @for (int j = 0; j < Model.MedicamentosDetalle.Count; j++)
                         {
                             @Html.HiddenFor(model => Model.MedicamentosDetalle[j].CodigoDetalle)
-                            @for (int k = 0; k < Model.MedicamentosDetalle[j].CodigosCajas.Count; k++)
-                            {
-                                @Html.HiddenFor(model => Model.MedicamentosDetalle[j].CodigosCajas[k])
-                            }
+                            @Html.HiddenFor(model => Model.MedicamentosDetalle[j].CodigoCaja)
                             @Html.HiddenFor(model => Model.MedicamentosDetalle[j].NombreMedicamento)
                             @Html.HiddenFor(model => Model.MedicamentosDetalle[j].TipoCantidad)
                             @Html.HiddenFor(model => Model.MedicamentosDetalle[j].Cantidad)
@@ -114,9 +111,9 @@
                                             }
                                         </div>
                                         <div class="col-sm-8">
-                                            <label><input type="checkbox"  asp-for="MedicamentosDetalle[j].Abierto"> Fue Abierto?</label>
+                                            <label><input type="checkbox" asp-for="MedicamentosDetalle[j].Abierto"> Fue Abierto?</label>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </td>
                             </tr>
                             i = i + 1;

@@ -6,7 +6,7 @@ namespace ApotheGSF.Models
     public class Facturas
     {
         [Key]
-        [Display(Name = "Código: ")]
+        [Display(Name = "No. Factura: ")]
         public int Codigo { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "SubTotal: ")]

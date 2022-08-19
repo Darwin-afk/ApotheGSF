@@ -66,10 +66,7 @@ namespace ApotheGSF.Controllers
             if (listado.Count == 0 && search == 1)
                 _notyf.Information("No hay facturas existentes");
 
-            for (int i = 0; i < listado.Count; i++)
-                listado[i].Posicion = i + 1;
-
-            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Posicion" : sortExpression;//verificar para fecha
+            sortExpression = string.IsNullOrWhiteSpace(sortExpression) ? "Codigo" : sortExpression;//verificar para fecha
             var model = PagingList.Create(listado, 3, pageindex, sortExpression, "");
             model.RouteValue = new RouteValueDictionary {
                             { "desde", desde},

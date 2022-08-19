@@ -36,7 +36,7 @@
             <thead>
                 <tr>
                     <th>
-                        #
+                        @Html.SortableHeaderFor(model => model.Codigo)
                     </th>
                     <th>
                         @Html.SortableHeaderFor(model => model.Creado)
@@ -55,7 +55,7 @@
                 {
                     <tr>
                         <td>
-                            @item.Posicion
+                            @Html.DisplayFor(modelItem => item.Codigo)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Creado)

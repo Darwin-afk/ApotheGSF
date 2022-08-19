@@ -192,7 +192,7 @@ namespace ApotheGSF.Controllers
             //obtener lista de medicamentos que no esten inactivos
             var medicamentos = await _context.Medicamentos.Where(m => m.Inactivo == false).ToListAsync();
 
-            foreach(var medicamento in medicamentos)
+            foreach (var medicamento in medicamentos)
             {
                 medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
             }
@@ -209,10 +209,10 @@ namespace ApotheGSF.Controllers
 
                 List<Laboratorios> laboratoriosUsar = new();
                 List<Laboratorios> laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false).ToListAsync();
-                
-                foreach(var laboratorio in laboratorios)
+
+                foreach (var laboratorio in laboratorios)
                 {
-                    if(primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
+                    if (primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
                     {
                         laboratoriosUsar.Add(laboratorio);
                     }
@@ -721,73 +721,103 @@ namespace ApotheGSF.Controllers
                 _notyf.Error("No se ha podido eliminar");
                 return false;
             }
-            //var factura = await _context.Facturas.FindAsync(viewModel.Codigo);
-            //if (factura != null)
-            //{
-            //    factura.Inactivo = true;
-            //    _context.Update(factura);
 
-            //    //por cada detalle en medicamentosDetalle
-            //    foreach (var detalle in viewModel.MedicamentosDetalle)
-            //    {
-            //        //si la caja no fue abierta
-            //        if (detalle.Abierto == false)
-            //        {
-            //            if (detalle.TipoCantidad == 1)//si es caja
-            //            {
-            //                if (detalle.CantidadAbierto <= detalle.Cantidad)
-            //                {
-            //                    //foreach (var codigoCaja in detalle.CodigosCajas)
-            //                    for (int i = 0; i < detalle.CantidadAbierto; i++)
-            //                    {
-            //                        MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == detalle.CodigosCajas[i]).FirstOrDefault();
+            var factura = await _context.Facturas.FindAsync(viewModel.Codigo);
+            if (factura != null)
+            {
+                factura.Inactivo = true;
+                _context.Update(factura);
 
-            //                        Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
+                int codigoCaja = 0;
 
-            //                        _context.Update(caja);
-            //                        caja.CantidadUnidad = medicamento.UnidadesCaja;
-            //                        caja.Detallada = false;
-            //                    }
-            //                }
-            //                else
-            //                {
-            //                    //mensaje de error
-            //                }
-            //            }
-            //            else//si es unidades
-            //            {
-            //                int cantidadDevolver = detalle.Cantidad;
+                //por cada detalle en medicamentosDetalle
+                foreach (var detalle in viewModel.MedicamentosDetalle)
+                {
+                    List<int> codigosCajas = new();
 
-            //                foreach (var codigoCaja in detalle.CodigosCajas)
-            //                {
-            //                    MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == codigoCaja).FirstOrDefault();
+                    //si la caja no fue abierta
+                    if (detalle.Abierto == false)
+                    {
+                        if (detalle.TipoCantidad == 1)//si es caja
+                        {
+                            MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == detalle.CodigoCaja.ToInt()).FirstOrDefault();
 
-            //                    Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
+                            Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
 
-            //                    _context.Update(caja);
+                            _context.Update(caja);
+                            caja.CantidadUnidad = medicamento.UnidadesCaja;
+                            caja.Detallada = false;
+                        }
+                        else//si es unidades
+                        {
+                            if (!int.TryParse(detalle.CodigoCaja, out codigoCaja))
+                            {
+                                var codigos = detalle.CodigoCaja.Split(",");
 
-            //                    if (caja.CantidadUnidad + cantidadDevolver <= medicamento.UnidadesCaja)
-            //                    {
-            //                        caja.CantidadUnidad += cantidadDevolver;
-            //                    }
-            //                    else
-            //                    {
-            //                        caja.CantidadUnidad += medicamento.UnidadesCaja - cantidadDevolver;
-            //                        cantidadDevolver -= medicamento.UnidadesCaja - cantidadDevolver;
-            //                    }
+                                foreach (var codigo in codigos)
+                                {
+                                    codigosCajas.Add(codigo.ToInt());
+                                }
+                            }
 
-            //                    if (caja.CantidadUnidad == medicamento.UnidadesCaja)
-            //                    {
-            //                        caja.Detallada = false;
-            //                    }
+                            int cantidadDevolver = detalle.Cantidad; ;
 
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //await _context.SaveChangesAsync();
-            //return true;
+                            if (codigosCajas.Count == 0)
+                            {
+                                MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == codigoCaja).FirstOrDefault();
+
+                                Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
+
+                                _context.Update(caja);
+
+                                if (caja.CantidadUnidad + cantidadDevolver <= medicamento.UnidadesCaja)
+                                {
+                                    caja.CantidadUnidad += cantidadDevolver;
+                                }
+                                else
+                                {
+                                    caja.CantidadUnidad += medicamento.UnidadesCaja - cantidadDevolver;
+                                    cantidadDevolver -= medicamento.UnidadesCaja - cantidadDevolver;
+                                }
+
+                                if (caja.CantidadUnidad == medicamento.UnidadesCaja)
+                                {
+                                    caja.Detallada = false;
+                                }
+                            }
+                            else
+                            {
+                                foreach (var codigo in codigosCajas)
+                                {
+                                    MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == codigo).FirstOrDefault();
+
+                                    Medicamentos medicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault();
+
+                                    _context.Update(caja);
+
+                                    if (caja.CantidadUnidad + cantidadDevolver <= medicamento.UnidadesCaja)
+                                    {
+                                        caja.CantidadUnidad += cantidadDevolver;
+                                    }
+                                    else
+                                    {
+                                        caja.CantidadUnidad += medicamento.UnidadesCaja - cantidadDevolver;
+                                        cantidadDevolver -= medicamento.UnidadesCaja - cantidadDevolver;
+                                    }
+
+                                    if (caja.CantidadUnidad == medicamento.UnidadesCaja)
+                                    {
+                                        caja.Detallada = false;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+            return true;
         }
 
 
@@ -807,7 +837,7 @@ namespace ApotheGSF.Controllers
             Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).FirstOrDefaultAsync();
 
             medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
-            
+
             if (MedicamentoId == 0)
             {
                 _notyf.Warning("Seleccione un medicamento");
@@ -1115,9 +1145,9 @@ namespace ApotheGSF.Controllers
 
                 int cantidadUsar = 0;
 
-                foreach(var caja in cajasUsar)
+                foreach (var caja in cajasUsar)
                 {
-                    if(tipoCantidad == 1)
+                    if (tipoCantidad == 1)
                     {
                         cantidadUsar = 1;
                         cantidad--;

@@ -100,16 +100,6 @@
                                 </td>
                                 <td>
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            @if (Model.MedicamentosDetalle[j].TipoCantidad == 1)
-                                            {
-                                                <input type="number" class="form-control" asp-for="MedicamentosDetalle[j].CantidadAbierto">
-                                            }
-                                            else
-                                            {
-                                                <input type="hidden" class="form-control" asp-for="MedicamentosDetalle[j].CantidadAbierto">
-                                            }
-                                        </div>
                                         <div class="col-sm-8">
                                             <label><input type="checkbox" asp-for="MedicamentosDetalle[j].Abierto"> Fue Abierto?</label>
                                         </div>

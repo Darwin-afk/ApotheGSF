@@ -8,8 +8,6 @@ namespace ApotheGSF.ViewModels
     {
         [Display(Name = "Código: ")]
         public int Codigo { get; set; }
-        [Display(Name = "Cliente: ")]
-        public string NombreCliente { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "SubTotal: ")]
         

@@ -8,8 +8,6 @@ namespace ApotheGSF.Models
         [Key]
         [Display(Name = "Código: ")]
         public int Codigo { get; set; }
-        [Display(Name = "Cliente: ")]
-        public string NombreCliente { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}")]
         [Display(Name = "SubTotal: ")]
         public float SubTotal { get; set; }

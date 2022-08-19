@@ -137,10 +137,10 @@ namespace ApotheGSF.Controllers
 
             List<MedicamentosCajas> cajas = _context.MedicamentosCajas.Where(m => m.CodigoMedicamento == medicamento.Codigo && m.CantidadUnidad > 0 && m.Inactivo == false).OrderBy(mc => mc.FechaVencimiento).ToList();
 
-            for (int i = 0; i < cajas.Count; i++)
-                cajas[i].NumeroCaja = i + 1;
+            //for (int i = 0; i < cajas.Count; i++)
+            //    cajas[i].NumeroCaja = i + 1;
 
-            var inventario = PagingList.Create(cajas, 5, pageindex, "NumeroCaja", "");
+            var inventario = PagingList.Create(cajas, 5, pageindex, "FechaVencimiento", "");
 
             inventario.Action = "Details";
 

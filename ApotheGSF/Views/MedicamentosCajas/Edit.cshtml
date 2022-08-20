@@ -18,22 +18,15 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-capsules"></i></span>
                     </div>
-                    <select asp-for="CodigoMedicamento" class="form-control" placeholder="Seleccione el Medicamento" asp-items="ViewBag.MedicamentosId">
-                        <option value="">Seleccione el Medicamento</option>
-                    </select>
+                    <input type="text" readonly class="form-control" value="@ViewBag.MedicamentosId" />
                 </div>
-
-
-
 
                 <label asp-for="CodigoLaboratorio" class="col-form-label"></label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-flask"></i></span>
                     </div>
-                    <select asp-for="CodigoLaboratorio" class="form-control" placeholder="Seleccione un Laboratorio" asp-items="ViewBag.LaboratoriosId">
-                        <option value="">Seleccione un Laboratorio</option>
-                    </select>
+                    <input type="text" readonly class="form-control" value="@ViewBag.LaboratoriosId" />
                 </div>
                 <div>
                 <span asp-validation-for="CodigoLaboratorio" class="text-danger"></span>
@@ -105,6 +98,7 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <input type="hidden" asp-for="CodigoMedicamento" />
+                        <input type="hidden" asp-for="CodigoLaboratorio" />
                         <input type="hidden" asp-for="Codigo" />
                     </div>
                     <div class="col-sm-4 text-center">

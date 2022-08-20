@@ -845,7 +845,15 @@ namespace ApotheGSF.Controllers
             //si hay cajas que agregar en vez de unidades
             if (cantidadCajas > 0)
             {
+                //agregar a cajas usadas las cajas a usar
+                foreach (var caja in cajasUsar)
+                    cajasUsadas.Add(caja);
+
                 resultado = AgregarCaja(viewModel, medicamento, laboratorioId, 1, cantidadCajas, cajasUsadas);
+
+                //eliminar primera caja
+                cajas.RemoveAt(0);
+
                 if (resultado.error)
                 {
                     return GenerarPartialView(resultado.error, resultado.viewModel);
@@ -874,12 +882,6 @@ namespace ApotheGSF.Controllers
                 //si la suma de la cantidad del detalle anterior mas la cantidad agregar es => a las unidades por medicamento
                 if (cantidaAnterior + cantidad >= medicamento.UnidadesCaja)
                 {
-                    existente = false;
-
-                    //se agregar otra caja
-                    cantidad -= medicamento.UnidadesCaja - cantidaAnterior;
-                    viewModel = AgregarCaja(viewModel, medicamento, laboratorioId, 1, 1, cajasUsadas).viewModel;
-
                     //se eliminan los detalles anteriores
                     foreach (var detalle in detallesAnteriores)
                     {
@@ -891,6 +893,16 @@ namespace ApotheGSF.Controllers
                             viewModel.MedicamentosDetalle[i].CodigoDetalle = i;
                         }
                     }
+
+                    existente = false;
+
+                    //agregar a cajas usadas las cajas a usar
+                    foreach (var caja in cajasUsar)
+                        cajasUsadas.Add(caja);
+
+                    //se agregar otra caja
+                    cantidad -= medicamento.UnidadesCaja - cantidaAnterior;
+                    viewModel = AgregarCaja(viewModel, medicamento, laboratorioId, 1, 1, cajasUsadas).viewModel;
                 }
 
                 detalleId = detallesAnteriores.Last().CodigoDetalle;

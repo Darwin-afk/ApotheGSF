@@ -67,6 +67,7 @@ namespace ApotheGSF.Controllers
                                      Codigo = u.Id,
                                      Nombre = u.Nombre,
                                      Apellido = u.Apellido,
+                                     Cedula = u.Cedula,
                                      Telefono = u.PhoneNumber,
                                      Direccion = u.Direccion,
                                      Usuario = u.UserName,

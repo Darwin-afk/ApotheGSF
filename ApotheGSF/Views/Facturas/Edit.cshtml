@@ -186,11 +186,6 @@
                 var selector = $(element).selectize().data('selectize');
                 selector.clearOptions();
 
-                selector.addOption({ value: data[0]["codigo"], text: data[0]["nombre"]});
-                if (data.length == 0) {
-                    selector.addOption({ value: 0, text: "No hay datos"});
-                }
-
                 for (let i = 0; i < data.length; i++) {
                     selector.addOption({ value: data[i]["codigo"], text: data[i]["nombre"]});
                 }

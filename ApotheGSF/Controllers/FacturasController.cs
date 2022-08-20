@@ -206,22 +206,8 @@ namespace ApotheGSF.Controllers
 
             if (medicamentos.Any(m => m.MedicamentosCajas.Count > 0))
             {
-                var primerMedicamento = medicamentos[0];
-
-                List<Laboratorios> laboratoriosUsar = new();
-                List<Laboratorios> laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false).ToListAsync();
-
-                foreach (var laboratorio in laboratorios)
-                {
-                    if (primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
-                    {
-                        laboratoriosUsar.Add(laboratorio);
-                    }
-                }
-
                 //usar los medicamentos que tengan alguna caja en inventario
                 ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.MedicamentosCajas.Count > 0), "Codigo", "Nombre");
-                ViewData["LaboratoriosId"] = new SelectList(laboratoriosUsar, "Codigo", "Nombre");
 
 
                 detallesEdit = new();
@@ -277,13 +263,8 @@ namespace ApotheGSF.Controllers
                 item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
             }
 
-            var primerMedicamento = medicamentos[0];
-
-            var laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false && primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == l.Codigo)).ToListAsync();
-
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
-            ViewData["LaboratoriosId"] = new SelectList(laboratorios, "Codigo", "Nombre", primerMedicamento);
 
             _notyf.Error("Invalido");
             return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
@@ -467,22 +448,8 @@ namespace ApotheGSF.Controllers
 
             if (medicamentos.Any(m => m.MedicamentosCajas.Count > 0))
             {
-                var primerMedicamento = medicamentos[0];
-
-                List<Laboratorios> laboratoriosUsar = new();
-                List<Laboratorios> laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false).ToListAsync();
-
-                foreach (var laboratorio in laboratorios)
-                {
-                    if (primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == laboratorio.Codigo))
-                    {
-                        laboratoriosUsar.Add(laboratorio);
-                    }
-                }
-
                 //usar los medicamentos que tengan alguna caja en inventario
                 ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.MedicamentosCajas.Count > 0), "Codigo", "Nombre");
-                ViewData["LaboratoriosId"] = new SelectList(laboratoriosUsar, "Codigo", "Nombre");
 
                 return View(factura);
             }
@@ -565,13 +532,8 @@ namespace ApotheGSF.Controllers
                 item.Cajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == item.Codigo && mc.CantidadUnidad > 0 && mc.Inactivo == false).ToList().Count;
             }
 
-            var primerMedicamento = medicamentos[0];
-
-            var laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false && primerMedicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == l.Codigo)).ToListAsync();
-
             //usar los medicamentos que tengan alguna caja en inventario
             ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.Cajas > 0), "Codigo", "Nombre");
-            ViewData["LaboratoriosId"] = new SelectList(laboratorios, "Codigo", "Nombre", primerMedicamento);
 
             return Json(new ResultadoFactura() { resultado = false, codigofactura = 0 });
         }

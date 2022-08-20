@@ -11,8 +11,6 @@
                 document.getElementById('Total').value = (resultado.subtotal * 1.18).toFixed(2);
                 document.getElementById('itbis').value = (resultado.subtotal * 0.18).toFixed(2);
 
-                alert("prueba 1");
-
                 var selector = $('#MedicamentoId').selectize().data('selectize');
                 selector.setValue('', false);
 

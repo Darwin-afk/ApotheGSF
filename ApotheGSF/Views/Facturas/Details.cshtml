@@ -15,7 +15,7 @@
         <div class="card-body">
             <dl class="row">
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Codigo)
+                    Factura No.:
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Codigo)
@@ -38,10 +38,13 @@
                 <thead>
                     <tr>
                         <th>
-                            #
+                            Codigo
                         </th>
                         <th>
-                            Nombre Medicamento
+                            Medicamento
+                        </th>
+                        <th>
+                            Laboratorio
                         </th>
                         <th>
                             Tipo Cantidad
@@ -62,10 +65,13 @@
                     {
                         <tr>
                             <td>
-                                @i
+                                @item.CodigoCaja
                             </td>
                             <td>
                                 @item.NombreMedicamento
+                            </td>
+                            <td>
+                                @item.NombreLaboratorio
                             </td>
                             <td>
                                 @if (item.TipoCantidad == 1)

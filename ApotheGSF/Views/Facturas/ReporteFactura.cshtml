@@ -56,10 +56,10 @@
                     @Html.DisplayNameFor(model => model.SubTotal) &nbsp; @Html.DisplayFor(model => model.SubTotal)
                 </dt>
                 <dt class="col-sm-2">
-                    <label>ITBIS</label> &nbsp; @foreach(var item in Model.MedicamentosDetalle){
+                    @foreach(var item in Model.MedicamentosDetalle){
                         contador = contador + (item.Total * 0.18);
                     }
-                    <p>@contador.ToString("n2")</p>
+                    <p>ITBIS: &nbsp; @contador.ToString("n2")</p>
                 </dt>
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Total) &nbsp; @Html.DisplayFor(model => model.Total)

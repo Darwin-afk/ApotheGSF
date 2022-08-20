@@ -18,6 +18,7 @@ using System.Linq.Dynamic.Core;
 using Rotativa.AspNetCore;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApotheGSF.Controllers
 {
@@ -29,16 +30,19 @@ namespace ApotheGSF.Controllers
         private ICompositeViewEngine _viewEngine;
         private static List<MedicamentosDetalle>? detallesEdit;
         private readonly INotyfService _notyf;
+        private readonly UserManager<AppUsuario> _userManager;
 
         public FacturasController(AppDbContext context,
                                   IHttpContextAccessor accessor,
                                   ICompositeViewEngine viewEngine,
-                                  INotyfService notyf)
+                                  INotyfService notyf,
+                                  UserManager<AppUsuario> userManager)
         {
             _context = context;
             _user = accessor.HttpContext.User;
             _viewEngine = viewEngine;
             _notyf = notyf;
+            _userManager = userManager;
         }
 
         // GET: Facturas
@@ -1115,7 +1119,10 @@ namespace ApotheGSF.Controllers
 
             factura.MedicamentosDetalle = ObtenerDetalles(factura);
 
-            return new ViewAsPdf("ReporteFactura", factura)
+            //obtener nombre del usuario
+            AppUsuario usuario = await _userManager.GetUserAsync(User);
+
+            return new ViewAsPdf("ReporteFactura", factura, new ViewDataDictionary(this.ViewData) { { "Nombre", usuario?.Nombre} })
             {
                 PageSize = Rotativa.AspNetCore.Options.Size.A6
             };

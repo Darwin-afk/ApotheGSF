@@ -652,6 +652,7 @@ namespace ApotheGSF.Controllers
         public async Task<ActionResult> AgregarMedicamento(FacturaViewModel viewModel, int MedicamentoId, int LaboratorioId, int TipoCantidad, int Cantidad)
         {
             List<int>? cajasUsadas = new();
+            List<int>? cajasUsar = new();
             bool existente = false;
             int detalleId = 0;
             Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).FirstOrDefaultAsync();
@@ -694,11 +695,29 @@ namespace ApotheGSF.Controllers
                 //por cada detalle
                 foreach (var detalle in viewModel.MedicamentosDetalle)
                 {
-                    //si tiene el mismo codigo medicamento y codigo laboratorio
-                    if (detalle.CodigoMedicamento == medicamento.Codigo && detalle.CodigoLaboratorio == LaboratorioId)
+                    if (TipoCantidad == 2)
                     {
-                        //agrega su caja  a cajas usadas
-                        cajasUsadas.Add(detalle.CodigoCaja);
+                        //si tiene el mismo codigo medicamento y codigo laboratorio
+                        if (detalle.CodigoMedicamento == medicamento.Codigo && detalle.CodigoLaboratorio == LaboratorioId && detalle.TipoCantidad == 1)
+                        {
+                            //agrega su caja  a cajas usadas
+                            cajasUsadas.Add(detalle.CodigoCaja);
+                        }
+
+                        if (detalle.CodigoMedicamento == medicamento.Codigo && detalle.CodigoLaboratorio == LaboratorioId && detalle.TipoCantidad == 2)
+                        {
+                            //agrega su caja  a cajas usadas
+                            cajasUsar.Add(detalle.CodigoCaja);
+                        }
+                    }
+                    else
+                    {
+                        //si tiene el mismo codigo medicamento y codigo laboratorio
+                        if (detalle.CodigoMedicamento == medicamento.Codigo && detalle.CodigoLaboratorio == LaboratorioId)
+                        {
+                            //agrega su caja  a cajas usadas
+                            cajasUsadas.Add(detalle.CodigoCaja);
+                        }
                     }
                 }
 
@@ -708,7 +727,7 @@ namespace ApotheGSF.Controllers
                 }
                 else//unidades
                 {
-                    return Json(AgregarUnidades(viewModel, medicamento, LaboratorioId, TipoCantidad, Cantidad, cajasUsadas));
+                    return Json(AgregarUnidades(viewModel, medicamento, LaboratorioId, TipoCantidad, Cantidad, cajasUsadas, cajasUsar));
                 }
             }
             else//medicamento nuevo
@@ -719,7 +738,7 @@ namespace ApotheGSF.Controllers
                 }
                 else//unidades
                 {
-                    return Json(AgregarUnidades(viewModel, medicamento, LaboratorioId, TipoCantidad, Cantidad, cajasUsadas));
+                    return Json(AgregarUnidades(viewModel, medicamento, LaboratorioId, TipoCantidad, Cantidad, cajasUsadas, cajasUsar));
                 }
             }
         }
@@ -767,12 +786,13 @@ namespace ApotheGSF.Controllers
             return GenerarPartialView(false, viewModel);
         }
 
-        private ResultadoAjax AgregarUnidades(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int>? cajasUsadas)
+        private ResultadoAjax AgregarUnidades(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int>? cajasUsadas, List<int>? cajasUsar)
         {
-            List<int> cajasUsar = new();
             int cantidadUsar = 0;
             int cantidadCajas = 0;
             int cantidadAgregar = 0;
+            int detalleId = 0;
+            bool existente = false;
             ResultadoAjax resultado = new ResultadoAjax();
             MedicamentosCajas? cajaDetallada = null;
 
@@ -837,8 +857,11 @@ namespace ApotheGSF.Controllers
             {
                 return GenerarPartialView(resultado.error, resultado.viewModel);
             }
+
             if (viewModel.MedicamentosDetalle.Any(md => md.CodigoMedicamento == medicamento.Codigo && md.CodigoLaboratorio == laboratorioId && md.TipoCantidad == 2))
             {
+                existente = true;
+
                 //obtener la lista de detalles anteriores del mismo medicamento con el mismo TipoCantidad
                 List<MedicamentosDetalle> detallesAnteriores = viewModel.MedicamentosDetalle.Where(md => md.CodigoMedicamento == medicamento.Codigo && md.CodigoLaboratorio == laboratorioId && md.TipoCantidad == 2).ToList();
 
@@ -851,6 +874,8 @@ namespace ApotheGSF.Controllers
                 //si la suma de la cantidad del detalle anterior mas la cantidad agregar es => a las unidades por medicamento
                 if (cantidaAnterior + cantidad >= medicamento.UnidadesCaja)
                 {
+                    existente = false;
+
                     //se agregar otra caja
                     cantidad -= medicamento.UnidadesCaja - cantidaAnterior;
                     viewModel = AgregarCaja(viewModel, medicamento, laboratorioId, 1, 1, cajasUsadas).viewModel;
@@ -867,6 +892,9 @@ namespace ApotheGSF.Controllers
                         }
                     }
                 }
+
+                detalleId = detallesAnteriores.Last().CodigoDetalle;
+
                 //obtener ultima caja del detalle anterior
                 MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.Codigo == detallesAnteriores.Last().CodigoCaja).FirstOrDefault();
                 //MedicamentosCajas ultimaCaja = cajas.Where(mc => mc.Codigo == detalleAnterior.CodigoCaja).FirstOrDefault();
@@ -899,7 +927,7 @@ namespace ApotheGSF.Controllers
 
             if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
             {
-                viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar);
+                viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
                 return GenerarPartialView(false, viewModel);
             }
 
@@ -911,7 +939,7 @@ namespace ApotheGSF.Controllers
 
                 if (cantidad <= cantidadUsar)//si la cantidad a usar es suficiente para lo que se pide
                 {
-                    viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar);
+                    viewModel = AgregarDetalle(viewModel, medicamento, laboratorioId, tipoCantidad, cantidad, cajasUsar, existente, detalleId);
                     return GenerarPartialView(false, viewModel);
                 }
             }
@@ -920,54 +948,64 @@ namespace ApotheGSF.Controllers
             return GenerarPartialView(true, viewModel);
         }
 
-        private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int> cajasUsar)
+        private FacturaViewModel AgregarDetalle(FacturaViewModel viewModel, Medicamentos medicamento, int laboratorioId, int tipoCantidad, int cantidad, List<int> cajasUsar, bool existente = false, int detalleId = 0)
         {
-            var laboratorio = _context.Laboratorios.Where(l => l.Codigo == laboratorioId).FirstOrDefault();
-
-            int cantidadUsar;
-
-            foreach (var codigo in cajasUsar)
+            if (existente == true)
             {
-                if (tipoCantidad == 1)
+                viewModel.MedicamentosDetalle[detalleId].Cantidad += cantidad;
+                viewModel.MedicamentosDetalle[detalleId].Total = viewModel.MedicamentosDetalle[detalleId].Precio * viewModel.MedicamentosDetalle[detalleId].Cantidad;
+            }
+            else
+            {
+                var laboratorio = _context.Laboratorios.Where(l => l.Codigo == laboratorioId).FirstOrDefault();
+
+                int cantidadUsar;
+
+                foreach (var codigo in cajasUsar)
                 {
-                    cantidadUsar = 1;
-                    cantidad--;
-                }
-                else
-                {
-                    //caja de cajasUsar
-                    MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == codigo).FirstOrDefault();
-                    //si la cantidad de la caja es menor o igual a la cantidad a agregar se agregar
-                    if(caja.CantidadUnidad <= cantidad)
+                    if (tipoCantidad == 1)
                     {
-                        cantidadUsar = cantidad;
+                        cantidadUsar = 1;
+                        cantidad--;
                     }
                     else
                     {
-                        //si no se agrega la cantidad de cajas y resta a la cantidad
-                        cantidadUsar = caja.CantidadUnidad;
-                        cantidad -= caja.CantidadUnidad;
+                        //caja de cajasUsar
+                        MedicamentosCajas caja = _context.MedicamentosCajas.Where(mc => mc.Codigo == codigo).FirstOrDefault();
+                        //si la cantidad de la caja es menor o igual a la cantidad a agregar se agregar
+                        if (caja.CantidadUnidad >= cantidad)
+                        {
+                            cantidadUsar = cantidad;
+                        }
+                        else
+                        {
+                            //si no se agrega la cantidad de cajas y resta a la cantidad
+                            cantidadUsar = caja.CantidadUnidad;
+                            cantidad -= caja.CantidadUnidad;
+                        }
+
                     }
 
-                }
+                    MedicamentosDetalle detalle = new()
+                    {
+                        CodigoDetalle = viewModel.MedicamentosDetalle.Count(),
+                        CodigoCaja = codigo,
+                        CodigoMedicamento = medicamento.Codigo,
+                        CodigoLaboratorio = laboratorioId,
+                        NombreMedicamento = medicamento.Nombre,
+                        NombreLaboratorio = laboratorio.Nombre,
+                        TipoCantidad = tipoCantidad,
+                        Cantidad = cantidadUsar,
+                        Precio = medicamento.MedicamentosCajas.Where(mc => mc.Codigo == codigo).First().PrecioUnidad
+                    };
 
-                MedicamentosDetalle detalle = new()
-                {
-                    CodigoDetalle = viewModel.MedicamentosDetalle.Count(),
-                    CodigoCaja = codigo,
-                    CodigoMedicamento = medicamento.Codigo,
-                    CodigoLaboratorio = laboratorioId,
-                    NombreMedicamento = medicamento.Nombre,
-                    NombreLaboratorio = laboratorio.Nombre,
-                    TipoCantidad = tipoCantidad,
-                    Cantidad = cantidadUsar,
-                    Precio = medicamento.MedicamentosCajas.Where(mc => mc.Codigo == codigo).First().PrecioUnidad
-                };
+                    if (tipoCantidad == 1)//cajas
+                        detalle.Precio = detalle.Precio * medicamento.UnidadesCaja;
 
-                if (tipoCantidad == 1)//cajas
                     detalle.Total = detalle.Precio * detalle.Cantidad;
 
-                viewModel.MedicamentosDetalle.Add(detalle);
+                    viewModel.MedicamentosDetalle.Add(detalle);
+                }
             }
 
             return viewModel;
@@ -1084,7 +1122,7 @@ namespace ApotheGSF.Controllers
             //obtener nombre del usuario
             AppUsuario usuario = await _userManager.GetUserAsync(User);
 
-            return new ViewAsPdf("ReporteFactura", factura, new ViewDataDictionary(this.ViewData) { { "Nombre", usuario?.Nombre} })
+            return new ViewAsPdf("ReporteFactura", factura, new ViewDataDictionary(this.ViewData) { { "Nombre", usuario?.Nombre } })
             {
                 PageSize = Rotativa.AspNetCore.Options.Size.A6
             };

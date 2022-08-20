@@ -52,17 +52,23 @@
         <hr />
         <div class="card-body">
             <dl class="row text-end">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.SubTotal) &nbsp; @Html.DisplayFor(model => model.SubTotal)
+                <dt class="row">
+                    @Html.DisplayNameFor(model => model.SubTotal)
+                    <pre style='display:inline'></pre>
+                    @Html.DisplayFor(model => model.SubTotal)
                 </dt>
-                <dt class="col-sm-2">
-                    @foreach(var item in Model.MedicamentosDetalle){
+                <dt class="row">
+                    @foreach (var item in Model.MedicamentosDetalle)
+                    {
                         contador = contador + (item.Total * 0.18);
                     }
-                    <p>ITBIS: &nbsp; @contador.ToString("n2")</p>
+                    ITBIS:&nbsp&nbsp<pre style='display:inline'></pre>
+                    @contador.ToString("n2")                    
                 </dt>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Total) &nbsp; @Html.DisplayFor(model => model.Total)
+                <dt class="row">
+                    @Html.DisplayNameFor(model => model.Total)
+                    <pre style='display:inline'></pre>
+                    @Html.DisplayFor(model => model.Total)
                 </dt>
             </dl>
         </div>

@@ -122,7 +122,7 @@
                                 <label for="FechaIngreso" class="col-form-label">SubTotal</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" asp-for="SubTotal" class="form-control" readonly>
+                                <input type="number" asp-for="SubTotal" class="form-control text-end" readonly value="0.00">
                             </div>
                         </div>
 
@@ -131,7 +131,7 @@
                                 <label class="col-form-label">ITBIS</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" id="itbis" class="form-control" disabled value="0.00">
+                                <input type="number" id="itbis" class="form-control text-end" disabled value="0.00">
                             </div>
                         </div>
 
@@ -140,7 +140,7 @@
                                 <label class="col-form-label">Total</label>
                             </div>
                             <div class="col-sm-8">
-                                <input asp-for="Total" type="number" class="form-control" readonly>
+                                <input asp-for="Total" type="number" class="form-control text-end" readonly value="0.00">
                             </div>
                         </div>
                     </div>

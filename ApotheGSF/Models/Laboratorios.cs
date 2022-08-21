@@ -19,15 +19,15 @@ namespace ApotheGSF.Models
         public string RNC { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio")]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
+        [RegularExpression(@"^(\+1)?\s?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})(\s?(x|([Ee]xt[.:]?\s?))[0-9]{4})?$", ErrorMessage = "Teléfono inválido")]
         [Display(Name = "Teléfono 1: ")]
         public string Telefono1 { get; set; }
 
 
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
+        [RegularExpression(@"^(\+1)?\s?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})(\s?(x|([Ee]xt[.:]?\s?))[0-9]{4})?$", ErrorMessage = "Teléfono inválido")]
         [Display(Name = "Teléfono 2: ")]
         public string? Telefono2 { get; set; }
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Fax inválido")]
+        [RegularExpression(@"^(\+1)?\s?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})(\s?(x|([Ee]xt[.:]?\s?))[0-9]{4})?$", ErrorMessage = "Fax inválido")]
         [Display(Name = "Fax: ")]
         public string? Fax { get; set; }
 

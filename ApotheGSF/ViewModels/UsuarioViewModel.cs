@@ -57,7 +57,7 @@ namespace ApotheGSF.ViewModels
 
 		[Phone]
 		[Required(ErrorMessage = "Digite el teléfono")]
-		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Teléfono inválido")]
+		[RegularExpression(@"^(\+1)?\s?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})(\s?(x|([Ee]xt[.:]?\s?))[0-9]{4})?$", ErrorMessage = "Teléfono inválido")]
 		[Display(Name = "Teléfono: ")]
 		public string Telefono { get; set; }
 

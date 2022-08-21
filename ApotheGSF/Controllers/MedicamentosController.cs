@@ -377,8 +377,19 @@ namespace ApotheGSF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EnviarCorreo([Bind("NombreMedicamento,CodigoProveedor,Cajas")] CorreoViewModel correo)
+        public IActionResult EnviarCorreo([Bind("NombreMedicamento,CodigoLaboratorio,Cajas")] CorreoViewModel correo)
         {
+            if(correo.CodigoLaboratorio <= 0)
+            {
+                _notyf.Error("Debe seleccionar algun laboratorio");
+
+                Medicamentos _medicamento = _context.Medicamentos.Where(m => m.Nombre == correo.NombreMedicamento).FirstOrDefault();
+
+                ViewBag.ProveedoresId = new SelectList(_context.Laboratorios.Where(p => p.Inactivo == false).ToList(), "Codigo", "Nombre");
+
+                return View(correo);
+            }
+
             if (correo.Cajas <= 0)
             {
                 _notyf.Error("La cantidad de cajas debe ser mayor a 0");
@@ -439,7 +450,7 @@ namespace ApotheGSF.Controllers
 
         private MailMessage GenerarCorreo(CorreoViewModel correo)
         {
-            Laboratorios laboratorio = _context.Laboratorios.Where(p => p.Codigo == correo.Laboratorio).FirstOrDefault();
+            Laboratorios laboratorio = _context.Laboratorios.Where(p => p.Codigo == correo.CodigoLaboratorio).FirstOrDefault();
 
             var mail = new MailMessage();
             mail.From = new MailAddress($"{correEmisor}", "Botica Popular", Encoding.UTF8);

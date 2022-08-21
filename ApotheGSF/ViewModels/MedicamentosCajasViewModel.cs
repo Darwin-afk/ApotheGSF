@@ -7,8 +7,10 @@ namespace ApotheGSF.ViewModels
     {
         [Display(Name = "Código: ")]
         public int CodigoCaja { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Medicamento: ")]
         public int CodigoMedicamento { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio")]
         [Display(Name = "Laboratorio: ")]
         public int CodigoLaboratorio { get; set; }
         [Required(ErrorMessage = "Digite una cantidad")]

@@ -51,7 +51,7 @@ namespace ApotheGSF.ViewModels
 
         [Required(ErrorMessage = "Digite el correo electrónico del usuario.")]
 		[MaxLength(100)]
-		[EmailAddress]
+		[EmailAddress(ErrorMessage = "Email inválido")]
 		[Display(Name = "Email: ")]
 		public string Email { get; set; }
 

@@ -59,10 +59,15 @@ namespace ApotheGSF.Controllers
             Notificaciones.Mensajes = new List<string>();
 
             //obtener cada medicamento con su cajas incluidas
-            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas.Where(mc => mc.CantidadUnidad > 0)).ToList();
+            List<Medicamentos> medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).ToList();
 
             if (medicamentos == null)
                 return true;
+
+            foreach (var medicamento in medicamentos)
+            {
+                medicamento.MedicamentosCajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo && mc.CantidadUnidad > 0).ToArray();
+            }
 
             //por cada medicamento
             foreach (var medicamento in medicamentos)
@@ -102,12 +107,18 @@ namespace ApotheGSF.Controllers
             }
 
             //obtener de nuevo cada medicamento con su cajas incluidas por si hubo cajas que se desactivaron
-            medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).Include(m => m.MedicamentosCajas).ToList();
+            medicamentos = _context.Medicamentos.Where(m => m.Inactivo == false).ToList();
+
+            foreach (var medicamento in medicamentos)
+            {
+                medicamento.MedicamentosCajas = _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo && mc.CantidadUnidad > 0).ToArray();
+            }
+
             //por cada medicamento
             foreach (var medicamento in medicamentos)
             {
                 //si su cantidad de cajas es menor x limite y no hay envios en curso
-                if (medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count < medicamento.Reorden && medicamento.EnvioPendiente == false)
+                if (medicamento.MedicamentosCajas.Where(mc => mc.Inactivo == false && mc.CantidadUnidad > 0).ToList().Count <= medicamento.Reorden && medicamento.EnvioPendiente == false)
                 {
                     //se agrega una notificacion de reabastecimiento
                     Notificaciones.Mensajes.Add($"&nbsp;&nbsp;&nbsp;{medicamento.Nombre} le queda poca mercancia, desea <a href=\"/Medicamentos/EnviarCorreo?codigoMedicamento={medicamento.Codigo}\">solicitar mas</a>");

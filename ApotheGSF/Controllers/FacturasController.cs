@@ -141,6 +141,8 @@ namespace ApotheGSF.Controllers
                 };
 
                 caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+                detalle.CodigoMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Codigo;
+                detalle.CodigoLaboratorio = _context.Laboratorios.Where(l => l.Codigo == caja.CodigoLaboratorio).FirstOrDefault().Codigo;
                 detalle.NombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
                 detalle.NombreLaboratorio = _context.Laboratorios.Where(l => l.Codigo == caja.CodigoLaboratorio).FirstOrDefault().Nombre;
                 detalle.Total = detalle.Cantidad * detalle.Precio;
@@ -152,6 +154,8 @@ namespace ApotheGSF.Controllers
                 if (facturasCajas.Count > 0)
                 {
                     caja = cajas.Where(mc => mc.Codigo == facturasCajas[0].CodigoCaja).FirstOrDefault();
+                    int codigoMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Codigo;
+                    int codigoLaboratorio = _context.Laboratorios.Where(l => l.Codigo == caja.CodigoLaboratorio).FirstOrDefault().Codigo;
                     string nombreMedicamento = _context.Medicamentos.Where(m => m.Codigo == caja.CodigoMedicamento).FirstOrDefault().Nombre;
                     string nombreLaboratorio = _context.Laboratorios.Where(l => l.Codigo == caja.CodigoLaboratorio).FirstOrDefault().Nombre;
 
@@ -163,13 +167,14 @@ namespace ApotheGSF.Controllers
                         {
                             CodigoDetalle = listaDetalle.Count,
                             CodigoCaja = facturasCajas[0].CodigoCaja,
+                            CodigoMedicamento = codigoMedicamento,
+                            CodigoLaboratorio = codigoLaboratorio,
+                            NombreMedicamento = nombreMedicamento,
+                            NombreLaboratorio = nombreLaboratorio,
                             TipoCantidad = facturasCajas[0].TipoCantidad,
                             Cantidad = facturasCajas[0].CantidadUnidad,
                             Precio = facturasCajas[0].Precio
                         };
-
-                        detalle.NombreMedicamento = nombreMedicamento;
-                        detalle.NombreLaboratorio = nombreLaboratorio;
                         detalle.Total = detalle.Cantidad * detalle.Precio;
 
                         //excluir ese elemento de facturasCajas
@@ -451,6 +456,8 @@ namespace ApotheGSF.Controllers
                 //usar los medicamentos que tengan alguna caja en inventario
                 ViewData["MedicamentosId"] = new SelectList(medicamentos.Where(m => m.MedicamentosCajas.Count > 0), "Codigo", "Nombre");
 
+                ViewData["itbis"] = (factura.SubTotal * 0.18f).ToString("n2");
+
                 return View(factura);
             }
 
@@ -575,8 +582,6 @@ namespace ApotheGSF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<bool> DeleteConfirmed(FacturaViewModel viewModel)
         {
-            return false;
-
             if (_context.Facturas == null)
             {
                 _notyf.Error("No se ha podido eliminar");
@@ -655,15 +660,17 @@ namespace ApotheGSF.Controllers
             List<int>? cajasUsar = new();
             bool existente = false;
             int detalleId = 0;
-            Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).FirstOrDefaultAsync();
-
-            medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
 
             if (MedicamentoId == 0)
             {
                 _notyf.Warning("Seleccione un medicamento");
                 return Json(GenerarPartialView(true, viewModel));
             }
+
+            Medicamentos? medicamento = await _context.Medicamentos.Where(m => m.Codigo == MedicamentoId && m.Inactivo == false).FirstOrDefaultAsync();
+
+            medicamento.MedicamentosCajas = await _context.MedicamentosCajas.Where(mc => mc.CodigoMedicamento == medicamento.Codigo).ToArrayAsync();
+
 
             if (LaboratorioId == 0)
             {

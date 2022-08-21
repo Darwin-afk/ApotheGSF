@@ -19,6 +19,9 @@ using System.Net;
 using System.Net.Mime;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using System.Configuration;
+using ApotheGSF.Data;
 
 namespace ApotheGSF.Controllers
 {
@@ -28,6 +31,7 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
         private readonly INotyfService _notyf;
+        readonly IConfiguration Configuration;
 
         /*CONFIGURACIÓN SMTP:
     ---------------------------------------------------------
@@ -57,11 +61,13 @@ namespace ApotheGSF.Controllers
 
         public MedicamentosController(AppDbContext context,
                              IHttpContextAccessor accessor,
+                             IConfiguration _con,
                              INotyfService notyf
             )
         {
             _context = context;
             _user = accessor.HttpContext.User;
+            Configuration = _con;
             _notyf = notyf;
         }
 
@@ -339,6 +345,30 @@ namespace ApotheGSF.Controllers
             Medicamentos medicamento = await _context.Medicamentos.Where(m => m.Codigo == CodigoMedicamento).FirstOrDefaultAsync();
 
             return medicamento.UnidadesCaja;
+        }
+
+        public JsonResult ObtenerCategorias()
+        {
+            var dsCategorias = ReadJsonFiles(Configuration.GetSection("AppSettings")["IDataCategorias"]);
+
+            var seedCategorias = JsonConvert.DeserializeObject<JsonData>(dsCategorias);
+
+            List<Categorias> categorias = seedCategorias.Categorias;
+
+            return Json(categorias);
+        }
+
+        private string ReadJsonFiles(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("No hay una ruta");
+            }
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new ArgumentException("El archivo no existe");
+            }
+            return System.IO.File.ReadAllText(filePath);
         }
 
         [Authorize(Roles = "Administrador, Comprador")]

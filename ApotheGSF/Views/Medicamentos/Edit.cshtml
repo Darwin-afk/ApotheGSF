@@ -44,16 +44,6 @@
                             </div>
                             <select asp-for="Categoria" class="form-control"placeholder="Seleccione una Categoria">
                                 <option value="">Seleccione una Categoria</option>
-                                <option value="Analgesicos">Analgésicos</option>
-                                <option value="Antiacidos y Antiulcerosos">Antiácidos y Antiulcerosos</option>
-                                <option value="Antialergicos">Antialérgicos</option>
-                                <option value="Antidiarreicos y Laxantes">Antidiarreicos y Laxantes</option>
-                                <option value="Antiinfecciosos y Antivial">Antiinfecciosos y Antivial</option>
-                                <option value="Antiinflamatorios">Antiinflamatorios</option>
-                                <option value="Antipireticos">Antipiréticos</option>
-                                <option value="Antitusivos y Mucoliticos">Antitusivos y Mucolíticos</option>
-                                <option value="Antidepresivos">Antidepresivos</option>
-                                <option value="Anticonceptivos">Anticonceptivos</option>
                             </select>
                         </div>
                         <span asp-validation-for="Categoria" class="text-danger"></span>
@@ -142,4 +132,26 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        $(document).ready(function() {
+
+            url = '@this.Url.Content("~/")' + "Medicamentos/ObtenerCategorias";
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    fillSelectList("Categoria", data);
+                });
+
+            function fillSelectList(Id, data) {
+                var element = "#" + Id;
+
+                var selector = $(element).selectize().data('selectize');
+
+                for (let i = 0; i < data.length; i++) {
+                    selector.addOption({ value: data[i]["nombre"], text: data[i]["nombre"] });
+                }
+            }
+        });
+    </script>
     }

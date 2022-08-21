@@ -1,0 +1,34 @@
+{
+  "Categorias": [
+    {
+      "Nombre": "Analgesicos"
+    },
+    {
+      "Nombre": "Antiacidos y Antiulcerosos"
+    },
+    {
+      "Nombre": "Antialergicos"
+    },
+    {
+      "Nombre": "Antidiarreicos y Laxantes"
+    },
+    {
+      "Nombre": "Antiinfecciosos y Antivial"
+    },
+    {
+      "Nombre": "Antiinflamatorios"
+    },
+    {
+      "Nombre": "Antipireticos"
+    },
+    {
+      "Nombre": "Antitusivos y Mucoliticos"
+    },
+    {
+      "Nombre": "Antidepresivos"
+    },
+    {
+      "Nombre": "Anticonceptivos"
+    }
+  ]
+}

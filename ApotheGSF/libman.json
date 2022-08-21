@@ -23,7 +23,6 @@
       "destination": "wwwroot/lib/twitter-bootstrap"
     },
     {
-      "provider": "cdnjs",
       "library": "selectize.js@0.13.6",
       "destination": "wwwroot/lib/selectize.js/",
       "files": [

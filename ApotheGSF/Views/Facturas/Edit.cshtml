@@ -102,19 +102,6 @@
 
                 <div class="form-group row">
                     <div class="col-sm-8">
-                        @*<div class="form-group col-sm-8 row">
-                        <div class="col-sm-4">
-                        <label for="Estado" class="col-form-label">Estado</label>
-                        </div>
-                        <div class="col-sm-8">
-                        <select asp-for="Estado" type="text" class="form-control">
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                        </select>
-                        </div>
-                        </div>
-                        <div class="col-sm-4">
-                        </div>*@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group row">
@@ -152,7 +139,7 @@
                 <!--Botones-->
                 <input type="hidden" asp-for="Codigo" />
                 <button type="button" class="btn" onclick="FacturarEditar()" style="background-color:white;color:#007000;"><i class="fa-solid fa-cash-register"></i>&nbsp;Actualizar</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <a class="btn" asp-controller="Home" asp-action="Index" type="button" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
+                <a class="btn" asp-action="Index" type="button" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
                 <!--Fin Botones-->
             </div>
         </div>

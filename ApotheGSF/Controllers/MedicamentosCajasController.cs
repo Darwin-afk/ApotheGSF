@@ -223,6 +223,15 @@ namespace ApotheGSF.Controllers
 
             if (ModelState.IsValid)
             {
+                //no se puede editar la cantidad de una caja no detallable
+                if(medicamento.Detallable == false && medicamentosCajas.CantidadUnidad < medicamento.UnidadesCaja)
+                {
+                    _notyf.Error("No se puede modificar la cantidad de esta caja no detallable");
+                    ViewData["MedicamentosId"] = _context.Medicamentos.Where(x => x.Codigo == medicamentosCajas.CodigoMedicamento).FirstOrDefault().Nombre;
+                    ViewData["LaboratoriosId"] = _context.Laboratorios.Where(x => x.Codigo == medicamentosCajas.CodigoLaboratorio).FirstOrDefault().Nombre;
+                    return View(medicamentosCajas);
+                }
+
                 //validar la cantidad
                 if (medicamentosCajas.CantidadUnidad <= 0)
                 {

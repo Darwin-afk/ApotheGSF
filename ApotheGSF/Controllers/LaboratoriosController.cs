@@ -14,6 +14,8 @@ using System.Text;
 using System.Linq.Dynamic.Core;
 using ReflectionIT.Mvc.Paging;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Newtonsoft.Json;
+using ApotheGSF.Data;
 
 namespace ApotheGSF.Controllers
 {
@@ -24,15 +26,18 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
         private readonly INotyfService _notyf;
+        private readonly IConfiguration Configuration;
 
 
         public LaboratoriosController(AppDbContext context,
                              IHttpContextAccessor accessor,
+                             IConfiguration _con,
                              INotyfService notyf
             )
         {
             _context = context;
             _user = accessor.HttpContext.User;
+            Configuration = _con;
             _notyf = notyf;
         }
 
@@ -92,6 +97,8 @@ namespace ApotheGSF.Controllers
         // GET: Laboratorios/Create
         public IActionResult Create()
         {
+            ViewBag.TerminosPagos = new SelectList(ObtenerTerminosPagos(), "Nombre", "Nombre");
+
             return View();
         }
 
@@ -109,6 +116,7 @@ namespace ApotheGSF.Controllers
                 if (error != "")
                 {
                     _notyf.Error(error);
+                    ViewBag.TerminosPagos = new SelectList(ObtenerTerminosPagos(), "Nombre", "Nombre");
                     return View(laboratorio);
                 }
 
@@ -122,6 +130,7 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
 
             }
+            ViewBag.TerminosPagos = new SelectList(ObtenerTerminosPagos(), "Nombre", "Nombre");
             return View(laboratorio);
         }
 
@@ -262,6 +271,8 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            ViewBag.TerminosPagos = new SelectList(ObtenerTerminosPagos(), "Nombre", "Nombre", laboratorio.TerminosdePago);
+
             return View(laboratorio);
         }
 
@@ -281,6 +292,7 @@ namespace ApotheGSF.Controllers
                     if (error != "")
                     {
                         _notyf.Error(error);
+                        ViewBag.TerminosPagos = new SelectList(ObtenerTerminosPagos(), "Nombre", "Nombre", laboratorio.TerminosdePago);
                         return View(laboratorio);
                     }
 
@@ -306,6 +318,8 @@ namespace ApotheGSF.Controllers
                 _notyf.Custom("Se ha guardado exitosamente!!!", 5, "#17D155", "fas fa-check");
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.TerminosPagos = new SelectList(ObtenerTerminosPagos(), "Nombre", "Nombre", laboratorio.TerminosdePago);
             return View(laboratorio);
         }
 
@@ -378,6 +392,17 @@ namespace ApotheGSF.Controllers
             //var laboratorios = await _context.Laboratorios.Where(l => l.Inactivo == false && medicamento.MedicamentosCajas.Any(mc => mc.CodigoLaboratorio == l.Codigo)).ToListAsync();
 
             return Json(laboratoriosUsar);
+        }
+
+        public List<TerminosPagos> ObtenerTerminosPagos()
+        {
+            var dsTerminosPagos = Extensiones.ReadJsonFiles(Configuration.GetSection("AppSettings")["IDataTerminosPagos"]);
+
+            var seedTerminosPagos = JsonConvert.DeserializeObject<JsonData>(dsTerminosPagos);
+
+            List<TerminosPagos> terminosPagos = seedTerminosPagos.TerminosPagos;
+
+            return terminosPagos;
         }
     }
 }

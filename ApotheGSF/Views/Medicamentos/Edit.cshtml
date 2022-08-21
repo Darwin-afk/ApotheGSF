@@ -42,7 +42,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-tags"></i></span>
                             </div>
-                            <select asp-for="Categoria" class="form-control"placeholder="Seleccione una Categoria">
+                            <select asp-for="Categoria" class="form-control"placeholder="Seleccione una Categoria" asp-items="@ViewBag.Categorias">
                                 <option value="">Seleccione una Categoria</option>
                             </select>
                         </div>
@@ -54,12 +54,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-prescription-bottle"></i></span>
                             </div>
-                            <select asp-for="Sustancia" class="form-control" placeholder="Seleccione una Sustancia">
+                            <select asp-for="Sustancia" class="form-control" placeholder="Seleccione una Sustancia" asp-items="@ViewBag.Sustancias">
                                 <option value="">Seleccione una Sustancia</option>
-                                <option value="Liquida">Líquida</option>
-                                <option value="Solida">Sólida</option>
-                                <option value="Semi-Sólida">Semi-Sólida</option>
-                                <option value="Otras">Otras</option>
                             </select>
                         </div>
                         <span asp-validation-for="Sustancia" class="text-danger"></span>
@@ -132,26 +128,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script>
-        $(document).ready(function() {
-
-            url = '@this.Url.Content("~/")' + "Medicamentos/ObtenerCategorias";
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    fillSelectList("Categoria", data);
-                });
-
-            function fillSelectList(Id, data) {
-                var element = "#" + Id;
-
-                var selector = $(element).selectize().data('selectize');
-
-                for (let i = 0; i < data.length; i++) {
-                    selector.addOption({ value: data[i]["nombre"], text: data[i]["nombre"] });
-                }
-            }
-        });
-    </script>
     }

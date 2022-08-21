@@ -1,0 +1,13 @@
+{
+  "Sustancias": [
+    {
+      "Nombre": "Líquida"
+    },
+    {
+      "Nombre": "Sólida"
+    },
+    {
+      "Nombre": "Semi-Sólida"
+    }
+  ]
+}

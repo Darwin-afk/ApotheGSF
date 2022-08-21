@@ -15,6 +15,9 @@ using ReflectionIT.Mvc.Paging;
 using System.Linq.Dynamic.Core;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using System.Configuration;
+using Newtonsoft.Json;
+using ApotheGSF.Data;
 
 namespace ApotheGSF.Controllers
 {
@@ -26,17 +29,20 @@ namespace ApotheGSF.Controllers
         private readonly RoleManager<AppRol> _roleManager;
         private readonly ClaimsPrincipal _user;
         private readonly INotyfService _notyf;
+        private readonly IConfiguration Configuration;
 
         public UsuariosController(AppDbContext context,
                                   UserManager<AppUsuario> userManager,
                                   RoleManager<AppRol> roleManager,
                                   IHttpContextAccessor accessor,
+                                  IConfiguration _con,
                                   INotyfService notyf)
         {
             _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
             _user = accessor.HttpContext.User;
+            Configuration = _con;
             _notyf = notyf;
         }
 
@@ -150,6 +156,8 @@ namespace ApotheGSF.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
+            ViewBag.Roles = new SelectList(ObtenerRoles(), "Nombre", "Nombre");
+
             return View();
         }
 
@@ -167,6 +175,7 @@ namespace ApotheGSF.Controllers
                 if (error != "")
                 {
                     _notyf.Error(error);
+                    ViewBag.Roles = new SelectList(ObtenerRoles(), "Nombre", "Nombre");
                     return View(viewModel);
                 }
 
@@ -244,6 +253,8 @@ namespace ApotheGSF.Controllers
                 }
 
             }
+
+            ViewBag.Roles = new SelectList(ObtenerRoles(), "Nombre", "Nombre");
             return View(viewModel);
         }
 
@@ -338,6 +349,8 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            ViewBag.Roles = new SelectList(ObtenerRoles(), "Nombre", "Nombre", usuario.Rol);
+
             return View(usuario);
         }
 
@@ -360,6 +373,7 @@ namespace ApotheGSF.Controllers
                     if (error != "")
                     {
                         _notyf.Error(error);
+                        ViewBag.Roles = new SelectList(ObtenerRoles(), "Nombre", "Nombre", viewModel.Rol);
                         return View(viewModel);
                     }
 
@@ -410,6 +424,8 @@ namespace ApotheGSF.Controllers
                 _notyf.Custom("Se ha guardado exitosamente!!!", 5, "#17D155", "fas fa-check");
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Roles = new SelectList(ObtenerRoles(), "Nombre", "Nombre", viewModel.Rol);
             return View(viewModel);
         }
 
@@ -495,6 +511,17 @@ namespace ApotheGSF.Controllers
         private bool AppUserExists(int id)
         {
             return (_context.AppUsuarios?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public List<Roles> ObtenerRoles()
+        {
+            var dsRoles = Extensiones.ReadJsonFiles(Configuration.GetSection("AppSettings")["IDataRoles"]);
+
+            var seedRoles = JsonConvert.DeserializeObject<JsonData>(dsRoles);
+
+            List<Roles> roles = seedRoles.Roles;
+
+            return roles;
         }
     }
 }

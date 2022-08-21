@@ -1,0 +1,10 @@
+{
+  "TerminosPagos": [
+    {
+      "Nombre": "Efectivo"
+    },
+    {
+      "Nombre": "Credito"
+    }
+  ]
+}

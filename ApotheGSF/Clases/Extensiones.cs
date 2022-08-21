@@ -135,5 +135,18 @@ namespace ApotheGSF.Clases
 			}
 			return found;
 		}
+
+		public static string ReadJsonFiles(string filePath)
+		{
+			if (string.IsNullOrWhiteSpace(filePath))
+			{
+				throw new ArgumentException("No hay una ruta");
+			}
+			if (!System.IO.File.Exists(filePath))
+			{
+				throw new ArgumentException("El archivo no existe");
+			}
+			return System.IO.File.ReadAllText(filePath);
+		}
 	}
 }

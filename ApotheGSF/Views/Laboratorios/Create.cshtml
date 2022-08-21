@@ -100,10 +100,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
                             </div>
-                            <select asp-for="TerminosdePago" class="form-control" placeholder="Seleccione Tipo de Pago">
+                            <select asp-for="TerminosdePago" class="form-control" placeholder="Seleccione Tipo de Pago" asp-items="@ViewBag.TerminosPagos">
                                 <option value="">Seleccione Tipo de Pago</option>
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Credito">Credito</option>
                             </select>
                         </div>
                         <span asp-validation-for="TerminosdePago" class="text-danger"></span>

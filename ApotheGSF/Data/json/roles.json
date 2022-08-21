@@ -1,0 +1,13 @@
+{
+  "Roles": [
+    {
+      "Nombre": "Administrador"
+    },
+    {
+      "Nombre": "Comprador"
+    },
+    {
+      "Nombre": "Vendedor"
+    }
+  ]
+}

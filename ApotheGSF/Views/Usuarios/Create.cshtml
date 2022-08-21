@@ -134,11 +134,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <select class="form-control" asp-for="Rol" placeholder="Seleccione un Rol">
+                            <select class="form-control" asp-for="Rol" placeholder="Seleccione un Rol" asp-items="@ViewBag.Roles">
                                 <option value="">Seleccione un Rol</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Comprador">Comprador</option>
-                                <option value="Vendedor">Vendedor</option>
                             </select>
                         </div>
                         <span asp-validation-for="Rol" class="text-danger"></span>

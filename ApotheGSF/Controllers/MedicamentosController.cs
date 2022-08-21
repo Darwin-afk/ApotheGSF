@@ -31,7 +31,7 @@ namespace ApotheGSF.Controllers
         private readonly AppDbContext _context;
         private readonly ClaimsPrincipal _user;
         private readonly INotyfService _notyf;
-        readonly IConfiguration Configuration;
+        private readonly IConfiguration Configuration;
 
         /*CONFIGURACIÓN SMTP:
     ---------------------------------------------------------
@@ -159,6 +159,9 @@ namespace ApotheGSF.Controllers
         [Authorize(Roles = "Administrador, Comprador")]
         public IActionResult Create()
         {
+            ViewBag.Categorias = new SelectList(ObtenerCategorias(), "Nombre", "Nombre");
+            ViewBag.Sustancias = new SelectList(ObtenerSustancias(), "Nombre", "Nombre");
+
             return View(new Medicamentos());
         }
 
@@ -176,6 +179,8 @@ namespace ApotheGSF.Controllers
                 if (error != "")
                 {
                     _notyf.Error(error);
+                    ViewBag.Categorias = new SelectList(ObtenerCategorias(), "Nombre", "Nombre");
+                    ViewBag.Sustancias = new SelectList(ObtenerSustancias(), "Nombre", "Nombre");
                     return View(medicamento);
                 }
 
@@ -191,6 +196,9 @@ namespace ApotheGSF.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home", new { Mensaje = "Se ha guardado exitosamente!!!" });
             }
+
+            ViewBag.Categorias = new SelectList(ObtenerCategorias(), "Nombre", "Nombre");
+            ViewBag.Sustancias = new SelectList(ObtenerSustancias(), "Nombre", "Nombre");
             return View(medicamento);
         }
 
@@ -226,6 +234,9 @@ namespace ApotheGSF.Controllers
                 return NotFound();
             }
 
+            ViewBag.Categorias = new SelectList(ObtenerCategorias(), "Nombre", "Nombre", medicamento.Categoria);
+            ViewBag.Sustancias = new SelectList(ObtenerSustancias(), "Nombre", "Nombre", medicamento.Sustancia);
+
             return View(medicamento);
         }
 
@@ -245,6 +256,8 @@ namespace ApotheGSF.Controllers
                     if (error != "")
                     {
                         _notyf.Error(error);
+                        ViewBag.Categorias = new SelectList(ObtenerCategorias(), "Nombre", "Nombre", medicamento.Categoria);
+                        ViewBag.Sustancias = new SelectList(ObtenerSustancias(), "Nombre", "Nombre", medicamento.Sustancia);
                         return View(medicamento);
                     }
 
@@ -273,6 +286,8 @@ namespace ApotheGSF.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Categorias = new SelectList(ObtenerCategorias(), "Nombre", "Nombre", medicamento.Categoria);
+            ViewBag.Sustancias = new SelectList(ObtenerSustancias(), "Nombre", "Nombre", medicamento.Sustancia);
             return View(medicamento);
         }
 
@@ -347,28 +362,26 @@ namespace ApotheGSF.Controllers
             return medicamento.UnidadesCaja;
         }
 
-        public JsonResult ObtenerCategorias()
+        public List<Categorias> ObtenerCategorias()
         {
-            var dsCategorias = ReadJsonFiles(Configuration.GetSection("AppSettings")["IDataCategorias"]);
+            var dsCategorias = Extensiones.ReadJsonFiles(Configuration.GetSection("AppSettings")["IDataCategorias"]);
 
             var seedCategorias = JsonConvert.DeserializeObject<JsonData>(dsCategorias);
 
             List<Categorias> categorias = seedCategorias.Categorias;
 
-            return Json(categorias);
+            return categorias;
         }
 
-        private string ReadJsonFiles(string filePath)
+        public List<Sustancias> ObtenerSustancias()
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-            {
-                throw new ArgumentException("No hay una ruta");
-            }
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new ArgumentException("El archivo no existe");
-            }
-            return System.IO.File.ReadAllText(filePath);
+            var dsSustancias = Extensiones.ReadJsonFiles(Configuration.GetSection("AppSettings")["IDataSustancias"]);
+
+            var seedSustancias = JsonConvert.DeserializeObject<JsonData>(dsSustancias);
+
+            List<Sustancias> sustancias = seedSustancias.Sustancias;
+
+            return sustancias;
         }
 
         [Authorize(Roles = "Administrador, Comprador")]

@@ -401,9 +401,6 @@ namespace ApotheGSF.Controllers
                     // verificar si se grabó bien, para luego asignar el rol
                     if (result > 0)
                     {
-                        var token = await _userManager.GeneratePasswordResetTokenAsync(antiguoUsuario);
-                        await _userManager.ResetPasswordAsync(antiguoUsuario, token, viewModel.Password);
-
                         var rolesViejos = await _context.AppUsuariosRoles.Where(x => x.UserId == viewModel.Codigo).ToListAsync();
                         _context.RemoveRange(rolesViejos);
                         await _context.SaveChangesAsync();

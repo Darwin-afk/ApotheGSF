@@ -135,7 +135,7 @@
             </div>
             <div class="card-footer text-center" style="background-color:#990000;">
                 <!--Botones-->
-                <button class="btn btn-secondary" type="reset" style="background-color:white;color:#494949;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button id="btnReset" class="btn btn-secondary" type="reset" style="background-color:white;color:#494949;"><i class="fas fa-file"></i>&nbsp;Nuevo</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <button type="button" class="btn" onclick="Facturar()" style="background-color:white;color:#007000;"><i class="fa-solid fa-cash-register"></i>&nbsp;Facturar</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <a class="btn" asp-controller="Home" asp-action="Index" type="button" style="background-color:white;color:red;"><i class="fas fa-times"></i>&nbsp;Cancelar</a>
                 <!--Fin Botones-->
@@ -173,13 +173,21 @@
                 selector.clearOptions();
 
                 for (let i = 0; i < data.length; i++) {
-                    selector.addOption({ value: data[i]["codigo"], text: data[i]["nombre"]});
+                    selector.addOption({ value: data[i]["codigo"], text: data[i]["nombre"] });
                 }
             }
         });
     </script>
 
-    @*<script>
+    <script>
+        $(document).ready(function() {
+            $("#btnReset").click(function() {
+                $('#ListaDetalle').html("");
+            });
+        });
+    </script>
+
+    <script>
         function RemoverDetalle(id) {
             $.ajax({
                 async: true,
@@ -195,9 +203,9 @@
                 }
             });
         };
-    </script>*@
+    </script>
 
     <script src="~/js/AgregarFacturaDetalle.js"></script>
-    <script src="~/js/RemoverFacturaDetalle.js"></script>
+    @*<script src="~/js/RemoverFacturaDetalle.js"></script>*@
     <script src="~/js/Facturar.js"></script>
     }
